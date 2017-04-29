@@ -27,7 +27,7 @@ public class Model extends Observable implements Runnable {
 		this.boardAi = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardAi);
 
-		// this.exemplePlace(this.boardPlayer);
+		 this.exemplePlace(this.boardPlayer);
 		this.aleaPlace(this.boardAi);
 		// this.print();
 	}
@@ -48,7 +48,7 @@ public class Model extends Observable implements Runnable {
 				} while (ship.getLengthShip() + y > 11);
 
 				for (int j = 0; j < ship.getLengthShip(); j++) {
-					this.setShipCell(boardPlayer, x, y + j, ship);
+					this.setShipCell(boardAi, x, y + j, ship);
 				}
 			}else{//vert
 				y = 1 + r.nextInt(10 - 1);
@@ -57,7 +57,7 @@ public class Model extends Observable implements Runnable {
 				} while (ship.getLengthShip() + x > 11);
 
 				for (int j = 0; j < ship.getLengthShip(); j++) {
-					this.setShipCell(boardPlayer, x + j, y, ship);
+					this.setShipCell(boardAi, x + j, y, ship);
 				}
 			}
 			i++;
