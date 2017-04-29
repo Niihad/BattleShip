@@ -73,7 +73,7 @@ public class GameScreen extends JPanel implements Observer{
 					}
 				}
 				board[i][j].setPreferredSize(new Dimension(50,50));
-				if(player && i < 10 && j < 10 && i > 0 && j > 0 && model.getBoardPlayer()[i][j].getShip() != null)
+				if(player && i < 11 && j < 11 && i > 0 && j > 0 && model.getBoardPlayer()[i][j].getShip() != null)
 					board[i][j].setBackground(Color.blue.darker());
 				
 				board[i][j].addActionListener(new ActionListener() {
