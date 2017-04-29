@@ -29,33 +29,35 @@ public class Model extends Observable implements Runnable {
 
 		 this.exemplePlace(this.boardPlayer);
 		this.aleaPlace(this.boardAi);
-		// this.print();
+		 this.print();
 	}
 
 	private void aleaPlace(Cell[][] boardAi) {
-		
+
 		Random r = new Random();
 		int x, y, i = 0;
-		
-		for (Ship ship : this.age.getShips()) {
-			// 0 - Horizonale -- 1 - Verticale
-			int nb = (int) (Math.random() * 2);
-			
-			if (nb == 0) {//hori
-				x = 1 + r.nextInt(10 - 1);
-				do {
-					y = 1 + r.nextInt(10 - 1);
-				} while (ship.getLengthShip() + y > 11);
 
+		for (Ship ship : this.age.getShips()) {
+			// 0 - Verticale -- 1 - Horizonale
+			int nb = (int) (Math.random() * 2);
+
+			if (nb == 0) {// Vert
+				do {
+					x = 1 + r.nextInt(10 - 1);
+					do {// depassement du tableau vers le bas
+						y = 1 + r.nextInt(10 - 1);
+					} while (ship.getLengthShip() + y > 11);
+				} while (test_collision(x, y, ship.getLengthShip(), boardAi, true) == true);
 				for (int j = 0; j < ship.getLengthShip(); j++) {
 					this.setShipCell(boardAi, x, y + j, ship);
 				}
-			}else{//vert
-				y = 1 + r.nextInt(10 - 1);
+			} else {// Horizontale
 				do {
-					x = 1 + r.nextInt(10 - 1);
-				} while (ship.getLengthShip() + x > 11);
-
+					y = 1 + r.nextInt(10 - 1);
+					do {// depassement du tableau vers la droite
+						x = 1 + r.nextInt(10 - 1);
+					} while (ship.getLengthShip() + x > 11);
+				} while (test_collision(x, y, ship.getLengthShip(), boardAi, false) == true);
 				for (int j = 0; j < ship.getLengthShip(); j++) {
 					this.setShipCell(boardAi, x + j, y, ship);
 				}
@@ -64,6 +66,21 @@ public class Model extends Observable implements Runnable {
 
 		}
 
+	}
+
+	private boolean test_collision(int x, int y, int size, Cell[][] boardAi2, boolean vert) {
+		if (vert) {
+			for (int i = 0; i < size; i++) {
+				if (boardAi[x][y + i].getShip() != null)
+					return true;
+			}
+		} else {
+			for (int i = 0; i < size; i++) {
+				if (boardAi[x + i][y].getShip() != null)
+					return true;
+			}
+		}
+		return false;
 	}
 
 	private void buildBoards(Cell[][] board) {
@@ -89,7 +106,7 @@ public class Model extends Observable implements Runnable {
 		for (int i = 1; i < WIDTH + 1; i++) {
 			System.out.println("---------------------");
 			for (int j = 1; j < HEIGHT + 1; j++) {
-				if (this.boardPlayer[i][j].getShip() != null)
+				if (this.boardAi[i][j].getShip() != null)
 					System.out.print("|X");
 				else
 					System.out.print("| ");
