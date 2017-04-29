@@ -9,9 +9,11 @@ public class GameController implements MouseListener {
 	private boolean collision;
 	private int x,y;
 	private GameScreen game;
+	private Model model;
 	
-	public GameController(GameScreen gameScreen, boolean collision, int i, int j) {
+	public GameController(GameScreen gameScreen, boolean collision, int i, int j, Model model) {
 		this.game = gameScreen; 
+		this.model = model;
 		this.collision = collision;
 		this.x = i;
 		this.y = j;
@@ -19,10 +21,12 @@ public class GameController implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		if(collision)
+		if(collision){
+			this.model.setLife_ia();
 			this.game.setCouleur(x,y,true);
-		else
+		}else{
 			this.game.setCouleur(x,y,false);
+		}
 	}
 
 	@Override

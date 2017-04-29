@@ -13,14 +13,21 @@ public class Model extends Observable implements Runnable {
 	private Point selectShipPLace = null;
 	private Ship chooseShip;
 	private Age age;
+	private int life,life_ia;
 
 	public Model() {
+		//a virer de la
+		//code en dure pour les test
 		age = new Age("Moderne");
 		age.addShip(new Ship("porte-avion", "assets/s1.png", 5, 5));
 		age.addShip(new Ship("croiseur", "assets/s1.png", 4, 4));
 		age.addShip(new Ship("contre-torpilleur", "assets/s1.png", 3, 3));
 		age.addShip(new Ship("sous-marins", "assets/s1.png", 3, 3));
 		age.addShip(new Ship("torpilleur", "assets/s1.png", 2, 2));
+		//doit etre calculer aussi par rapport aux epoques
+		life = 5 + 4 + 3 + 3 + 2;
+		life_ia =  5 + 4 + 3 + 3 + 2;
+		
 
 		this.boardPlayer = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardPlayer);
@@ -158,6 +165,26 @@ public class Model extends Observable implements Runnable {
 
 	public void setBoardAi(Cell[][] boardAi) {
 		this.boardAi = boardAi;
+	}
+
+	public int getLife() {
+		return life;
+	}
+
+	public void setLife() {
+		this.life--;
+		setChanged();
+		notifyObservers(this);	
+	}
+
+	public int getLife_ia() {
+		return life_ia;
+	}
+
+	public void setLife_ia() {
+		this.life_ia--;
+		setChanged();
+		notifyObservers(this);	
 	}
 
 	/***********************************************************/

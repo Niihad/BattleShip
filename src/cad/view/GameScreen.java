@@ -3,8 +3,6 @@ package cad.view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -20,6 +18,7 @@ public class GameScreen extends JPanel implements Observer{
 	protected Model model;
 	private JButton[][] boardPlayer, boardAI;
 	private JPanel panelBoardPlayer, panelBoardAI;
+
 
 	public GameScreen(Model model) {
 		this.model = model;
@@ -82,10 +81,8 @@ public class GameScreen extends JPanel implements Observer{
 					boolean collision = false;
 					if(model.getBoardAi()[i][j].getShip() != null)
 						collision = true;
-					boardAI[i][j].addMouseListener(new GameController(this,collision,i,j));
-				}
-
-				
+					boardAI[i][j].addMouseListener(new GameController(this,collision,i,j,model));
+				}				
 				jp.add(board[i][j]);
 			}
 		}
