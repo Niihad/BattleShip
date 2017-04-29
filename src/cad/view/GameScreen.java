@@ -11,6 +11,7 @@ import java.util.Observer;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import cad.controller.GameController;
 import cad.model.Model;
 
 public class GameScreen extends JPanel implements Observer{
@@ -28,6 +29,7 @@ public class GameScreen extends JPanel implements Observer{
 		 */
 		
 		this.boardPlayer = new JButton[11][11];
+		
 		this.drawBoard(this.panelBoardPlayer, this.boardPlayer, 50, 50, true);
 		
 		this.boardAI = new JButton[11][11];
@@ -76,14 +78,25 @@ public class GameScreen extends JPanel implements Observer{
 				if(player && i < 11 && j < 11 && i > 0 && j > 0 && model.getBoardPlayer()[i][j].getShip() != null)
 					board[i][j].setBackground(Color.blue.darker());
 				
-				board[i][j].addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-					}
-				});
+				if(!player && i < 11 && j < 11 && i > 0 && j > 0){
+					boolean collision = false;
+					if(model.getBoardAi()[i][j].getShip() != null)
+						collision = true;
+					boardAI[i][j].addMouseListener(new GameController(this,collision,i,j));
+				}
+
 				
 				jp.add(board[i][j]);
 			}
 		}
+	}
+	
+	//en rouge si on touche pas et en vert si on touche
+	public void setCouleur(int x,int y,boolean collision){
+		if(collision)
+			boardAI[x][y].setBackground(Color.green.darker());
+		else
+			boardAI[x][y].setBackground(Color.red.darker());
 	}
 
 

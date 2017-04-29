@@ -27,9 +27,9 @@ public class Model extends Observable implements Runnable {
 		this.boardAi = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardAi);
 
-		 this.exemplePlace(this.boardPlayer);
+		this.exemplePlace(this.boardPlayer);
 		this.aleaPlace(this.boardAi);
-		 this.print();
+		this.print();
 	}
 
 	private void aleaPlace(Cell[][] boardAi) {
