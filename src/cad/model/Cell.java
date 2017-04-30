@@ -1,14 +1,15 @@
 package cad.model;
 
 public class Cell{
-	
 	private int x, y, part;
-	private boolean state, isTouch;
+	private boolean state, isTouch, shoot;
 	private Ship ship;
 	
 	public Cell(int x, int y){
 		this.x = x;
 		this.y = y;
+		this.ship = ship;
+		this.shoot = false;
 	}
 
 	public int getX() {
@@ -57,6 +58,14 @@ public class Cell{
 
 	public void setShip(Ship ship) {
 		this.ship = ship;
+	}
+	
+	public boolean isShoot() {
+		return shoot;
+	}
+
+	public void setShoot(boolean shoot) {
+		this.shoot = shoot;
 	}
 
 }

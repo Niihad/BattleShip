@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 
 import cad.model.Model;
 import cad.view.ConfigScreen;
+import cad.view.GameScreen;
 import cad.view.MenuScreen;
 import cad.view.PlacementScreen;
 import cad.view.StatsScreen;
@@ -14,8 +15,8 @@ public class BattleShip extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private MenuScreen menu;
-	private PlacementScreen game;
-	//private GameScreen game;
+	private GameScreen game;
+	private PlacementScreen placement;
 	private StatsScreen stats;
 	private ConfigScreen config;
 	private JFrame frame;
@@ -33,10 +34,9 @@ public class BattleShip extends JFrame {
 	}
 	
 	public void setGameScreen() {
-		this.game = new PlacementScreen(model);
-
+		//this.game = new PlacementScreen(model);
 		this.stats = new StatsScreen(model);
-		//this.game = new GameScreen(model);
+		this.game = new GameScreen(model);
 		frame.add(stats, BorderLayout.NORTH);
 		frame.add(game, BorderLayout.CENTER);
 	}

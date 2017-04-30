@@ -19,7 +19,6 @@ public class GameScreen extends JPanel implements Observer{
 	private JButton[][] boardPlayer, boardAI;
 	private JPanel panelBoardPlayer, panelBoardAI;
 
-
 	public GameScreen(Model model) {
 		this.model = model;
 		this.boardPlayer = new JButton[11][11];
@@ -28,7 +27,6 @@ public class GameScreen extends JPanel implements Observer{
 		this.drawBoard(this.panelBoardAI, this.boardAI, 50, 50, false);
 		this.model.addObserver(this);
 	}
-	
 	
 	private JPanel drawJPanel(int x, int y, int w, int h){
 		JPanel panel = new JPanel();
@@ -82,6 +80,7 @@ public class GameScreen extends JPanel implements Observer{
 	
 	//en rouge si on touche pas et en vert si on touche
 	public void setCouleur(int x,int y,boolean collision){
+		this.boardAI[x][y].setEnabled(false);
 		if(collision)
 			boardAI[x][y].setBackground(Color.green.darker());
 		else
@@ -92,5 +91,4 @@ public class GameScreen extends JPanel implements Observer{
 	@Override
 	public void update(Observable arg0, Object arg1) {
 	}
-
 }

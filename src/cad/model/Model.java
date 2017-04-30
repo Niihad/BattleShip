@@ -1,7 +1,6 @@
 package cad.model;
 
 import java.awt.Point;
-import java.util.HashMap;
 import java.util.Observable;
 import java.util.Random;
 
@@ -9,13 +8,18 @@ public class Model extends Observable implements Runnable {
 	
 	private static final int WIDTH = 10;
 	private static final int HEIGHT = 10;
-	
-	private HashMap<Integer, Age> ages;
+	//private HashMap<Integer, Age> ages;
+	private Age age;
 	private Cell[][] boardPlayer, boardAI;
 	private Point selectShipPLace = null;
 	private Ship chooseShip;
-	private Age age;
 	private int life,life_ia;
+	private Context context;
+	private boolean end_game = false;
+	private Etat etat;
+	public enum Etat {
+		WAIT, PLAYER, IA
+	}
 
 	public Model() {
 		Ship[] ships = new Ship[5];
@@ -26,16 +30,17 @@ public class Model extends Observable implements Runnable {
 		ships[4] = new Ship("torpilleur", "assets/s1.png", 2, 2);
 		age = this.addAge("Moderne", ships);
 		
-		//doit etre calculer aussi par rapport aux epoques
-		life = 5 + 4 + 3 + 3 + 2;
-		life_ia =  5 + 4 + 3 + 3 + 2;
+		for (Ship ship : this.age.getShips())
+			life += ship.getLife();
+			life_ia =  life;
 		
 		this.boardPlayer = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardPlayer);
 		this.boardAI = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardAI);
 		this.initialPlaceShip(this.boardAI);
-		
+		this.etat = Etat.PLAYER;
+		this.context = new Context(new Aleatoire());
 		//this.aleaPlace(this.boardAI);
 
 		this.print();
@@ -74,27 +79,26 @@ public class Model extends Observable implements Runnable {
 	private void aleaPlace(Cell[][] boardAi) {
 		Random r = new Random();
 		int x, y;
-
 		for (Ship ship : this.age.getShips()) {
 			// 0 - Verticale -- 1 - Horizonale
 			int nb = (int) (Math.random() * 2);
 
 			if (nb == 0) {// Vert
 				do {
-					x = 1 + r.nextInt(10 - 1);
+					x = 1 + r.nextInt(WIDTH - 1);
 					do {// depassement du tableau vers le bas
-						y = 1 + r.nextInt(10 - 1);
-					} while (ship.getLengthShip() + y > 11);
+						y = 1 + r.nextInt(HEIGHT - 1);
+					} while (ship.getLengthShip() + y > HEIGHT + 1);
 				} while (test_collision(x, y, ship.getLengthShip(), boardAi, true) == true);
 				for (int j = 0; j < ship.getLengthShip(); j++) {
 					this.setShipCell(boardAi, x, y+j, ship,j);
 				}
 			} else {// Horizontale
 				do {
-					y = 1 + r.nextInt(10 - 1);
+					y = 1 + r.nextInt(HEIGHT - 1);
 					do {// depassement du tableau vers la droite
-						x = 1 + r.nextInt(10 - 1);
-					} while (ship.getLengthShip() + x > 11);
+						x = 1 + r.nextInt(WIDTH - 1);
+					} while (ship.getLengthShip() + x > WIDTH + 1);
 				} while (test_collision(x, y, ship.getLengthShip(), boardAi, false) == true);
 				for (int j = 0; j < ship.getLengthShip(); j++) {
 					this.setShipCell(boardAi, x+j, y, ship, j);
@@ -103,6 +107,8 @@ public class Model extends Observable implements Runnable {
 		}
 	}
 
+	//permet de test si on peux placer le bateau a cette position
+	//test si deux bateaux se croisent
 	private boolean test_collision(int x, int y, int size, Cell[][] boardAi2, boolean vert) {
 		if (vert) {
 			for (int i = 0; i < size; i++) {
@@ -143,11 +149,7 @@ public class Model extends Observable implements Runnable {
 	public static int getHeight() {
 		return HEIGHT;
 	}
-	
-	public HashMap<Integer, Age> getAges() {
-		return ages;
-	}
-
+		
 	public Age getAge() {
 		return age;
 	}
@@ -193,7 +195,8 @@ public class Model extends Observable implements Runnable {
 	}
 
 	public void setLife() {
-		this.life--;
+		if(life >= 1)
+			this.life--;
 		setChanged();
 		notifyObservers(this);	
 	}
@@ -203,11 +206,36 @@ public class Model extends Observable implements Runnable {
 	}
 
 	public void setLife_ia() {
-		this.life_ia--;
+		if(life_ia >= 1)
+			this.life_ia--;
 		setChanged();
 		notifyObservers(this);	
 	}
 
+	public Context getContext() {
+		return context;
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
+	}
+	
+	public boolean isEnd_game() {
+		return end_game;
+	}
+
+	public void setEnd_game(boolean end_game) {
+		this.end_game = end_game;
+	}
+
+	public Etat getEtat() {
+		return etat;
+	}
+
+	public void setEtat(Etat etat) {
+		this.etat = etat;
+	}
+	
 	/***********************************************************/
 	/********************** ShipPLcaeView **********************/
 	/***********************************************************/
@@ -226,6 +254,7 @@ public class Model extends Observable implements Runnable {
 	/************************ GameScreen ***********************/
 	/***********************************************************/
 
+	
 	@Override
 	public void run() {
 		this.mettreAjour();
@@ -236,4 +265,24 @@ public class Model extends Observable implements Runnable {
 		notifyObservers();
 	}
 
+	//permet de test si l'ia a deja tirer sur cette case
+	public boolean neverShoot(int x, int y) {
+		return boardPlayer[x][y].isShoot();
+	}
+
+	public void setShoot(int x, int y) {
+		boardPlayer[x][y].setShoot(true);
+		System.out.println("ia tire en" + x + "-- " + y +"\n") ;
+		if(boardPlayer[x][y].getShip() != null){
+			setLife();	
+			System.out.println("collision");
+		}
+		etat = Etat.PLAYER;
+	}
+	
+	public void IA_play(){
+		if(etat == Etat.IA){
+			context.executeStrategy(this);
+		}	
+	}
 }
