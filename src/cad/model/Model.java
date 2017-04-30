@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Random;
 
+import cad.model.Model.Etat;
+
 public class Model extends Observable implements Runnable {
 	
 	private static final int WIDTH = 10;
@@ -14,6 +16,12 @@ public class Model extends Observable implements Runnable {
 	private Ship chooseShip;
 	private Age age;
 	private int life,life_ia;
+	private Context context;
+	private boolean end_game = false;
+	private Etat etat;
+	public enum Etat {
+		WAIT, PLAYER, IA
+	}
 
 	public Model() {
 		//a virer de la
@@ -34,6 +42,8 @@ public class Model extends Observable implements Runnable {
 		this.buildBoards(this.boardAi);
 		this.aleaPlace(this.boardAi);
 		this.exemplePlace(this.boardPlayer);
+		this.etat = Etat.PLAYER;
+		this.context = new Context(new Aleatoire());
 	}
 	
 	private void buildBoards(Cell[][] board){
@@ -194,7 +204,30 @@ public class Model extends Observable implements Runnable {
 		notifyObservers(this);	
 	}
 
+	public Context getContext() {
+		return context;
+	}
 
+	public void setContext(Context context) {
+		this.context = context;
+	}
+	
+	public boolean isEnd_game() {
+		return end_game;
+	}
+
+	public void setEnd_game(boolean end_game) {
+		this.end_game = end_game;
+	}
+
+	public Etat getEtat() {
+		return etat;
+	}
+
+	public void setEtat(Etat etat) {
+		this.etat = etat;
+	}
+	
 	/***********************************************************/
 	/********************** ShipPLcaeView **********************/
 	/***********************************************************/
@@ -230,8 +263,17 @@ public class Model extends Observable implements Runnable {
 
 	public void setShoot(int x, int y) {
 		boardPlayer[x][y].setShoot(true);
-		if(boardPlayer[x][y].getShip() != null)
-			setLife_ia();		
+		System.out.println("ia tire en" + x + "-- " + y +"\n") ;
+		if(boardPlayer[x][y].getShip() != null){
+			setLife();	
+			System.out.println("collision");
+		}
+		etat = Etat.PLAYER;
 	}
-
+	
+	public void IA_play(){
+		if(etat == Etat.IA){
+			context.executeStrategy(this);
+		}	
+	}
 }

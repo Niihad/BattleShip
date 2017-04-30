@@ -10,7 +10,9 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import cad.controller.GameController;
+import cad.model.Context;
 import cad.model.Model;
+import cad.model.Model.Etat;
 
 public class GameScreen extends JPanel implements Observer{
 
@@ -18,7 +20,6 @@ public class GameScreen extends JPanel implements Observer{
 	protected Model model;
 	private JButton[][] boardPlayer, boardAI;
 	private JPanel panelBoardPlayer, panelBoardAI;
-
 
 	public GameScreen(Model model) {
 		this.model = model;
@@ -28,15 +29,13 @@ public class GameScreen extends JPanel implements Observer{
 		 */
 		
 		this.boardPlayer = new JButton[11][11];
-		
 		this.drawBoard(this.panelBoardPlayer, this.boardPlayer, 50, 50, true);
 		
 		this.boardAI = new JButton[11][11];
 		this.drawBoard(this.panelBoardAI, this.boardAI, 50, 50, false);
-		
+
 		this.model.addObserver(this);
 	}
-	
 	
 	private JPanel drawJPanel(int x, int y, int w, int h){
 		JPanel panel = new JPanel();
