@@ -71,7 +71,7 @@ public class GameScreen extends JPanel implements Observer{
 					boolean collision = false;
 					if(model.getBoardAI()[i][j].getShip() != null)
 						collision = true;
-					boardAI[i][j].addMouseListener(new GameController(this,collision,i,j,model));
+					boardAI[i][j].addActionListener(new GameController(this,collision,i,j,model));
 				}				
 				jp.add(board[i][j]);
 			}
