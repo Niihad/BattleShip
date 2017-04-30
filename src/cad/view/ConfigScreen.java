@@ -10,18 +10,23 @@ import javax.swing.JPanel;
 
 import cad.BattleShip;
 import cad.controller.ConfigListener;
+import cad.model.Aleatoire;
+import cad.model.Context;
 
 public class ConfigScreen extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private Object[] liste1,liste2,liste3;
 	private JComboBox tirJoueur,tirOrdinateur,epoque;
+	private String strategy1;
 	private Label tirJ,tirIa,eq;
 	private JButton play;
 	private BattleShip bs;
 
 	public ConfigScreen(BattleShip battleShip) {
 		this.bs = battleShip;
+		Context context = new Context(new Aleatoire());
+		this.strategy1 = context.getNameStrategy();
 		drawConfig();
 		controller();
 	}
@@ -33,9 +38,9 @@ public class ConfigScreen extends JPanel {
 
 	private void drawConfig() {
 		this.setBackground(Color.GREEN);
-		this.liste1 = new Object[]{"Basique","Bateau"};
+		this.liste1 = new Object[]{"Basique"};
 		this.tirJoueur = new JComboBox(liste1);
-		this.liste2 = new Object[]{"Alea","Diagonale","Complex"};// a recup auto plus tard
+		this.liste2 = new Object[]{strategy1};// a recup auto plus tard
 		this.tirOrdinateur = new JComboBox(liste2);
 		this.liste3 = new Object[]{"Moderne","Pirate","Romaine"}; // pareille
 		this.epoque = new JComboBox(liste3);

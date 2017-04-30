@@ -9,10 +9,6 @@ public class Model extends Observable implements Runnable {
 	
 	private static final int WIDTH = 10;
 	private static final int HEIGHT = 10;
-	
-	private HashMap<Integer, Age> ages;
-	private int keyage = 0;
-
 	private Cell[][] boardPlayer, boardAi;
 	private Point selectShipPLace = null;
 	private Ship chooseShip;
@@ -32,7 +28,6 @@ public class Model extends Observable implements Runnable {
 			life += ship.getLife();
 			life_ia =  life;
 		
-		
 		this.boardPlayer = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardPlayer);
 		this.boardAi = new Cell[WIDTH + 1][HEIGHT + 1];
@@ -42,7 +37,6 @@ public class Model extends Observable implements Runnable {
 	}
 	
 	private void buildBoards(Cell[][] board){
-		
 		for(int i=0; i<=WIDTH; i++){
 			for(int j=0; j<=HEIGHT; j++){
 				board[i][j] = new Cell(i, j, null);
@@ -51,10 +45,8 @@ public class Model extends Observable implements Runnable {
 	}
 
 	private void aleaPlace(Cell[][] boardAi) {
-
 		Random r = new Random();
 		int x, y, i = 0;
-
 		for (Ship ship : this.age.getShips()) {
 			// 0 - Verticale -- 1 - Horizonale
 			int nb = (int) (Math.random() * 2);
@@ -81,11 +73,11 @@ public class Model extends Observable implements Runnable {
 				}
 			}
 			i++;
-
 		}
-
 	}
 
+	//permet de test si on peux placer le bateau a cette position
+	//test si deux bateaux se croisent
 	private boolean test_collision(int x, int y, int size, Cell[][] boardAi2, boolean vert) {
 		if (vert) {
 			for (int i = 0; i < size; i++) {
@@ -101,8 +93,8 @@ public class Model extends Observable implements Runnable {
 		return false;
 	}
 
+	//placement pour test
 	private void exemplePlace(Cell[][] board){
-		//int position[][] = {{1,1}, {3,1}, {3,5}, {5,1}, {5,4}, {5,7}, {7,1}, {7,3}, {7,5}, {7,7}};
 		int position[][] = { { 1, 1 }, { 4, 4 }, { 6, 6 }, { 8, 1 }, { 10, 9 } };
 		int i = 0;
 		for (Ship ship : this.age.getShips()) {
@@ -113,6 +105,7 @@ public class Model extends Observable implements Runnable {
 		}
 	}
 
+	//affichage du plateau de l'ia
 	private void print() {
 		for (int i = 1; i < WIDTH + 1; i++) {
 			System.out.println("---------------------");
@@ -138,11 +131,7 @@ public class Model extends Observable implements Runnable {
 	public static int getHeight() {
 		return HEIGHT;
 	}
-	
-	public HashMap<Integer, Age> getAges() {
-		return ages;
-	}
-
+		
 	public Age getAge() {
 		return age;
 	}
@@ -205,6 +194,7 @@ public class Model extends Observable implements Runnable {
 		notifyObservers(this);	
 	}
 
+
 	/***********************************************************/
 	/********************** ShipPLcaeView **********************/
 	/***********************************************************/
@@ -231,6 +221,17 @@ public class Model extends Observable implements Runnable {
 	public void mettreAjour() {
 		setChanged();
 		notifyObservers();
+	}
+
+	//permet de test si l'ia a deja tirer sur cette case
+	public boolean neverShoot(int x, int y) {
+		return boardPlayer[x][y].isShoot();
+	}
+
+	public void setShoot(int x, int y) {
+		boardPlayer[x][y].setShoot(true);
+		if(boardPlayer[x][y].getShip() != null)
+			setLife_ia();		
 	}
 
 }
