@@ -123,7 +123,7 @@ public class PlacementScreen extends JPanel implements Observer{
 	/************************** Ships **************************/
 	/***********************************************************/
 	
-	private void drawShips(JPanel jp, JButton[] label){
+	/*private void drawShips(JPanel jp, JButton[] label){
 		//jp = this.drawJPanel(500, 500);
 		jp.setLayout(new GridLayout(4,4,20,50));
 		for(int i=0; i<10; i++)
@@ -134,7 +134,7 @@ public class PlacementScreen extends JPanel implements Observer{
 			this.iconShip(jp, ship, ship.getLengthShip()*50, label[i]);
 			i++;
 		}
-	}
+	}*/
 	
 	private void iconShip(JPanel jp, final Ship ship, int width, JButton jb){
 		ImageIcon icon = new ImageIcon(new ImageIcon(ship.getPathImage()).getImage().getScaledInstance(width, 40, Image.SCALE_DEFAULT));
