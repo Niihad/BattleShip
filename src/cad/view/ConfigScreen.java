@@ -14,6 +14,7 @@ import cad.BattleShip;
 import cad.controller.ConfigListener;
 import cad.model.Aleatoire;
 import cad.model.Context;
+import cad.model.Diagonale;
 import cad.model.Model;
 
 public class ConfigScreen extends JPanel implements ItemListener {
@@ -37,9 +38,10 @@ public class ConfigScreen extends JPanel implements ItemListener {
 		this.strategy1 = context.getNameStrategy();
 		//On affecte la strategie alea de base si y on touche pas les combobox
 		this.mod.setContext(context);
-		/*
-		context2 = new Context(new Aleatoire());
-		this.strategy2 = context2.getNameStrategy();*/
+		
+		
+		context2 = new Context(new Diagonale());
+		this.strategy2 = context2.getNameStrategy();
 		
 		drawConfig();
 		controller();
@@ -53,7 +55,7 @@ public class ConfigScreen extends JPanel implements ItemListener {
 	private void drawConfig() {
 		//Ajouter le nom de la strategy recup dans le controlleur dans le tableau 
 		// et ajouter un cas dans la fct itemStateChanged
-		this.strategy = new String[]{strategy1};
+		this.strategy = new String[]{strategy1,strategy2};
 		this.tirOrdinateur = new JComboBox(strategy);
 		tirOrdinateur.addItemListener(this);
 		
@@ -79,7 +81,7 @@ public class ConfigScreen extends JPanel implements ItemListener {
 	@Override
 	public void itemStateChanged(ItemEvent arg0) {
 		if(arg0.getSource() == tirOrdinateur){
-		  int tmp = epoque.getSelectedIndex();
+	 int tmp = tirOrdinateur.getSelectedIndex();
 		switch (tmp){
 		  case 0:
 			  this.mod.setContext(context);
@@ -88,9 +90,9 @@ public class ConfigScreen extends JPanel implements ItemListener {
 			  this.mod.setContext(context2);
 			  break;  
 		  default:
-			  this.mod.setContext(context);
 			}
 		}
+	
 	}
 
 }

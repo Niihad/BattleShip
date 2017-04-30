@@ -216,6 +216,7 @@ public class Model extends Observable implements Runnable {
 
 	public void setContext(Context context) {
 		this.context = context;
+		mettreAjour();
 	}
 	
 	public boolean isEnd_game() {
