@@ -79,8 +79,9 @@ public class GameScreen extends JPanel implements Observer{
 				
 				if(!player && i < 11 && j < 11 && i > 0 && j > 0){
 					boolean collision = false;
-					if(model.getBoardAi()[i][j].getShip() != null)
+					if(model.getBoardAi()[i][j].getShip() != null){
 						collision = true;
+					}
 					boardAI[i][j].addMouseListener(new GameController(this,collision,i,j,model));
 				}				
 				jp.add(board[i][j]);
@@ -90,6 +91,7 @@ public class GameScreen extends JPanel implements Observer{
 	
 	//en rouge si on touche pas et en vert si on touche
 	public void setCouleur(int x,int y,boolean collision){
+		this.boardAI[x][y].setEnabled(false);
 		if(collision)
 			boardAI[x][y].setBackground(Color.green.darker());
 		else
@@ -100,5 +102,4 @@ public class GameScreen extends JPanel implements Observer{
 	@Override
 	public void update(Observable arg0, Object arg1) {
 	}
-
 }

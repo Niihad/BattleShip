@@ -16,8 +16,7 @@ public class BattleShip extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private MenuScreen menu;
 
-	//private GameScreen game;
-	//private PlacementScreen game;
+	//private PlacementScreen pl;
 
 	private GameScreen game;
 	private StatsScreen stats;
@@ -37,8 +36,6 @@ public class BattleShip extends JFrame {
 	}
 	
 	public void setGameScreen() {
-		//this.game = new PlacementScreen(model);
-
 		this.stats = new StatsScreen(model);
 		this.game = new GameScreen(model);
 		frame.add(stats, BorderLayout.NORTH);

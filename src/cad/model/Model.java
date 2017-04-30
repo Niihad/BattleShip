@@ -28,9 +28,10 @@ public class Model extends Observable implements Runnable {
 		age.addShip(new Ship("contre-torpilleur", "assets/s1.png", 3, 3));
 		age.addShip(new Ship("sous-marins", "assets/s1.png", 3, 3));
 		age.addShip(new Ship("torpilleur", "assets/s1.png", 2, 2));
-		//doit etre calculer aussi par rapport aux epoques
-		life = 5 + 4 + 3 + 3 + 2;
-		life_ia =  5 + 4 + 3 + 3 + 2;
+		for (Ship ship : this.age.getShips())
+			life += ship.getLife();
+			life_ia =  life;
+		
 		
 		this.boardPlayer = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardPlayer);
@@ -60,20 +61,20 @@ public class Model extends Observable implements Runnable {
 
 			if (nb == 0) {// Vert
 				do {
-					x = 1 + r.nextInt(10 - 1);
+					x = 1 + r.nextInt(WIDTH - 1);
 					do {// depassement du tableau vers le bas
-						y = 1 + r.nextInt(10 - 1);
-					} while (ship.getLengthShip() + y > 11);
+						y = 1 + r.nextInt(HEIGHT - 1);
+					} while (ship.getLengthShip() + y > HEIGHT + 1);
 				} while (test_collision(x, y, ship.getLengthShip(), boardAi, true) == true);
 				for (int j = 0; j < ship.getLengthShip(); j++) {
 					this.setShipCell(boardAi, x, y + j, ship);
 				}
 			} else {// Horizontale
 				do {
-					y = 1 + r.nextInt(10 - 1);
+					y = 1 + r.nextInt(HEIGHT - 1);
 					do {// depassement du tableau vers la droite
-						x = 1 + r.nextInt(10 - 1);
-					} while (ship.getLengthShip() + x > 11);
+						x = 1 + r.nextInt(WIDTH - 1);
+					} while (ship.getLengthShip() + x > WIDTH + 1);
 				} while (test_collision(x, y, ship.getLengthShip(), boardAi, false) == true);
 				for (int j = 0; j < ship.getLengthShip(); j++) {
 					this.setShipCell(boardAi, x + j, y, ship);
@@ -187,7 +188,8 @@ public class Model extends Observable implements Runnable {
 	}
 
 	public void setLife() {
-		this.life--;
+		if(life >= 1)
+			this.life--;
 		setChanged();
 		notifyObservers(this);	
 	}
@@ -197,7 +199,8 @@ public class Model extends Observable implements Runnable {
 	}
 
 	public void setLife_ia() {
-		this.life_ia--;
+		if(life_ia >= 1)
+			this.life_ia--;
 		setChanged();
 		notifyObservers(this);	
 	}
@@ -219,6 +222,7 @@ public class Model extends Observable implements Runnable {
 	/************************ GameScreen ***********************/
 	/***********************************************************/
 
+	
 	@Override
 	public void run() {
 		this.mettreAjour();
