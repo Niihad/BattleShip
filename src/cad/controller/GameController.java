@@ -22,38 +22,6 @@ public class GameController implements ActionListener {
 		this.y = j;
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		if(model.getEtat() == Etat.PLAYER){
-			if(collision){
-				this.model.setLife_ia();
-				this.game.setCouleur(x,y,true);
-			}else{
-				this.game.setCouleur(x,y,false);
-			}
-			this.model.setEtat(Etat.IA);
-			this.model.IA_play();
-			this.game.updateBoardPlayer();
-		}
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -66,6 +34,8 @@ public class GameController implements ActionListener {
 			}
 			this.model.setEtat(Etat.IA);
 			this.model.IA_play();
+			this.game.updateBoardPlayer();
+
 			}		
 	}
 
