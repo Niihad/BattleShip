@@ -2,7 +2,7 @@ package cad.model;
 
 import java.util.Random;
 
-public class Aleatoire implements Strategy{
+public class Aleatoire implements Strategy {
 
 	@Override
 	public String name() {
@@ -14,7 +14,7 @@ public class Aleatoire implements Strategy{
 		Random r = new Random();
 		int w = mod.getWidth();
 		int h = mod.getHeight();
-		int x, y = 0;
+		int x = 0, y = 0;
 
 		do{
 			x = 1 + r.nextInt(w - 1);

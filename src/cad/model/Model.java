@@ -8,7 +8,6 @@ public class Model extends Observable implements Runnable {
 	
 	private static final int WIDTH = 10;
 	private static final int HEIGHT = 10;
-	//private HashMap<Integer, Age> ages;
 	private Age age;
 	private Cell[][] boardPlayer, boardAI;
 	private Point selectShipPLace = null;
@@ -38,10 +37,9 @@ public class Model extends Observable implements Runnable {
 		this.buildBoards(this.boardPlayer);
 		this.boardAI = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardAI);
-		this.initialPlaceShip(this.boardAI);
+		this.initialPlaceShip(this.boardPlayer);
 		this.etat = Etat.PLAYER;
-		this.context = new Context(new Aleatoire());
-		//this.aleaPlace(this.boardAI);
+		this.aleaPlace(this.boardAI);
 
 		this.print();
 	}
@@ -197,8 +195,7 @@ public class Model extends Observable implements Runnable {
 	public void setLife() {
 		if(life >= 1)
 			this.life--;
-		setChanged();
-		notifyObservers(this);	
+		this.mettreAjour();	
 	}
 
 	public int getLife_ia() {
@@ -208,8 +205,7 @@ public class Model extends Observable implements Runnable {
 	public void setLife_ia() {
 		if(life_ia >= 1)
 			this.life_ia--;
-		setChanged();
-		notifyObservers(this);	
+		this.mettreAjour();
 	}
 
 	public Context getContext() {
