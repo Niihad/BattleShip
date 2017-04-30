@@ -8,8 +8,9 @@ import cad.model.Model;
 import cad.view.ConfigScreen;
 import cad.view.GameScreen;
 import cad.view.MenuScreen;
+import cad.view.MenuView;
 import cad.view.PlacementScreen;
-import cad.view.StatsScreen;
+import cad.view.StatsView;
 
 public class BattleShip extends JFrame {
 
@@ -17,7 +18,7 @@ public class BattleShip extends JFrame {
 	private MenuScreen menu;
 	private GameScreen game;
 	private PlacementScreen placement;
-	private StatsScreen stats;
+	private StatsView stats;
 	private ConfigScreen config;
 	private JFrame frame;
 	private Model model;
@@ -34,8 +35,8 @@ public class BattleShip extends JFrame {
 	}
 	
 	public void setGameScreen() {
-		//this.game = new PlacementScreen(model);
-		this.stats = new StatsScreen(model);
+		frame.setJMenuBar(new MenuView(model));
+		this.stats = new StatsView(model);
 		this.game = new GameScreen(model);
 		frame.add(stats, BorderLayout.NORTH);
 		frame.add(game, BorderLayout.CENTER);

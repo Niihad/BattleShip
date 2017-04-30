@@ -8,12 +8,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import cad.model.Model;
 
-public class StatsScreen extends JPanel implements Observer{
+public class StatsView extends JPanel implements Observer{
 	private Model mod;
 	private JLabel life,life_IA,strategy;
 	private int tmp;
 	
-	public StatsScreen(Model model){
+	public StatsView(Model model){
 		this.mod = model;
 		draw();
 		this.mod.addObserver(this);
