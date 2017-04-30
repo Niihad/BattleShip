@@ -37,7 +37,7 @@ public class Model extends Observable implements Runnable {
 		this.buildBoards(this.boardPlayer);
 		this.boardAI = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardAI);
-		this.initialPlaceShip(this.boardAI);
+		this.initialPlaceShip(this.boardPlayer);
 		this.etat = Etat.PLAYER;
 		this.aleaPlace(this.boardAI);
 
