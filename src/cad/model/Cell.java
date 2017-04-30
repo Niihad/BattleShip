@@ -2,14 +2,13 @@ package cad.model;
 
 public class Cell{
 	
-	private int x, y;
+	private int x, y, part;
 	private boolean state, isTouch;
 	private Ship ship;
 	
-	public Cell(int x, int y, Ship ship){
+	public Cell(int x, int y){
 		this.x = x;
 		this.y = y;
-		this.ship = ship;
 	}
 
 	public int getX() {
@@ -26,6 +25,14 @@ public class Cell{
 
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	public int getPart() {
+		return part;
+	}
+
+	public void setPart(int part) {
+		this.part = part;
 	}
 
 	public boolean isState() {

@@ -11,48 +11,69 @@ public class Model extends Observable implements Runnable {
 	private static final int HEIGHT = 10;
 	
 	private HashMap<Integer, Age> ages;
-	private int keyage = 0;
-
-	private Cell[][] boardPlayer, boardAi;
+	private Cell[][] boardPlayer, boardAI;
 	private Point selectShipPLace = null;
 	private Ship chooseShip;
 	private Age age;
 	private int life,life_ia;
 
 	public Model() {
-		//a virer de la
-		//code en dure pour les test
-		age = new Age("Moderne");
-		age.addShip(new Ship("porte-avion", "assets/s1.png", 5, 5));
-		age.addShip(new Ship("croiseur", "assets/s1.png", 4, 4));
-		age.addShip(new Ship("contre-torpilleur", "assets/s1.png", 3, 3));
-		age.addShip(new Ship("sous-marins", "assets/s1.png", 3, 3));
-		age.addShip(new Ship("torpilleur", "assets/s1.png", 2, 2));
+		Ship[] ships = new Ship[5];
+		ships[0] = new Ship("porte-avion", "assets/s1.png", 5, 5);
+		ships[1] = new Ship("croiseur", "assets/s1.png", 4, 4);
+		ships[2] = new Ship("contre-torpilleur", "assets/s1.png", 3, 3);
+		ships[3] = new Ship("sous-marins", "assets/s1.png", 3, 3);
+		ships[4] = new Ship("torpilleur", "assets/s1.png", 2, 2);
+		age = this.addAge("Moderne", ships);
+		
 		//doit etre calculer aussi par rapport aux epoques
 		life = 5 + 4 + 3 + 3 + 2;
 		life_ia =  5 + 4 + 3 + 3 + 2;
 		
 		this.boardPlayer = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardPlayer);
-		this.boardAi = new Cell[WIDTH + 1][HEIGHT + 1];
-		this.buildBoards(this.boardAi);
-		this.aleaPlace(this.boardAi);
-		this.exemplePlace(this.boardPlayer);
+		this.boardAI = new Cell[WIDTH + 1][HEIGHT + 1];
+		this.buildBoards(this.boardAI);
+		this.initialPlaceShip(this.boardAI);
+		
+		//this.aleaPlace(this.boardAI);
+
+		this.print();
+	}
+	
+	/***********************************************************/
+	/********************** Initiale Game **********************/
+	/***********************************************************/
+	
+	private Age addAge(String name, Ship[] ships){
+		Age age = new Age(name);
+		for(int i=0; i<ships.length; i++)	
+			age.addShip(ships[i]);
+		return age;
 	}
 	
 	private void buildBoards(Cell[][] board){
-		
 		for(int i=0; i<=WIDTH; i++){
 			for(int j=0; j<=HEIGHT; j++){
-				board[i][j] = new Cell(i, j, null);
+				board[i][j] = new Cell(i, j);
 			}
+		}
+	}
+	
+	private void initialPlaceShip(Cell[][] board){
+		int position[][] = { { 1, 1 }, { 4, 4 }, { 6, 6 }, { 8, 1 }, { 10, 9 } };
+		int i = 0;
+		for (Ship ship : this.age.getShips()) {
+			for (int j = 0; j < ship.getLengthShip(); j++) {
+				this.setShipCell(board, position[i][0], position[i][1] + j, ship, j);
+			}
+			i++;
 		}
 	}
 
 	private void aleaPlace(Cell[][] boardAi) {
-
 		Random r = new Random();
-		int x, y, i = 0;
+		int x, y;
 
 		for (Ship ship : this.age.getShips()) {
 			// 0 - Verticale -- 1 - Horizonale
@@ -66,7 +87,7 @@ public class Model extends Observable implements Runnable {
 					} while (ship.getLengthShip() + y > 11);
 				} while (test_collision(x, y, ship.getLengthShip(), boardAi, true) == true);
 				for (int j = 0; j < ship.getLengthShip(); j++) {
-					this.setShipCell(boardAi, x, y + j, ship);
+					this.setShipCell(boardAi, x, y+j, ship,j);
 				}
 			} else {// Horizontale
 				do {
@@ -76,47 +97,32 @@ public class Model extends Observable implements Runnable {
 					} while (ship.getLengthShip() + x > 11);
 				} while (test_collision(x, y, ship.getLengthShip(), boardAi, false) == true);
 				for (int j = 0; j < ship.getLengthShip(); j++) {
-					this.setShipCell(boardAi, x + j, y, ship);
+					this.setShipCell(boardAi, x+j, y, ship, j);
 				}
 			}
-			i++;
-
 		}
-
 	}
 
 	private boolean test_collision(int x, int y, int size, Cell[][] boardAi2, boolean vert) {
 		if (vert) {
 			for (int i = 0; i < size; i++) {
-				if (boardAi[x][y + i].getShip() != null)
+				if (boardAI[x][y + i].getShip() != null)
 					return true;
 			}
 		} else {
 			for (int i = 0; i < size; i++) {
-				if (boardAi[x + i][y].getShip() != null)
+				if (boardAI[x + i][y].getShip() != null)
 					return true;
 			}
 		}
 		return false;
 	}
 
-	private void exemplePlace(Cell[][] board){
-		//int position[][] = {{1,1}, {3,1}, {3,5}, {5,1}, {5,4}, {5,7}, {7,1}, {7,3}, {7,5}, {7,7}};
-		int position[][] = { { 1, 1 }, { 4, 4 }, { 6, 6 }, { 8, 1 }, { 10, 9 } };
-		int i = 0;
-		for (Ship ship : this.age.getShips()) {
-			for (int j = 0; j < ship.getLengthShip(); j++) {
-				this.setShipCell(board, position[i][0], position[i][1] + j, ship);
-			}
-			i++;
-		}
-	}
-
 	private void print() {
 		for (int i = 1; i < WIDTH + 1; i++) {
 			System.out.println("---------------------");
 			for (int j = 1; j < HEIGHT + 1; j++) {
-				if (this.boardAi[i][j].getShip() != null)
+				if (this.boardAI[i][j].getShip() != null)
 					System.out.print("|X");
 				else
 					System.out.print("| ");
@@ -174,12 +180,12 @@ public class Model extends Observable implements Runnable {
 		this.boardPlayer = boardPlayer;
 	}
 
-	public Cell[][] getBoardAi() {
-		return boardAi;
+	public Cell[][] getBoardAI() {
+		return boardAI;
 	}
 
-	public void setBoardAi(Cell[][] boardAi) {
-		this.boardAi = boardAi;
+	public void setBoardAI(Cell[][] boardAi) {
+		this.boardAI = boardAi;
 	}
 
 	public int getLife() {
@@ -206,8 +212,9 @@ public class Model extends Observable implements Runnable {
 	/********************** ShipPLcaeView **********************/
 	/***********************************************************/
 
-	public synchronized void setShipCell(Cell[][] cells, int x, int y, Ship ship) {
+	public synchronized void setShipCell(Cell[][] cells, int x, int y, Ship ship, int part) {
 		cells[x][y].setShip(ship);
+		cells[x][y].setPart(part);
 		this.mettreAjour();
 	}
 
