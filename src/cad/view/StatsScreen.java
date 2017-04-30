@@ -6,9 +6,12 @@ import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import cad.model.Model;
 
 public class StatsScreen extends JPanel implements Observer{
+
+	private static final long serialVersionUID = 1L;
 	private Model mod;
 	private JLabel life,life_IA;
 	private int tmp;

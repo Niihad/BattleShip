@@ -1,6 +1,5 @@
 package cad.controller;
 
-import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,13 +12,16 @@ import javax.swing.SwingUtilities;
 import cad.view.CellView;
 
 public class ShipBrdPanelListener extends MouseAdapter {
-    private JLabel label;
-    private JPanel originalJPanel;
-    private JPanel panel, glassPane;
-    private Point gpP;
+	
+	private JPanel panel;
+    private JPanel[][] board;
+    private JLabel[] label;
+    private int length, part;
+    private boolean rotation;
     
-    public ShipBrdPanelListener(JPanel panel){
+    public ShipBrdPanelListener(JPanel panel, JPanel[][] board){
     	this.panel = panel;
+    	this.board = board;
     }
 
     @Override
@@ -28,34 +30,33 @@ public class ShipBrdPanelListener extends MouseAdapter {
             return;
         }
         JPanel src = (JPanel) e.getSource();
-        Component comp = src.getComponentAt(e.getPoint());
+        CellView comp = (CellView) src.getComponentAt(e.getPoint());
         if (comp != null && ((JComponent) comp).getComponentCount() == 1) {
-            originalJPanel = (JPanel) comp;
-            label = (JLabel) originalJPanel.getComponent(0);
+        	this.length = comp.getCell().getShip().getLengthShip();
+        	this.part = comp.getCell().getPart();
+        	this.label = new JLabel[length];
+        	if(length > 1){
+        		this.rotation = comp.getCell().getShip().isRotation();
+        		if(!comp.getCell().getShip().isRotation()){ // horizontal
+        			for(int i=0; i<=part; i++){
+        				CellView cell = (CellView) board[comp.getOrd()][comp.getAbs()-i];
+        				repaintClick(cell,i,i,e,true);
+        			}
+        			for(int i=1; i<length-part; i++){
+        				CellView cell = (CellView) board[comp.getOrd()][comp.getAbs()+i];
+        				repaintClick(cell,i+part,i,e,false);
+        			}
+        		}
+        	}
         } else {
             return;
         }
-        originalJPanel.remove(label);
-        originalJPanel.revalidate();
-        originalJPanel.repaint();
-        
-        glassPane = (JPanel) SwingUtilities.getRootPane(originalJPanel).getGlassPane();
-        glassPane.setVisible(true);
-        gpP = glassPane.getLocationOnScreen();
-        glassPane.setLayout(null);
-        int x = e.getXOnScreen() - gpP.x - label.getWidth() / 2;
-        int y = e.getYOnScreen() - gpP.y - label.getHeight() / 2;
-        label.setLocation(x, y);
-        label.setSize(label.getPreferredSize());
-        glassPane.add(label);
-        
-        glassPane.repaint();
         e.consume();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (label == null) {
+        /*if (label == null) {
             return;
         }
         int x = e.getXOnScreen() - gpP.x - label.getWidth() / 2;
@@ -77,18 +78,53 @@ public class ShipBrdPanelListener extends MouseAdapter {
         label = null;
         glassPane.setVisible(false);
         panel.revalidate();
-        panel.repaint();
+        panel.repaint();*/
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (label == null) {
+    	if(length > 1){
+    		if(!this.rotation){ // horizontal
+    			for(int i=0; i<=part; i++)
+    				repaintDragged(i,i,e,true);
+    			for(int i=1; i<length-part; i++)
+    				repaintDragged(i+part,i,e,false);
+    		}
+    	}
+    }
+    
+    private void repaintClick(CellView cell, int i, int j, MouseEvent e, boolean first){
+    	label[i] = (JLabel) cell.getComponent(0);
+    	cell.remove(label[i]);
+    	cell.revalidate();
+    	cell.repaint();
+    	JPanel glassPane = (JPanel) SwingUtilities.getRootPane(cell).getGlassPane();
+        this.buildShip(glassPane, i, j, e, first);
+        label[i].setSize(label[i].getPreferredSize());
+        glassPane.add(label[i]);
+        glassPane.repaint();
+    }
+    
+    private void buildShip(JPanel glassPane, int i, int j, MouseEvent e, boolean first){
+        glassPane.setVisible(true);
+        Point gpP = glassPane.getLocationOnScreen();
+        glassPane.setLayout(null);
+        int tmp;
+        if(first)
+        	tmp = e.getXOnScreen()-(((int)label[i].getSize().getWidth())*i);
+        else
+        	tmp = e.getXOnScreen()+(((int)label[i].getSize().getWidth())*j);
+        int x = tmp - gpP.x - label[i].getWidth() / 2;
+        int y = e.getYOnScreen() - gpP.y - label[i].getHeight() / 2;
+        label[i].setLocation(x, y);
+    }
+    
+    private void repaintDragged(int i, int j, MouseEvent e, boolean first){
+    	if (label[i] == null) {
             return;
         }
-        int x = e.getXOnScreen() - gpP.x - label.getWidth() / 2;
-        int y = e.getYOnScreen() - gpP.y - label.getHeight() / 2;
-        label.setLocation(x, y);
-        
+    	JPanel glassPane = (JPanel) SwingUtilities.getRootPane(label[i]).getGlassPane();
+    	this.buildShip(glassPane, i, j, e, first);
         panel.repaint();
     }
     

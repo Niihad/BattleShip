@@ -28,12 +28,13 @@ public class PlacementScreen extends JPanel implements Observer{
 	public PlacementScreen(Model modele){
 		super();
 		this.model = modele;
-		ShipBrdPanelListener shipListener = new ShipBrdPanelListener(this);
 		
 		this.board = new JPanel[Model.getWidth()+1][Model.getHeight()*2+4];
 		this.panelBoard = new JPanel();
 		this.drawBoard(this.panelBoard, this.board, this.model.getBoardPlayer(), this.model.getBoardAI());
 		this.add(this.panelBoard);
+
+		ShipBrdPanelListener shipListener = new ShipBrdPanelListener(this, board);
 		this.panelBoard.addMouseListener(shipListener);
 		this.panelBoard.addMouseMotionListener(shipListener);
 		this.drawShipsBoard(model.getBoardAI());
@@ -41,6 +42,20 @@ public class PlacementScreen extends JPanel implements Observer{
 		this.model.addObserver(this);
 	}
 	
+	
+	
+	public JPanel[][] getBoard() {
+		return board;
+	}
+
+
+
+	public void setBoard(JPanel[][] board) {
+		this.board = board;
+	}
+
+
+
 	/***********************************************************/
 	/************************** Board **************************/
 	/***********************************************************/
@@ -53,30 +68,30 @@ public class PlacementScreen extends JPanel implements Observer{
 		for(int i=0; i<cellsPlayer.length; i++){
 			for(int j=0; j<length; j++){
 				if(i==0 && j==0){
-					board[i][j] = new CellView(this.model,cellsPlayer[i][j],CELL_WIDTH);
+					board[i][j] = new CellView(this.model,i,j,cellsPlayer[i][j],CELL_WIDTH);
 				}else if(i==0 && j==13){
-					board[i][j] = new CellView(this.model,cellsAI[i][j-cellsAI.length-2],CELL_WIDTH);
+					board[i][j] = new CellView(this.model,i,j,cellsAI[i][j-cellsAI.length-2],CELL_WIDTH);
 				}else if(j>10 && j<13){
 					board[i][j] = new CellView(this.model, i, j, CELL_WIDTH);
 				}else if(i==0 && j>0 && j < cellsPlayer.length){
-					board[i][j] = new CellView(this.model,cellsPlayer[i][j],CELL_WIDTH);
+					board[i][j] = new CellView(this.model,i,j,cellsPlayer[i][j],CELL_WIDTH);
 					board[i][j].add(new JLabel(""+j));
 				}else if(i>0 && j==0){
-					board[i][j] = new CellView(this.model,cellsPlayer[i][j],CELL_WIDTH);
+					board[i][j] = new CellView(this.model,i,j,cellsPlayer[i][j],CELL_WIDTH);
 					board[i][j].add(new JLabel(""+c));
 					c++;
 				}else if(i==0 && j>10){
 					int m = j-cellsAI.length-2;
-					board[i][j] = new CellView(this.model,cellsAI[i][m],CELL_WIDTH);
+					board[i][j] = new CellView(this.model,i,j,cellsAI[i][m],CELL_WIDTH);
 					board[i][j].add(new JLabel(""+m));
 				}else if(i>0 && j==13){
-					board[i][j] = new CellView(this.model,cellsAI[i][j-cellsAI.length-2],CELL_WIDTH);
+					board[i][j] = new CellView(this.model,i,j,cellsAI[i][j-cellsAI.length-2],CELL_WIDTH);
 					board[i][j].add(new JLabel(""+d));
 					d++;
 				}else if(j < cellsPlayer.length){
-					board[i][j] = new CellView(this.model,cellsPlayer[i][j],CELL_WIDTH);
+					board[i][j] = new CellView(this.model,i,j,cellsPlayer[i][j],CELL_WIDTH);
 				}else {
-					board[i][j] = new CellView(this.model,cellsAI[i][j-cellsAI.length-2],CELL_WIDTH);
+					board[i][j] = new CellView(this.model,i,j,cellsAI[i][j-cellsAI.length-2],CELL_WIDTH);
 				}
 				jp.add(board[i][j]);
 			}
@@ -93,7 +108,7 @@ public class PlacementScreen extends JPanel implements Observer{
 			for(int j=0; j<board[i].length;j++){
 				Cell cell = board[i][j];
 				if(cell.getShip() != null){
-					this.drawShipCut(cell.getShip().getPathImage(), cell.getShip().getLengthShip(), cell.getPart(),i,j);
+					this.drawShipCut(cell.getShip().getPathImage(), cell.getShip().getLengthShip(), cell.getPart(),i,j+13);
 				}
 			}
 		}
