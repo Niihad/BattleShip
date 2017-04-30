@@ -42,7 +42,7 @@ public class BattleShip extends JFrame {
 	}
 	
 	public void setConfigScreen() {
-		this.config = new ConfigScreen(this);
+		this.config = new ConfigScreen(this,model);
 		frame.add(config, BorderLayout.CENTER);
 	}
 	

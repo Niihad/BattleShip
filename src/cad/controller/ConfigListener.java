@@ -10,7 +10,7 @@ public class ConfigListener implements ActionListener {
 	private ConfigScreen cScreen;
 	private BattleShip bs;
 
-	public ConfigListener(BattleShip bs, Object selectedItem, Object selectedItem2, Object selectedItem3, ConfigScreen configScreen) {
+	public ConfigListener(BattleShip bs, ConfigScreen configScreen) {
 		this.cScreen = configScreen;
 		this.bs = bs;
 	}
