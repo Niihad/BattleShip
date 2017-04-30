@@ -42,11 +42,12 @@ public class GameScreen extends JPanel implements Observer{
 	
 	// build board game 
 	private void drawBoard(JPanel jp, JButton[][] board, int x, int y, boolean player){
+		int w = 11, h = 11;
 		jp = this.drawJPanel(x, y, 450, 450);
 		char c = 'A';
 		jp.setLayout(new GridLayout(10 + 1,10 + 1,1,1));
-		for(int i = 0;i <= 10;i++){
-			for(int j = 0;j <= 10;j++){
+		for(int i = 0;i < w;i++){
+			for(int j = 0;j < h;j++){
 				if(i == 0){
 					if(j != 0)
 						board[i][j] = new JButton("" + j);
@@ -58,16 +59,23 @@ public class GameScreen extends JPanel implements Observer{
 						board[i][j] = new JButton("" + c);
 						c += 1;						
 						board[i][j].setEnabled(false);
-					}else{
+					} else {
 						board[i][j] = new JButton();
 						board[i][j].setEnabled(!player);
 					}
 				}
 				board[i][j].setPreferredSize(new Dimension(50,50));
-				if(player && i < 11 && j < 11 && i > 0 && j > 0 && model.getBoardPlayer()[i][j].getShip() != null)
-					board[i][j].setBackground(Color.blue.darker());
-				
-				if(!player && i < 11 && j < 11 && i > 0 && j > 0){
+				if(player) {
+					if(model.getBoardPlayer()[i][j].isTouch()) {
+						if(model.getBoardPlayer()[i][j].getShip() == null)
+							board[i][j].setBackground(Color.black.darker());
+						else
+							board[i][j].setBackground(Color.red.darker());
+					}
+					else if(model.getBoardPlayer()[i][j].getShip() != null)
+						board[i][j].setBackground(Color.blue.darker());
+				}
+				else {
 					boolean collision = false;
 					if(model.getBoardAI()[i][j].getShip() != null)
 						collision = true;
@@ -85,6 +93,25 @@ public class GameScreen extends JPanel implements Observer{
 			boardAI[x][y].setBackground(Color.green.darker());
 		else
 			boardAI[x][y].setBackground(Color.red.darker());
+	}
+	
+	/**
+	 * Met à jour le tableau du joueur suite au tir de l'IA
+	 * si l'IA ne touche pas de bateau
+	 * 		alors met la case en noir 
+	 * 		sinon met la case en rouge
+	 */
+	public void updateBoardPlayer(){
+		int w = 11, h = 11;
+		for(int x = 0; x < w; x++) 
+			for(int y = 0; y < h; y++) {
+				if(model.getBoardPlayer()[x][y].isShoot()) {
+					if(model.getBoardPlayer()[x][y].getShip() == null)
+						boardPlayer[x][y].setBackground(Color.black.darker());
+					else
+						boardPlayer[x][y].setBackground(Color.red.darker());
+				}
+			}
 	}
 
 

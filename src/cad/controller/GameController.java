@@ -24,13 +24,14 @@ public class GameController implements MouseListener {
 	public void mouseClicked(MouseEvent arg0) {
 		if(model.getEtat() == Etat.PLAYER){
 		if(collision){
-			this.model.setLife_ia();
-			this.game.setCouleur(x,y,true);
-		}else{
-			this.game.setCouleur(x,y,false);
-		}
-		this.model.setEtat(Etat.IA);
-		this.model.IA_play();
+				this.model.setLife_ia();
+				this.game.setCouleur(x,y,true);
+			}else{
+				this.game.setCouleur(x,y,false);
+			}
+			this.model.setEtat(Etat.IA);
+			this.model.IA_play();
+			this.game.updateBoardPlayer();
 		}
 	}
 
