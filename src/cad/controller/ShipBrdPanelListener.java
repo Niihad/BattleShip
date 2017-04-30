@@ -9,17 +9,22 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import cad.model.Cell;
+import cad.model.Model;
 import cad.view.CellView;
 
 public class ShipBrdPanelListener extends MouseAdapter {
 	
+	private Model model;
 	private JPanel panel;
     private JPanel[][] board;
+    private CellView[] originalJPanel;
     private JLabel[] label;
     private int length, part;
     private boolean rotation;
     
-    public ShipBrdPanelListener(JPanel panel, JPanel[][] board){
+    public ShipBrdPanelListener(Model model, JPanel panel, JPanel[][] board){
+    	this.model = model;
     	this.panel = panel;
     	this.board = board;
     }
@@ -34,21 +39,20 @@ public class ShipBrdPanelListener extends MouseAdapter {
         if (comp != null && ((JComponent) comp).getComponentCount() == 1) {
         	this.length = comp.getCell().getShip().getLengthShip();
         	this.part = comp.getCell().getPart();
+        	this.originalJPanel = new CellView[length]; 
         	this.label = new JLabel[length];
-        	if(length > 1){
-        		this.rotation = comp.getCell().getShip().isRotation();
-        		if(!comp.getCell().getShip().isRotation()){ // horizontal
-        			for(int i=0; i<=part; i++){
-        				CellView cell = (CellView) board[comp.getOrd()][comp.getAbs()-i];
-        				repaintClick(cell,i,i,e,true);
-        			}
-        			for(int i=1; i<length-part; i++){
-        				CellView cell = (CellView) board[comp.getOrd()][comp.getAbs()+i];
-        				repaintClick(cell,i+part,i,e,false);
-        			}
-        		}
-        	}
-        } else {
+    		this.rotation = comp.getCell().getShip().isRotation();
+    		if(!comp.getCell().getShip().isRotation()){ // horizontal
+    			for(int i=0; i<=part; i++){
+    				this.originalJPanel[i] = (CellView) board[comp.getOrd()][comp.getAbs()-i];
+    				this.repaintClick(this.originalJPanel[i],i,i,e,true);
+    			}
+    			for(int i=1; i<length-part; i++){
+    				this.originalJPanel[i+part] = (CellView) board[comp.getOrd()][comp.getAbs()+i];
+    				this.repaintClick(this.originalJPanel[i+part],i+part,i,e,false);
+    			}
+    		}
+        }else{
             return;
         }
         e.consume();
@@ -56,41 +60,64 @@ public class ShipBrdPanelListener extends MouseAdapter {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        /*if (label == null) {
+    	if (label == null) {
             return;
         }
-        int x = e.getXOnScreen() - gpP.x - label.getWidth() / 2;
-        int y = e.getYOnScreen() - gpP.y - label.getHeight() / 2;
-        label.setLocation(x, y);
-        
-        panel.repaint();
+		if(!this.rotation){ // horizontal
+			for(int i=0; i<=part; i++)
+				this.repaintComp(i,i,e,true);
+			for(int i=1; i<length-part; i++)
+				this.repaintComp(i+part,i,e,false);
+		}
         JPanel src = (JPanel) e.getSource();
         CellView comp = (CellView) src.getComponentAt(e.getPoint());
-        if (comp != null){
-            if (isNewJPanelValid(comp))
-            	comp.add(label);
-            else 
-                originalJPanel.add(label);
-        }else{
-            originalJPanel.add(label);
+        if (comp != null) {
+	        if(!this.rotation){ // horizontal
+	        	if (isNewJPanelValid(comp)){ // test position
+					for(int i=0; i<=part; i++){
+						CellView panelDestination = (CellView) board[comp.getOrd()][comp.getAbs()-i];
+						panelDestination.setCell((Cell) this.originalJPanel[i].getCell().clone());
+						this.originalJPanel[i].getCell().setShip(null);
+						panelDestination.add(label[i]);
+						if(comp.getAbs() < 11)
+							this.model.getBoardPlayer()[comp.getOrd()][comp.getAbs()-i] = panelDestination.getCell();
+						else
+							this.model.getBoardAI()[comp.getOrd()][comp.getAbs()-i] = panelDestination.getCell();
+					}
+					for(int i=1; i<length-part; i++){
+						CellView panelDestination = (CellView) board[comp.getOrd()][comp.getAbs()+i];
+						panelDestination.setCell((Cell) this.originalJPanel[i+part].getCell().clone());
+						panelDestination.add(label[i+part]);
+						this.originalJPanel[i+part].getCell().setShip(null);
+						if(comp.getAbs() < 11)
+							this.model.getBoardPlayer()[comp.getOrd()][comp.getAbs()+i] = panelDestination.getCell();
+						else
+							this.model.getBoardAI()[comp.getOrd()][comp.getAbs()+i] = panelDestination.getCell();
+					}
+				}else{
+					for(int i=0; i<=originalJPanel.length; i++)
+						originalJPanel[i].add(label[i]);
+				}
+        	}
         }
-        
+        this.panel.revalidate();
+        this.panel.repaint();
         label = null;
-        glassPane.setVisible(false);
-        panel.revalidate();
-        panel.repaint();*/
+        this.model.print(model.getBoardPlayer());
+        this.model.print(model.getBoardAI());
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-    	if(length > 1){
-    		if(!this.rotation){ // horizontal
-    			for(int i=0; i<=part; i++)
-    				repaintDragged(i,i,e,true);
-    			for(int i=1; i<length-part; i++)
-    				repaintDragged(i+part,i,e,false);
-    		}
-    	}
+    	if (label == null) {
+            return;
+        }
+		if(!this.rotation){ // horizontal
+			for(int i=0; i<=part; i++)
+				repaintComp(i,i,e,true);
+			for(int i=1; i<length-part; i++)
+				repaintComp(i+part,i,e,false);
+		}
     }
     
     private void repaintClick(CellView cell, int i, int j, MouseEvent e, boolean first){
@@ -105,6 +132,15 @@ public class ShipBrdPanelListener extends MouseAdapter {
         glassPane.repaint();
     }
     
+    private void repaintComp(int i, int j, MouseEvent e, boolean first){
+    	 if (label[i] == null) {
+             return;
+         }
+         JPanel glassPane = (JPanel) SwingUtilities.getRootPane(label[i]).getGlassPane();
+         this.buildShip(glassPane, i, j, e, first);
+         panel.repaint();
+    }
+    
     private void buildShip(JPanel glassPane, int i, int j, MouseEvent e, boolean first){
         glassPane.setVisible(true);
         Point gpP = glassPane.getLocationOnScreen();
@@ -117,15 +153,6 @@ public class ShipBrdPanelListener extends MouseAdapter {
         int x = tmp - gpP.x - label[i].getWidth() / 2;
         int y = e.getYOnScreen() - gpP.y - label[i].getHeight() / 2;
         label[i].setLocation(x, y);
-    }
-    
-    private void repaintDragged(int i, int j, MouseEvent e, boolean first){
-    	if (label[i] == null) {
-            return;
-        }
-    	JPanel glassPane = (JPanel) SwingUtilities.getRootPane(label[i]).getGlassPane();
-    	this.buildShip(glassPane, i, j, e, first);
-        panel.repaint();
     }
     
     private boolean isNewJPanelValid(CellView cell) {

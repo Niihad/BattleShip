@@ -37,11 +37,12 @@ public class Model extends Observable implements Runnable {
 		this.buildBoards(this.boardPlayer);
 		this.boardAI = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardAI);
-		this.initialPlaceShip(this.boardPlayer);
+		this.initialPlaceShip(this.boardAI);
 		this.etat = Etat.PLAYER;
-		this.aleaPlace(this.boardAI);
+		//this.aleaPlace(this.boardAI);
 
-		this.print();
+		this.print(boardPlayer);
+		this.print(boardAI);
 	}
 	
 	/***********************************************************/
@@ -122,11 +123,11 @@ public class Model extends Observable implements Runnable {
 		return false;
 	}
 
-	private void print() {
+	public void print(Cell[][] board) {
 		for (int i = 1; i < WIDTH + 1; i++) {
 			System.out.println("---------------------");
 			for (int j = 1; j < HEIGHT + 1; j++) {
-				if (this.boardAI[i][j].getShip() != null)
+				if (board[i][j].getShip() != null)
 					System.out.print("|X");
 				else
 					System.out.print("| ");
@@ -134,6 +135,7 @@ public class Model extends Observable implements Runnable {
 			System.out.print("|\n");
 		}
 		System.out.println("---------------------");
+		System.out.println("----------------------------------------------------------------------------");
 	}
 
 	/***********************************************************/

@@ -22,8 +22,6 @@ public class PlacementScreen extends JPanel implements Observer{
 	private Model model;
 	private JPanel[][] board;
 	private JPanel panelBoard;
-	private JLabel shipLabel = new JLabel();
-	//private boolean vertical = false;
 
 	public PlacementScreen(Model modele){
 		super();
@@ -34,7 +32,7 @@ public class PlacementScreen extends JPanel implements Observer{
 		this.drawBoard(this.panelBoard, this.board, this.model.getBoardPlayer(), this.model.getBoardAI());
 		this.add(this.panelBoard);
 
-		ShipBrdPanelListener shipListener = new ShipBrdPanelListener(this, board);
+		ShipBrdPanelListener shipListener = new ShipBrdPanelListener(this.model, this, board);
 		this.panelBoard.addMouseListener(shipListener);
 		this.panelBoard.addMouseMotionListener(shipListener);
 		this.drawShipsBoard(model.getBoardAI());

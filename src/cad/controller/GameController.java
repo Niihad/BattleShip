@@ -2,7 +2,6 @@ package cad.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 
 import cad.model.Model;
 import cad.view.GameScreen;
@@ -21,20 +20,7 @@ public class GameController implements ActionListener {
 		this.y = j;
 	}
 
-	public void mouseClicked(MouseEvent arg0) {
-		/*if(model.getEtat() == Etat.PLAYER){
-			if(collision){
-				this.model.setLife_ia();
-				this.game.setCouleur(x,y,true);
-			}else{
-				this.game.setCouleur(x,y,false);
-			}
-			this.model.setEtat(Etat.IA);
-			this.model.IA_play();
-			this.game.updateBoardPlayer();
-		}*/
-	}
-
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		/*if(model.getEtat() == Etat.PLAYER){
 			if(collision){
@@ -45,6 +31,7 @@ public class GameController implements ActionListener {
 			}
 			this.model.setEtat(Etat.IA);
 			this.model.IA_play();
+			this.game.updateBoardPlayer();
 		}	*/	
 	}
 
