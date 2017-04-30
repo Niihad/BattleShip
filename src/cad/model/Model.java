@@ -6,8 +6,8 @@ import java.util.Observable;
 
 public class Model extends Observable implements Runnable {
 	
-	public static int WIDTH = 10;
-	public static int HEIGHT = 10;
+	private static final int WIDTH = 10;
+	private static final int HEIGHT = 10;
 	
 	private HashMap<Integer, Age> ages;
 	private int keyage = 0;
@@ -25,13 +25,13 @@ public class Model extends Observable implements Runnable {
 		}
 		this.buildAge("Moderne", shipInfo);
 		
-		this.boardPlayer = new Cell[WIDTH+1][HEIGHT+1];
+		this.boardPlayer = new Cell[getWidth()+1][HEIGHT+1];
 		this.buildBoards(this.boardPlayer);
-		this.boardAi = new Cell[WIDTH+1][HEIGHT+1];
+		System.out.println(this.getBoardPlayer()[0][0]);
+		this.boardAi = new Cell[getWidth()+1][HEIGHT+1];
 		this.buildBoards(this.boardAi);
 		
 		this.exemplePlace(this.boardPlayer);
-		this.print();
 	}
 	
 	private void buildAge(String nameAge, String[] shipInfo){ // ship = name - irl
@@ -46,15 +46,15 @@ public class Model extends Observable implements Runnable {
 	
 	private void buildBoards(Cell[][] board){
 		
-		for(int i=1; i<WIDTH+1; i++){
-			for(int j=1; j<HEIGHT+1; j++){
+		for(int i=0; i<=getWidth(); i++){
+			for(int j=0; j<=HEIGHT; j++){
 				board[i][j] = new Cell(i, j, null);
 			}
 		}
 	}
 	
 	private void exemplePlace(Cell[][] board){
-		int position[][] = {{2,2}, {4,2}, {4,6}, {6,2}, {6,5}, {6,8}, {8,2}, {8,4}, {8,6}, {8,8}};
+		int position[][] = {{1,1}, {3,1}, {3,5}, {5,1}, {5,4}, {5,7}, {7,1}, {7,3}, {7,5}, {7,7}};
 		int i = 0;
 		for(Ship ship : this.ages.get(this.keyage).getShips()){
 			for(int j=0; j<ship.getLengthShip(); j++){
@@ -64,24 +64,18 @@ public class Model extends Observable implements Runnable {
 		}
 	}
 	
-	private void print(){
-		for(int i=1; i<WIDTH+1; i++){
-			System.out.println("---------------------");
-			for(int j=1; j<HEIGHT+1; j++){
-				if(this.boardPlayer[i][j].getShip() != null)
-					System.out.print("|X");
-				else
-					System.out.print("| ");
-			}
-			System.out.print("|\n");
-		}
-		System.out.println("---------------------");
-	}
-	
-	
+
 	/***********************************************************/
 	/********************* GETTER / SETTER *********************/
 	/***********************************************************/
+	
+	public static int getWidth() {
+		return WIDTH;
+	}
+	
+	public static int getHeight() {
+		return HEIGHT;
+	}
 	
 	public HashMap<Integer, Age> getAges() {
 		return ages;
