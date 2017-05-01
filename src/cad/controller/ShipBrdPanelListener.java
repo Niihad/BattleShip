@@ -12,50 +12,81 @@ import javax.swing.SwingUtilities;
 import cad.model.Cell;
 import cad.model.Model;
 import cad.view.CellView;
+import cad.view.PlacementScreen;
 
 public class ShipBrdPanelListener extends MouseAdapter {
 	
 	private Model model;
-	private JPanel panel;
+	private PlacementScreen placement;
     private JPanel[][] board;
     private CellView[] originalJPanel;
     private JLabel[] label;
     private int length, part;
     private boolean rotation;
     
-    public ShipBrdPanelListener(Model model, JPanel panel, JPanel[][] board){
+    public ShipBrdPanelListener(Model model, PlacementScreen placement){
     	this.model = model;
-    	this.panel = panel;
-    	this.board = board;
+    	this.placement = placement;
+    	this.board = placement.getBoard();
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (e.getButton() != MouseEvent.BUTTON1) {
-            return;
-        }
-        JPanel src = (JPanel) e.getSource();
+    	/* recupere et stock le jPanel present a l'endroit du curseur 
+    	 * remarque un bloc jPanel represente un seul bloc du bateau plusieur bloc
+    	 * de jPanel sont donc utilisé pour constituer l'integralité d'un bateau.
+    	 */
+    	JPanel src = (JPanel) e.getSource();
+    	// recuperaton du composant present dans le jPanel
         CellView comp = (CellView) src.getComponentAt(e.getPoint());
         if (comp != null && ((JComponent) comp).getComponentCount() == 1) {
-        	this.length = comp.getCell().getShip().getLengthShip();
-        	this.part = comp.getCell().getPart();
-        	this.originalJPanel = new CellView[length]; 
-        	this.label = new JLabel[length];
-    		this.rotation = comp.getCell().getShip().isRotation();
-    		if(!comp.getCell().getShip().isRotation()){ // horizontal
-    			for(int i=0; i<=part; i++){
-    				this.originalJPanel[i] = (CellView) board[comp.getOrd()][comp.getAbs()-i];
-    				this.repaintClick(this.originalJPanel[i],i,i,e,true);
-    			}
-    			for(int i=1; i<length-part; i++){
-    				this.originalJPanel[i+part] = (CellView) board[comp.getOrd()][comp.getAbs()+i];
-    				this.repaintClick(this.originalJPanel[i+part],i+part,i,e,false);
-    			}
-    		}
+        	// rotation du bateau selectionné
+        	if (e.getButton() != MouseEvent.BUTTON1){
+	        	//this.rotationShip(comp,e);
+	        }else{
+	        	Cell cell = model.getBoardConvert(comp.getAbs())[comp.getOrd()][comp.getAbsConvert()];
+	        	/* longueur du bateau. Cette variable sera utilisé pour dessiner bloc par bloc 
+	        	 * les composants que constitue un bateau 
+	        	 */
+	        	this.length = cell.getShip().getLengthShip();
+	        	// correspond au numero du bloc du bateau selectionné
+	        	this.part = cell.getPart();
+	        	// stock chaque cells que constitue le bateau selectionné
+	        	this.originalJPanel = new CellView[length]; 
+	        	// stock chaque label que constitue le bateau selectionné
+	        	this.label = new JLabel[length];
+	        	// renseigne sur la rotation du bateau
+	    		this.rotation = cell.getShip().isRotation();
+	        	for(int i=0; i<length; i++){
+	        		if(!this.rotation){ // horizontal
+	        			this.originalJPanel[i] = (CellView) board[comp.getOrd()][comp.getAbs()+i-part];
+	        			this.repaintClick(this.originalJPanel[i],i,e,true);
+	        		}else{ // vertical
+	        			this.originalJPanel[i] = (CellView) board[comp.getOrd()+i-part][comp.getAbs()];
+						this.repaintClick(this.originalJPanel[i],i,e,true);
+	        		}
+	        	}
+
+	        }
         }else{
-            return;
+        	return;
         }
         e.consume();
+    }
+    
+    @Override
+    public void mouseDragged(MouseEvent e) {
+    	if (label == null) {
+            return;
+        }
+    	JPanel glassPane;
+		if(!this.rotation){ // horizontal
+			for(int i=0; i<length; i++){
+				glassPane = (JPanel) SwingUtilities.getRootPane(label[i]).getGlassPane();
+		        this.buildShip(glassPane, i, e);
+		        placement.repaint();
+			}
+		}
     }
 
     @Override
@@ -63,101 +94,69 @@ public class ShipBrdPanelListener extends MouseAdapter {
     	if (label == null) {
             return;
         }
-		if(!this.rotation){ // horizontal
-			for(int i=0; i<=part; i++)
-				this.repaintComp(i,i,e,true);
-			for(int i=1; i<length-part; i++)
-				this.repaintComp(i+part,i,e,false);
-		}
         JPanel src = (JPanel) e.getSource();
         CellView comp = (CellView) src.getComponentAt(e.getPoint());
         if (comp != null) {
-	        if(!this.rotation){ // horizontal
-	        	if (isNewJPanelValid(comp)){ // test position
-					for(int i=0; i<=part; i++){
-						CellView panelDestination = (CellView) board[comp.getOrd()][comp.getAbs()-i];
-						panelDestination.setCell((Cell) this.originalJPanel[i].getCell().clone());
-						this.originalJPanel[i].getCell().setShip(null);
-						panelDestination.add(label[i]);
-						if(comp.getAbs() < 11)
-							this.model.getBoardPlayer()[comp.getOrd()][comp.getAbs()-i] = panelDestination.getCell();
-						else
-							this.model.getBoardAI()[comp.getOrd()][comp.getAbs()-i] = panelDestination.getCell();
-					}
-					for(int i=1; i<length-part; i++){
-						CellView panelDestination = (CellView) board[comp.getOrd()][comp.getAbs()+i];
-						panelDestination.setCell((Cell) this.originalJPanel[i+part].getCell().clone());
-						panelDestination.add(label[i+part]);
-						this.originalJPanel[i+part].getCell().setShip(null);
-						if(comp.getAbs() < 11)
-							this.model.getBoardPlayer()[comp.getOrd()][comp.getAbs()+i] = panelDestination.getCell();
-						else
-							this.model.getBoardAI()[comp.getOrd()][comp.getAbs()+i] = panelDestination.getCell();
-					}
-				}else{
-					for(int i=0; i<=originalJPanel.length; i++)
-						originalJPanel[i].add(label[i]);
-				}
-        	}
+        	boolean player = (comp.getAbs()<10) ? true : false;
+        	System.out.println(comp.getAbs()+" "+player);
+        	Cell cell = model.getBoardConvert(comp.getAbs())[comp.getOrd()][comp.getAbsConvert()];
+        	if (this.model.placementShipValid(cell)){ // test position
+        		Cell cloneShip = model.getBoardConvert(originalJPanel[0].getAbs())[originalJPanel[0].getOrd()][originalJPanel[0].getAbsConvert()];
+        		this.model.affectCloneShip(cloneShip);
+        		for(int i=0; i<length; i++){
+        			Cell OriginCell = model.getBoardConvert(originalJPanel[i].getAbs())[originalJPanel[i].getOrd()][originalJPanel[i].getAbsConvert()];
+	        		if(!this.rotation){ // horizontal
+		        		this.model.movePlacementShipBoard(OriginCell,cell,part,player);
+		        		CellView panelDestination = (CellView) board[comp.getOrd()][comp.getAbs()+i-part];
+		        		panelDestination.add(label[i]);
+		        	}else{ // vertical
+		        		this.model.movePlacementShipBoard(OriginCell,cell,i,player);
+		        		CellView panelDestination = (CellView) board[comp.getOrd()+i-part][comp.getAbs()];
+		        		panelDestination.add(label[i]);
+		        	}
+	        	}
+        	}else{
+				for(int i=0; i<=originalJPanel.length; i++)
+					originalJPanel[i].add(label[i]);
+			}
         }
-        this.panel.revalidate();
-        this.panel.repaint();
+        this.placement.revalidate();
+        this.placement.repaint();
         label = null;
         this.model.print(model.getBoardPlayer());
         this.model.print(model.getBoardAI());
     }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-    	if (label == null) {
-            return;
-        }
-		if(!this.rotation){ // horizontal
-			for(int i=0; i<=part; i++)
-				repaintComp(i,i,e,true);
-			for(int i=1; i<length-part; i++)
-				repaintComp(i+part,i,e,false);
-		}
-    }
     
-    private void repaintClick(CellView cell, int i, int j, MouseEvent e, boolean first){
+    
+    /***********************************************************/
+	/************************* FONCTION ************************/
+	/***********************************************************/
+    
+    private void repaintClick(CellView cell, int i, MouseEvent e, boolean first){
     	label[i] = (JLabel) cell.getComponent(0);
     	cell.remove(label[i]);
     	cell.revalidate();
     	cell.repaint();
     	JPanel glassPane = (JPanel) SwingUtilities.getRootPane(cell).getGlassPane();
-        this.buildShip(glassPane, i, j, e, first);
+        this.buildShip(glassPane, i, e);
         label[i].setSize(label[i].getPreferredSize());
         glassPane.add(label[i]);
         glassPane.repaint();
     }
     
-    private void repaintComp(int i, int j, MouseEvent e, boolean first){
-    	 if (label[i] == null) {
-             return;
-         }
-         JPanel glassPane = (JPanel) SwingUtilities.getRootPane(label[i]).getGlassPane();
-         this.buildShip(glassPane, i, j, e, first);
-         panel.repaint();
-    }
-    
-    private void buildShip(JPanel glassPane, int i, int j, MouseEvent e, boolean first){
+    private void buildShip(JPanel glassPane, int i, MouseEvent e){
         glassPane.setVisible(true);
         Point gpP = glassPane.getLocationOnScreen();
         glassPane.setLayout(null);
-        int tmp;
-        if(first)
-        	tmp = e.getXOnScreen()-(((int)label[i].getSize().getWidth())*i);
-        else
-        	tmp = e.getXOnScreen()+(((int)label[i].getSize().getWidth())*j);
-        int x = tmp - gpP.x - label[i].getWidth() / 2;
+        int tmpX = 0;
+        int x = e.getXOnScreen() - gpP.x - label[i].getWidth() / 2;
         int y = e.getYOnScreen() - gpP.y - label[i].getHeight() / 2;
-        label[i].setLocation(x, y);
+       // if(!this.rotation){ // horizontal
+        tmpX = (((int)label[i].getSize().getWidth())*(i-this.part));
+       //}else{ // vertical
+        	//tmpY = (((int)label[key].getSize().getHeight())*i);
+        //}
+        label[i].setLocation(x+tmpX, y);
     }
     
-    private boolean isNewJPanelValid(CellView cell) {
-        int x = cell.getAbs();
-        int y = cell.getOrd();
-        return !(x==0 || x==13 || y==0 || (y>10 && y<13));
-    }
 }

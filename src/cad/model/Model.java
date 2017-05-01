@@ -4,6 +4,8 @@ import java.awt.Point;
 import java.util.Observable;
 import java.util.Random;
 
+import cad.view.CellView;
+
 public class Model extends Observable implements Runnable {
 	
 	private static final int WIDTH = 10;
@@ -11,7 +13,7 @@ public class Model extends Observable implements Runnable {
 	private Age age;
 	private Cell[][] boardPlayer, boardAI;
 	private Point selectShipPLace = null;
-	private Ship chooseShip;
+	private Ship chooseShip, cloneShip;
 	private int life,life_ia;
 	private Context context;
 	private boolean end_game = false;
@@ -45,99 +47,7 @@ public class Model extends Observable implements Runnable {
 		this.print(boardAI);
 	}
 	
-	/***********************************************************/
-	/********************** Initiale Game **********************/
-	/***********************************************************/
 	
-	private Age addAge(String name, Ship[] ships){
-		Age age = new Age(name);
-		for(int i=0; i<ships.length; i++)	
-			age.addShip(ships[i]);
-		return age;
-	}
-	
-	private void buildBoards(Cell[][] board){
-		for(int i=0; i<=WIDTH; i++){
-			for(int j=0; j<=HEIGHT; j++){
-				board[i][j] = new Cell(i, j);
-			}
-		}
-	}
-	
-	private void initialPlaceShip(Cell[][] board){
-		int position[][] = { { 1, 1 }, { 4, 4 }, { 6, 6 }, { 8, 1 }, { 10, 9 } };
-		int i = 0;
-		for (Ship ship : this.age.getShips()) {
-			for (int j = 0; j < ship.getLengthShip(); j++) {
-				this.setShipCell(board, position[i][0], position[i][1] + j, ship, j);
-			}
-			i++;
-		}
-	}
-
-	private void aleaPlace(Cell[][] boardAi) {
-		Random r = new Random();
-		int x, y;
-		for (Ship ship : this.age.getShips()) {
-			// 0 - Verticale -- 1 - Horizonale
-			int nb = (int) (Math.random() * 2);
-
-			if (nb == 0) {// Vert
-				do {
-					x = 1 + r.nextInt(WIDTH - 1);
-					do {// depassement du tableau vers le bas
-						y = 1 + r.nextInt(HEIGHT - 1);
-					} while (ship.getLengthShip() + y > HEIGHT + 1);
-				} while (test_collision(x, y, ship.getLengthShip(), boardAi, true) == true);
-				for (int j = 0; j < ship.getLengthShip(); j++) {
-					this.setShipCell(boardAi, x, y+j, ship,j);
-				}
-			} else {// Horizontale
-				do {
-					y = 1 + r.nextInt(HEIGHT - 1);
-					do {// depassement du tableau vers la droite
-						x = 1 + r.nextInt(WIDTH - 1);
-					} while (ship.getLengthShip() + x > WIDTH + 1);
-				} while (test_collision(x, y, ship.getLengthShip(), boardAi, false) == true);
-				for (int j = 0; j < ship.getLengthShip(); j++) {
-					this.setShipCell(boardAi, x+j, y, ship, j);
-				}
-			}
-		}
-	}
-
-	//permet de test si on peux placer le bateau a cette position
-	//test si deux bateaux se croisent
-	private boolean test_collision(int x, int y, int size, Cell[][] boardAi2, boolean vert) {
-		if (vert) {
-			for (int i = 0; i < size; i++) {
-				if (boardAI[x][y + i].getShip() != null)
-					return true;
-			}
-		} else {
-			for (int i = 0; i < size; i++) {
-				if (boardAI[x + i][y].getShip() != null)
-					return true;
-			}
-		}
-		return false;
-	}
-
-	public void print(Cell[][] board) {
-		for (int i = 1; i < WIDTH + 1; i++) {
-			System.out.println("---------------------");
-			for (int j = 1; j < HEIGHT + 1; j++) {
-				if (board[i][j].getShip() != null)
-					System.out.print("|X");
-				else
-					System.out.print("| ");
-			}
-			System.out.print("|\n");
-		}
-		System.out.println("---------------------");
-		System.out.println("----------------------------------------------------------------------------");
-	}
-
 	/***********************************************************/
 	/********************* GETTER / SETTER *********************/
 	/***********************************************************/
@@ -235,8 +145,140 @@ public class Model extends Observable implements Runnable {
 		this.etat = etat;
 	}
 	
+	public Cell getCell(int i, int j, boolean player){
+		return (player) ? this.boardPlayer[i][j] : this.boardAI[i][j];
+	}
+	
+	public Cell[][] getBoardConvert(int val){
+		return (val > Model.WIDTH) ? this.boardAI : this.boardPlayer;
+	}
+	
+	
 	/***********************************************************/
-	/********************** ShipPLcaeView **********************/
+	/********************** Initiale Game **********************/
+	/***********************************************************/
+	
+	private Age addAge(String name, Ship[] ships){
+		Age age = new Age(name);
+		for(int i=0; i<ships.length; i++)	
+			age.addShip(ships[i]);
+		return age;
+	}
+	
+	private void buildBoards(Cell[][] board){
+		for(int i=0; i<=WIDTH; i++){
+			for(int j=0; j<=HEIGHT; j++){
+				board[i][j] = new Cell(i, j);
+			}
+		}
+	}
+	
+	private void initialPlaceShip(Cell[][] board){
+		int position[][] = { { 1, 1 }, { 4, 4 }, { 6, 6 }, { 8, 1 }, { 10, 9 } };
+		int i = 0;
+		for (Ship ship : this.age.getShips()) {
+			for (int j = 0; j < ship.getLengthShip(); j++) {
+				this.setShipCell(board, position[i][0], position[i][1] + j, ship, j);
+			}
+			i++;
+		}
+	}
+
+	private void aleaPlace(Cell[][] boardAi) {
+		Random r = new Random();
+		int x, y;
+		for (Ship ship : this.age.getShips()) {
+			// 0 - Verticale -- 1 - Horizonale
+			int nb = (int) (Math.random() * 2);
+
+			if (nb == 0) {// Vert
+				do {
+					x = 1 + r.nextInt(WIDTH - 1);
+					do {// depassement du tableau vers le bas
+						y = 1 + r.nextInt(HEIGHT - 1);
+					} while (ship.getLengthShip() + y > HEIGHT + 1);
+				} while (test_collision(x, y, ship.getLengthShip(), boardAi, true) == true);
+				for (int j = 0; j < ship.getLengthShip(); j++) {
+					this.setShipCell(boardAi, x, y+j, ship,j);
+				}
+			} else {// Horizontale
+				do {
+					y = 1 + r.nextInt(HEIGHT - 1);
+					do {// depassement du tableau vers la droite
+						x = 1 + r.nextInt(WIDTH - 1);
+					} while (ship.getLengthShip() + x > WIDTH + 1);
+				} while (test_collision(x, y, ship.getLengthShip(), boardAi, false) == true);
+				for (int j = 0; j < ship.getLengthShip(); j++) {
+					this.setShipCell(boardAi, x+j, y, ship, j);
+				}
+			}
+		}
+	}
+
+	//permet de test si on peux placer le bateau a cette position
+	//test si deux bateaux se croisent
+	private boolean test_collision(int x, int y, int size, Cell[][] boardAi2, boolean vert) {
+		if (vert) {
+			for (int i = 0; i < size; i++) {
+				if (boardAI[x][y + i].getShip() != null)
+					return true;
+			}
+		} else {
+			for (int i = 0; i < size; i++) {
+				if (boardAI[x + i][y].getShip() != null)
+					return true;
+			}
+		}
+		return false;
+	}
+
+	public void print(Cell[][] board) {
+		for (int i = 1; i < WIDTH + 1; i++) {
+			System.out.println("---------------------");
+			for (int j = 1; j < HEIGHT + 1; j++) {
+				if (board[i][j].getShip() != null)
+					System.out.print("|X");
+				else
+					System.out.print("| ");
+			}
+			System.out.print("|\n");
+		}
+		System.out.println("---------------------");
+		System.out.println("----------------------------------------------------------------------------");
+	}
+	
+	public void affectCloneShip(Cell cell){
+		this.cloneShip = (Ship) cell.cloneShip();
+	}
+	
+	public void movePlacementShipBoard(Cell cell, Cell newCell, int part, boolean player){
+		boolean rotation = cell.getShip().isRotation();
+		int x = newCell.getX();
+		int y = newCell.getY();
+		if(!rotation)// horizontal
+			y = y + cell.getPart()- part; 
+		else // verticale
+			x = x + cell.getPart()- part;
+		if(player){
+			this.boardPlayer[x][y] = (Cell) cell.clone();
+			this.boardPlayer[x][y].setLocation(x, y);
+			this.boardPlayer[x][y].setShip(this.cloneShip);
+			cell.setShip(null);
+		}else{
+			this.boardAI[x][y] = (Cell) cell.clone();
+			this.boardAI[x][y].setLocation(x, y);
+			this.boardAI[x][y].setShip(this.cloneShip);
+			cell.setShip(null);
+		}
+	}
+	
+	public boolean placementShipValid(Cell cell){
+		return true;
+	}
+
+	
+	/***********************************************************/
+	/********************** ShipPLaceView **********************/
 	/***********************************************************/
 
 	public synchronized void setShipCell(Cell[][] cells, int x, int y, Ship ship, int part) {

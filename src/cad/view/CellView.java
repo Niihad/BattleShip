@@ -15,26 +15,13 @@ public class CellView extends JPanel implements Observer{
 	
 	private static final long serialVersionUID = 1L;
 	protected Model model;
-	protected Cell cell;
 	protected int abs, ord, width;
 	
 	public CellView(Model model, int x, int y, int width){
 		super();
 		this.model=model;
-		this.abs = y;
 		this.ord = x;
-		this.width = width;
-		this.setLayout(new GridBagLayout());
-		this.setPreferredSize(new Dimension(width,width)); 
-		this.model.addObserver(this);
-	}
-	
-	public CellView(Model model, int x, int y, Cell cell, int width){
-		super();
-		this.model=model;
-		this.cell = cell;
 		this.abs = y;
-		this.ord = x;
 		this.width = width;
 		this.setLayout(new GridBagLayout());
 		this.setPreferredSize(new Dimension(width,width)); 
@@ -57,13 +44,9 @@ public class CellView extends JPanel implements Observer{
 	public void setOrd(int ord) {
 		this.ord = ord;
 	}
-
-	public Cell getCell() {
-		return cell;
-	}
-
-	public void setCell(Cell cell) {
-		this.cell = cell;
+	
+	public int getAbsConvert(){
+		return (this.abs>Model.getWidth()) ? this.abs-Model.getWidth()-3 : this.abs;
 	}
 
 	@Override

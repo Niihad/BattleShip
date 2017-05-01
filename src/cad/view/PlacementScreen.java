@@ -27,12 +27,12 @@ public class PlacementScreen extends JPanel implements Observer{
 		super();
 		this.model = modele;
 		
-		this.board = new JPanel[Model.getWidth()+1][Model.getHeight()*2+4];
+		this.board = new JPanel[Model.getHeight()+1][Model.getWidth()*2+4];
 		this.panelBoard = new JPanel();
-		this.drawBoard(this.panelBoard, this.board, this.model.getBoardPlayer(), this.model.getBoardAI());
+		this.drawBoard(this.panelBoard, this.board, this.model.getBoardPlayer().length);
 		this.add(this.panelBoard);
 
-		ShipBrdPanelListener shipListener = new ShipBrdPanelListener(this.model, this, board);
+		ShipBrdPanelListener shipListener = new ShipBrdPanelListener(this.model, this);
 		this.panelBoard.addMouseListener(shipListener);
 		this.panelBoard.addMouseMotionListener(shipListener);
 		this.drawShipsBoard(model.getBoardAI());
@@ -40,18 +40,13 @@ public class PlacementScreen extends JPanel implements Observer{
 		this.model.addObserver(this);
 	}
 	
-	
-	
 	public JPanel[][] getBoard() {
 		return board;
 	}
 
-
-
 	public void setBoard(JPanel[][] board) {
 		this.board = board;
 	}
-
 
 
 	/***********************************************************/
@@ -59,37 +54,38 @@ public class PlacementScreen extends JPanel implements Observer{
 	/***********************************************************/
 	
 	// build board game 
-	private void drawBoard(JPanel jp, JPanel[][] board, Cell[][] cellsPlayer, Cell[][] cellsAI){
+	private void drawBoard(JPanel jp, JPanel[][] board, int size){
 		char c = 'A', d = 'A';
-		int length = cellsPlayer.length*2+2;
-		jp.setLayout(new GridLayout(cellsPlayer.length, length,0,0));
-		for(int i=0; i<cellsPlayer.length; i++){
+		int length = size*2+2;
+		jp.setLayout(new GridLayout(size, length,0,0));
+		for(int i=0; i<size; i++){
 			for(int j=0; j<length; j++){
 				if(i==0 && j==0){
-					board[i][j] = new CellView(this.model,i,j,cellsPlayer[i][j],CELL_WIDTH);
+					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
 				}else if(i==0 && j==13){
-					board[i][j] = new CellView(this.model,i,j,cellsAI[i][j-cellsAI.length-2],CELL_WIDTH);
+					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
 				}else if(j>10 && j<13){
-					board[i][j] = new CellView(this.model, i, j, CELL_WIDTH);
-				}else if(i==0 && j>0 && j < cellsPlayer.length){
-					board[i][j] = new CellView(this.model,i,j,cellsPlayer[i][j],CELL_WIDTH);
+					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
+					board[i][j].setBorder(null);
+				}else if(i==0 && j>0 && j < size){
+					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
 					board[i][j].add(new JLabel(""+j));
 				}else if(i>0 && j==0){
-					board[i][j] = new CellView(this.model,i,j,cellsPlayer[i][j],CELL_WIDTH);
+					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
 					board[i][j].add(new JLabel(""+c));
 					c++;
 				}else if(i==0 && j>10){
-					int m = j-cellsAI.length-2;
-					board[i][j] = new CellView(this.model,i,j,cellsAI[i][m],CELL_WIDTH);
+					int m = j-size-2;
+					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
 					board[i][j].add(new JLabel(""+m));
 				}else if(i>0 && j==13){
-					board[i][j] = new CellView(this.model,i,j,cellsAI[i][j-cellsAI.length-2],CELL_WIDTH);
+					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
 					board[i][j].add(new JLabel(""+d));
 					d++;
-				}else if(j < cellsPlayer.length){
-					board[i][j] = new CellView(this.model,i,j,cellsPlayer[i][j],CELL_WIDTH);
+				}else if(j < size){
+					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
 				}else {
-					board[i][j] = new CellView(this.model,i,j,cellsAI[i][j-cellsAI.length-2],CELL_WIDTH);
+					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
 				}
 				jp.add(board[i][j]);
 			}
@@ -112,7 +108,7 @@ public class PlacementScreen extends JPanel implements Observer{
 		}
 	}
 	
-	private void drawShipCut(String path, int length, int cut, int i, int j){
+	public void drawShipCut(String path, int length, int cut, int i, int j){
 		ImageIcon icon = new ImageIcon(new ImageIcon(path).getImage().getScaledInstance(CELL_WIDTH*length, CELL_WIDTH, Image.SCALE_DEFAULT));
 		Image img = icon.getImage();
 		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);

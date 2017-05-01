@@ -40,8 +40,8 @@ public class BattleShip extends JFrame {
 		this.placement = new PlacementScreen(model);
 		this.game = new GameScreen(model);
 		frame.add(stats, BorderLayout.NORTH);
-		//frame.add(placement, BorderLayout.CENTER);
-		frame.add(game, BorderLayout.CENTER);
+		frame.add(placement, BorderLayout.CENTER);
+		//frame.add(game, BorderLayout.CENTER);
 	}
 	
 	public void setConfigScreen() {
