@@ -3,31 +3,31 @@
 	<epoque nom ="Moderne" id="0">
 		<ships>
 			<ship>
-				<nom>porte-avion</nom>
+				<nom>Porte-avion</nom>
 				<image>assets/s1.png</image>
 				<longueur>5</longueur>
 				<vie></vie>
 			</ship>
 			<ship>
-				<nom>croiseur</nom>
+				<nom>Croiseur</nom>
 				<image>assets/s1.png</image>
 				<longueur>4</longueur>
 				<vie></vie>
 			</ship>
 			<ship>
-				<nom>contre-torpilleur</nom>
+				<nom>Contre-torpilleur</nom>
 				<image>assets/s1.png</image>
 				<longueur>3</longueur>
 				<vie></vie>
 			</ship>
 			<ship>
-				<nom>sous-marins</nom>
+				<nom>Sous-marins</nom>
 				<image>assets/s1.png</image>
 				<longueur>3</longueur>
 				<vie></vie>
 			</ship>
 			<ship>
-				<nom>torpilleur</nom>
+				<nom>Torpilleur</nom>
 				<image>assets/s1.png</image>
 				<longueur>2</longueur>
 				<vie></vie>
@@ -37,31 +37,31 @@
 	<epoque nom="Pirates" id="1">
 		<ships>
 			<ship>
-				<nom>porte-avion</nom>
+				<nom>Schooner</nom>
 				<image>assets/s1.png</image>
 				<longueur>5</longueur>
 				<vie></vie>
 			</ship>
 			<ship>
-				<nom>croiseur</nom>
+				<nom>Frégate</nom>
 				<image>assets/s1.png</image>
 				<longueur>4</longueur>
 				<vie></vie>
 			</ship>
 			<ship>
-				<nom>contre-torpilleur</nom>
+				<nom>Barque</nom>
 				<image>assets/s1.png</image>
 				<longueur>3</longueur>
 				<vie></vie>
 			</ship>
 			<ship>
-				<nom>sous-marins</nom>
+				<nom>Barque</nom>
 				<image>assets/s1.png</image>
 				<longueur>3</longueur>
 				<vie></vie>
 			</ship>
 			<ship>
-				<nom>torpilleur</nom>
+				<nom>Sloop</nom>
 				<image>assets/s1.png</image>
 				<longueur>2</longueur>
 				<vie></vie>
@@ -71,31 +71,31 @@
 	<epoque nom="Romaines" id="2">
 		<ships>
 			<ship>
-				<nom>porte-avion</nom>
+				<nom>Trirème</nom>
 				<image>assets/s1.png</image>
 				<longueur>5</longueur>
 				<vie></vie>
 			</ship>
 			<ship>
-				<nom>croiseur</nom>
+				<nom>Quinquérème</nom>
 				<image>assets/s1.png</image>
 				<longueur>4</longueur>
 				<vie></vie>
 			</ship>
 			<ship>
-				<nom>contre-torpilleur</nom>
+				<nom>Galère</nom>
 				<image>assets/s1.png</image>
 				<longueur>3</longueur>
 				<vie></vie>
 			</ship>
 			<ship>
-				<nom>sous-marins</nom>
+				<nom>Galère</nom>
 				<image>assets/s1.png</image>
 				<longueur>3</longueur>
 				<vie></vie>
 			</ship>
 			<ship>
-				<nom>torpilleur</nom>
+				<nom>Birème</nom>
 				<image>assets/s1.png</image>
 				<longueur>2</longueur>
 				<vie></vie>

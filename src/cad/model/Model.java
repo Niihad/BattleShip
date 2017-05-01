@@ -21,28 +21,11 @@ public class Model extends Observable implements Runnable {
 	}
 
 	public Model() {
-		Ship[] ships = new Ship[5];
-		ships[0] = new Ship("porte-avion", "assets/s1.png", 5, 5);
-		ships[1] = new Ship("croiseur", "assets/s1.png", 4, 4);
-		ships[2] = new Ship("contre-torpilleur", "assets/s1.png", 3, 3);
-		ships[3] = new Ship("sous-marins", "assets/s1.png", 3, 3);
-		ships[4] = new Ship("torpilleur", "assets/s1.png", 2, 2);
-		age = this.addAge("Moderne", ships);
-		
-		for (Ship ship : this.age.getShips())
-			life += ship.getLife();
-			life_ia =  life;
-		
 		this.boardPlayer = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardPlayer);
 		this.boardAI = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardAI);
-		this.initialPlaceShip(this.boardPlayer);
 		this.etat = Etat.PLAYER;
-		this.aleaPlace(this.boardAI);
-
-		//this.print(boardPlayer);
-		this.print(boardAI);
 	}
 	
 	
@@ -169,6 +152,30 @@ public class Model extends Observable implements Runnable {
 				board[i][j] = new Cell(i, j);
 			}
 		}
+	}
+	
+	/**
+	 * Initialise les bateaux
+	 * @param nomEpoque : nom de l'époque choisie
+	 * @param shipsEpoque : liste des bateaux pour une époque choisie
+	 */
+	public void selectionEpoque(String nomEpoque, Ship[] shipsEpoque) {
+		Ship[] ships = shipsEpoque;
+
+		for(int i = 0; i < shipsEpoque.length; i++) 
+			System.out.println(ships[i].getName());
+		
+		age = this.addAge(nomEpoque, ships);
+		
+		for (Ship ship : this.age.getShips())
+			life += ship.getLife();
+		life_ia =  life;
+		
+		this.initialPlaceShip(this.boardPlayer);
+		this.etat = Etat.PLAYER;
+		this.aleaPlace(this.boardAI);
+		
+		this.print(boardAI);
 	}
 	
 	private void initialPlaceShip(Cell[][] board){

@@ -77,8 +77,9 @@ public class ConfigScreen extends JPanel implements ItemListener {
 		this.tirOrdinateur = new JComboBox(strategy);
 		tirOrdinateur.addItemListener(this);
 		
-		//this.age = new 	String[]{"Moderne","Pirate","Romaine"}; // a recup
 		this.age = chargementNomEpoque();
+		// Initialisation de l'époque
+		this.mod.selectionEpoque(age[0], chargementEpoque(0));
 		this.epoque = new JComboBox(age);
 		epoque.addItemListener(this);
 		
@@ -231,7 +232,6 @@ public class ConfigScreen extends JPanel implements ItemListener {
 	}
 
 
-
 	@Override
 	public void itemStateChanged(ItemEvent arg0) {
 		if(arg0.getSource() == tirOrdinateur){
@@ -254,13 +254,13 @@ public class ConfigScreen extends JPanel implements ItemListener {
 			int tmp = epoque.getSelectedIndex();
 			switch (tmp){
 			  case 0:
-				  chargementEpoque(0);
+				  this.mod.selectionEpoque(age[0], chargementEpoque(0));
 				  break;  
 			  case 1:
-				  chargementEpoque(1);
+				  this.mod.selectionEpoque(age[1], chargementEpoque(1));
 				  break;  
 			  case 2:
-				  chargementEpoque(2);
+				  this.mod.selectionEpoque(age[2], chargementEpoque(2));
 				  break; 
 			  default:
 			}
