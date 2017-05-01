@@ -17,8 +17,8 @@ public class Aleatoire implements Strategy {
 		int x = 0, y = 0;
 
 		do{
-			x = 1 + r.nextInt(w - 1);
-			y = 1 + r.nextInt(h - 1);
+			x = 1 + r.nextInt(w);
+			y = 1 + r.nextInt(h);
 		}while(mod.neverShoot(x,y));
 		
 		mod.setShoot(x,y);
