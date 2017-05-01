@@ -40,23 +40,43 @@ public class ShipBrdPanelListener extends MouseAdapter {
     	// recuperaton du composant present dans le jPanel
         CellView comp = (CellView) src.getComponentAt(e.getPoint());
         if (comp != null && ((JComponent) comp).getComponentCount() == 1) {
+        	Cell cell = model.getBoardConvert(comp.getAbs())[comp.getOrd()][comp.getAbsConvert()];
+        	this.model.affectCloneShip(cell);
+        	/* longueur du bateau. Cette variable sera utilisé pour dessiner bloc par bloc 
+        	 * les composants que constitue un bateau 
+        	 */
+        	this.length = cell.getShip().getLengthShip();
+        	// correspond au numero du bloc du bateau selectionné
+        	this.part = cell.getPart();
+        	// renseigne sur la rotation du bateau
+    		this.rotation = cell.getShip().isRotation();
         	// rotation du bateau selectionné
         	if (e.getButton() != MouseEvent.BUTTON1){
-	        	//this.rotationShip(comp,e);
+        		int middle = part - length/2;
+        		this.model.rotationShipPlacement(cell, comp.getAbs()-middle, part);
+        		for(int i=0; i<length; i++){
+        			if(!this.rotation){ // horizontal
+        				CellView panelOrigin = (CellView) board[comp.getOrd()][comp.getAbs()+i-part];
+        				JLabel label = (JLabel) panelOrigin.getComponent(0);
+        				CellView panelDestination = (CellView) board[comp.getOrd()+i-length/2][comp.getAbs()-middle];
+        				panelDestination.add(label);
+        			}else{ // vertical
+        				CellView panelOrigin = (CellView) board[comp.getOrd()+i-part][comp.getAbs()];
+        				JLabel label = (JLabel) panelOrigin.getComponent(0);
+        				CellView panelDestination = (CellView) board[comp.getOrd()-middle][comp.getAbs()+i-length/2];
+        				panelDestination.add(label);
+        			}
+        		}
+        		this.placement.revalidate();
+                this.placement.repaint();
+                this.model.print(this.model.getBoardPlayer());
+                this.model.print(this.model.getBoardAI());
 	        }else{
-	        	Cell cell = model.getBoardConvert(comp.getAbs())[comp.getOrd()][comp.getAbsConvert()];
-	        	/* longueur du bateau. Cette variable sera utilisé pour dessiner bloc par bloc 
-	        	 * les composants que constitue un bateau 
-	        	 */
-	        	this.length = cell.getShip().getLengthShip();
-	        	// correspond au numero du bloc du bateau selectionné
-	        	this.part = cell.getPart();
 	        	// stock chaque cells que constitue le bateau selectionné
 	        	this.originalJPanel = new CellView[length]; 
 	        	// stock chaque label que constitue le bateau selectionné
 	        	this.label = new JLabel[length];
-	        	// renseigne sur la rotation du bateau
-	    		this.rotation = cell.getShip().isRotation();
+	        	
 	        	for(int i=0; i<length; i++){
 	        		if(!this.rotation){ // horizontal
 	        			this.originalJPanel[i] = (CellView) board[comp.getOrd()][comp.getAbs()+i-part];
@@ -98,7 +118,6 @@ public class ShipBrdPanelListener extends MouseAdapter {
         CellView comp = (CellView) src.getComponentAt(e.getPoint());
         if (comp != null) {
         	boolean player = (comp.getAbs()<10) ? true : false;
-        	System.out.println(comp.getAbs()+" "+player);
         	Cell cell = model.getBoardConvert(comp.getAbs())[comp.getOrd()][comp.getAbsConvert()];
         	if (this.model.placementShipValid(cell)){ // test position
         		Cell cloneShip = model.getBoardConvert(originalJPanel[0].getAbs())[originalJPanel[0].getOrd()][originalJPanel[0].getAbsConvert()];
@@ -123,8 +142,6 @@ public class ShipBrdPanelListener extends MouseAdapter {
         this.placement.revalidate();
         this.placement.repaint();
         label = null;
-        this.model.print(model.getBoardPlayer());
-        this.model.print(model.getBoardAI());
     }
     
     
@@ -151,11 +168,7 @@ public class ShipBrdPanelListener extends MouseAdapter {
         int tmpX = 0;
         int x = e.getXOnScreen() - gpP.x - label[i].getWidth() / 2;
         int y = e.getYOnScreen() - gpP.y - label[i].getHeight() / 2;
-       // if(!this.rotation){ // horizontal
         tmpX = (((int)label[i].getSize().getWidth())*(i-this.part));
-       //}else{ // vertical
-        	//tmpY = (((int)label[key].getSize().getHeight())*i);
-        //}
         label[i].setLocation(x+tmpX, y);
     }
     
