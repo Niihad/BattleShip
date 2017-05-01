@@ -4,8 +4,6 @@ import java.awt.Point;
 import java.util.Observable;
 import java.util.Random;
 
-import cad.view.CellView;
-
 public class Model extends Observable implements Runnable {
 	
 	private static final int WIDTH = 10;
@@ -247,6 +245,21 @@ public class Model extends Observable implements Runnable {
 		System.out.println("----------------------------------------------------------------------------");
 	}
 	
+	
+	/***********************************************************/
+	/********************** ShipPLaceView **********************/
+	/***********************************************************/
+
+	public synchronized void setShipCell(Cell[][] cells, int x, int y, Ship ship, int part) {
+		cells[x][y].setShip(ship);
+		cells[x][y].setPart(part);
+		this.mettreAjour();
+	}
+
+	public synchronized void moveShip(int x, int y) {
+		this.mettreAjour();
+	}
+	
 	public void affectCloneShip(Cell cell){
 		this.cloneShip = (Ship) cell.cloneShip();
 	}
@@ -272,23 +285,33 @@ public class Model extends Observable implements Runnable {
 		}
 	}
 	
+	public void rotationShipPlacement(Cell cell, int val, int part){
+		int length = cell.getShip().getLengthShip();
+		boolean rotation = cell.getShip().isRotation();
+		int middle = part - length/2;
+		for(int i=0; i<length; i++){
+			if(!rotation){ // horizontal
+				Cell origin = this.getBoardConvert(val)[cell.getX()][cell.getY()+i-part];
+				Cell newCell = this.getBoardConvert(val)[cell.getX()+i-length/2][cell.getY()-middle];
+				newCell.setShip(this.cloneShip);
+				newCell.setPart(origin.getPart());
+				newCell.getShip().setRotation(!rotation);
+				if(origin.getX() != newCell.getX() || origin.getY() != newCell.getY())
+					origin.setShip(null);
+			}else{
+				Cell origin = this.getBoardConvert(val)[cell.getX()+i-part][cell.getY()];
+				Cell newCell = this.getBoardConvert(val)[cell.getX()-middle][cell.getY()+i-length/2];
+				newCell.setShip(this.cloneShip);
+				newCell.setPart(origin.getPart());
+				newCell.getShip().setRotation(!rotation);
+				if(origin.getX() != newCell.getX() || origin.getY() != newCell.getY())
+					origin.setShip(null);
+			}
+		}
+	}
+	
 	public boolean placementShipValid(Cell cell){
 		return true;
-	}
-
-	
-	/***********************************************************/
-	/********************** ShipPLaceView **********************/
-	/***********************************************************/
-
-	public synchronized void setShipCell(Cell[][] cells, int x, int y, Ship ship, int part) {
-		cells[x][y].setShip(ship);
-		cells[x][y].setPart(part);
-		this.mettreAjour();
-	}
-
-	public synchronized void moveShip(int x, int y) {
-		this.mettreAjour();
 	}
 
 	/***********************************************************/
