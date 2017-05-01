@@ -39,11 +39,11 @@ public class Model extends Observable implements Runnable {
 		this.buildBoards(this.boardPlayer);
 		this.boardAI = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardAI);
-		this.initialPlaceShip(this.boardAI);
+		this.initialPlaceShip(this.boardPlayer);
 		this.etat = Etat.PLAYER;
-		//this.aleaPlace(this.boardAI);
+		this.aleaPlace(this.boardAI);
 
-		this.print(boardPlayer);
+		//this.print(boardPlayer);
 		this.print(boardAI);
 	}
 	
@@ -313,10 +313,8 @@ public class Model extends Observable implements Runnable {
 
 	public void setShoot(int x, int y) {
 		boardPlayer[x][y].setShoot(true);
-		System.out.println("ia tire en" + x + "-- " + y +"\n") ;
 		if(boardPlayer[x][y].getShip() != null){
 			setLife();	
-			System.out.println("collision");
 		}
 		etat = Etat.PLAYER;
 	}
