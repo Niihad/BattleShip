@@ -94,8 +94,6 @@ public class ShipBrdPanelListener extends MouseAdapter {
 	        		}
 	        		this.placement.revalidate();
 	                this.placement.repaint();
-	                this.model.print(this.model.getBoardPlayer());
-	                this.model.print(this.model.getBoardAI());
         		}
 	        }else{
 	        	// stock chaque cells que constitue le bateau selectionné
@@ -144,10 +142,10 @@ public class ShipBrdPanelListener extends MouseAdapter {
         }
         JPanel src = (JPanel) e.getSource();
         JPanel comp = (JPanel) src.getComponentAt(e.getPoint());
-        ord = placement.getIndexJPanel(comp).x;
-    	abs = placement.getIndexJPanel(comp).y;
-    	absC = (abs>Model.getWidth()) ? abs-Model.getWidth()-3 : abs;
         if (comp != null) {
+        	ord = placement.getIndexJPanel(comp).x;
+        	abs = placement.getIndexJPanel(comp).y;
+        	absC = (abs>Model.getWidth()) ? abs-Model.getWidth()-3 : abs;
         	if((abs < 11 || abs > 13) && ord != 0 && abs != 0){
 	        	Cell cell = model.getBoardConvert(abs)[ord][absC]; 
 	        	if (this.model.verificationPlacementShip(cell, abs, this.length, this.rotation,part)){ 
@@ -163,18 +161,16 @@ public class ShipBrdPanelListener extends MouseAdapter {
 			        	}
 		        	}
 	        	}else{
-	        		this.replaeShip();
+	        		this.replaceShip();
 				}
         	}else{
-        		this.replaeShip();
+        		this.replaceShip();
 			}
         }else{
-			this.replaeShip();
+			this.replaceShip();
 		}
         this.placement.revalidate();
         this.placement.repaint();
-        this.model.print(this.model.getBoardPlayer());
-        this.model.print(this.model.getBoardAI());
         label = null;
     }
     
@@ -209,7 +205,7 @@ public class ShipBrdPanelListener extends MouseAdapter {
         label[i].setLocation(x+tmpX, y+tmpY);
     }
     
-    private void replaeShip(){
+    private void replaceShip(){
     	for(int i=0; i<originalJPanel.length; i++){
 			originalJPanel[i].add(label[i]);
 			int ordOld = placement.getIndexJPanel(originalJPanel[i]).x;

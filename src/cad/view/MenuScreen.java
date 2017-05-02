@@ -1,7 +1,9 @@
 package cad.view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -54,17 +56,18 @@ public class MenuScreen extends JPanel {
 		this.exit = new JButton("Quitter");
 		this.setBackground(Color.BLUE);
 		Box panneauBouton = Box.createVerticalBox();
+	    panneauBouton.add(Box.createVerticalStrut(50));
 		panneauBouton.add(play);
-	    panneauBouton.add(Box.createVerticalStrut(20));
+	    panneauBouton.add(Box.createVerticalStrut(25));
 		panneauBouton.add(load);
-	    panneauBouton.add(Box.createVerticalStrut(20));
+	    panneauBouton.add(Box.createVerticalStrut(25));
 		panneauBouton.add(exit);
 		this.add(panneauBouton);
 	}
 	
 	public void paintComponent(Graphics g){
          try{
-	        Image img = ImageIO.read(new File("./assets/s1.png"));
+	        Image img = ImageIO.read(new File("./assets/image/Menu.jpg"));
             int height = this.getSize().height;
             int width = this.getSize().width;
             g.drawImage(img, 0, 0, width, height, this);

@@ -354,9 +354,6 @@ public class Model extends Observable implements Runnable,Serializable  {
 	public void selectionEpoque(String nomEpoque, Ship[] shipsEpoque) {
 		Ship[] ships = shipsEpoque;
 
-		for(int i = 0; i < shipsEpoque.length; i++) 
-			System.out.println(ships[i].getName());
-		
 		age = this.addAge(nomEpoque, ships);
 		
 		this.life = 0;
@@ -610,8 +607,10 @@ public class Model extends Observable implements Runnable,Serializable  {
 			setLife();	
 		}
 		etat = Etat.PLAYER;
+		this.mettreAjour();
 	}
 	
+
 	//appel de la strategie pour faire jouer ia
 	public void IA_play(){
 		if(etat == Etat.IA && end_game == false){

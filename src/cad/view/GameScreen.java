@@ -1,12 +1,20 @@
 package cad.view;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
+
+import java.io.File;
+import java.io.IOException;
+
 import java.util.Observable;
 import java.util.Observer;
+
+import javax.imageio.ImageIO;
+
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -38,6 +46,27 @@ public class GameScreen extends JPanel implements Observer{
 		this.model.addObserver(this);
 	}
 	
+
+	private JPanel drawJPanel(int x, int y, int w, int h){
+		JPanel panel = new JPanel();
+		panel.setBounds(x,y, w, h);
+		this.add(panel);
+		return panel;
+	}
+	
+	public void paintComponent(Graphics g){
+        try{
+        	
+	       Image img = ImageIO.read(new File("./assets/image/"+ model.getAge().getAgeName() +".jpg"));
+           int height = this.getSize().height;
+           int width = this.getSize().width;
+           g.drawImage(img, 0, 0, width, height, this);
+           System.out.println(model.getAge().getAgeName());
+
+	    } catch(IOException e){
+	        e.printStackTrace();
+	    }
+   }
 	
 	/***********************************************************/
 	/************************** Board **************************/
@@ -52,7 +81,6 @@ public class GameScreen extends JPanel implements Observer{
 		for(int i=0; i<Model.getWidth()+1; i++){
 			for(int j=0; j<Model.getHeight()+1; j++){
 				board[i][j] = new CellView(this.model,i,j,size, player);
-				board[i][j].addActionListener(new GameController(bs,this,i,j));
 				if(j>10 && j<13){
 					board[i][j].setBorder(null);
 				}else if(i==0 && j>0 && j < size){
@@ -106,7 +134,7 @@ public class GameScreen extends JPanel implements Observer{
 	}
 	
 	/**
-	 * Met à jour le tableau du joueur suite au tir de l'IA
+	 * Met ï¿½ jour le tableau du joueur suite au tir de l'IA
 	 * si l'IA ne touche pas de bateau
 	 * 		alors met la case en noir 
 	 * 		sinon met la case en rouge
@@ -125,7 +153,7 @@ public class GameScreen extends JPanel implements Observer{
 	}
 	
 	/**
-	 * Met à jour le tableau de l'IA au chargement d'une partie
+	 * Met ï¿½ jour le tableau de l'IA au chargement d'une partie
 	 */
 	public void updateBoardAI() {
 		int w = 11, h = 11;

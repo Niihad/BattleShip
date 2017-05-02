@@ -1,13 +1,20 @@
 package cad.view;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Label;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -28,7 +35,7 @@ public class ConfigScreen extends JPanel implements ItemListener {
 	private String[] strategy,age;
 	private JComboBox tirOrdinateur,epoque,tiragealea;
 	private int choixEpoque,choixStrategie,choixTirage;
-	private Label tirIa,eq,choix,pseudo;
+	private JLabel tirIa,eq,choix,pseudo;
 	private JButton play;
 	private JTextField pseudoField;
 	private BattleShip bs;
@@ -63,17 +70,21 @@ public class ConfigScreen extends JPanel implements ItemListener {
 		epoque.addItemListener(this);
 		
 		this.tiragealea = new JComboBox(new String[]{"Pile","Face"});
-		this.tirIa = new Label("Strategie tir IA");
-		this.eq = new Label("Epoque");
+		this.tirIa = new JLabel("Strategie tir IA");
+		this.tirIa.setForeground(Color.WHITE);
+		this.eq = new JLabel("Epoque");
+		this.eq.setForeground(Color.WHITE);
 		this.play = new JButton("Play");
-		this.choix = new Label("Faire votre choix");
-		this.pseudo = new Label("Pseudo :");
+		this.choix = new JLabel("Faire votre choix");
+		this.choix.setForeground(Color.WHITE);
+		this.pseudo = new JLabel("Pseudo :");
+		this.pseudo.setForeground(Color.WHITE);
 		this.pseudoField = new JTextField("pseudo");
 
 		play.addActionListener(new ConfigListener(bs,this));
 
-		this.setBackground(Color.GREEN);
 		Box panneauBouton = Box.createVerticalBox();
+	    panneauBouton.add(Box.createVerticalStrut(10));
 		panneauBouton.add(pseudo);
 		panneauBouton.add(pseudoField);
 		panneauBouton.add(tirIa);
@@ -82,7 +93,7 @@ public class ConfigScreen extends JPanel implements ItemListener {
 		panneauBouton.add(epoque);
 		panneauBouton.add(choix);
 		panneauBouton.add(tiragealea);
-	    panneauBouton.add(Box.createVerticalStrut(60));
+	    panneauBouton.add(Box.createVerticalStrut(20));
 	    panneauBouton.add(play);
 		this.add(panneauBouton);		
 	}
@@ -115,6 +126,17 @@ public class ConfigScreen extends JPanel implements ItemListener {
   		return choixEpoque;
   	}		  	
 
+	public void paintComponent(Graphics g){
+        try{
+	        Image img = ImageIO.read(new File("./assets/image/Config.jpg"));
+           int height = this.getSize().height;
+           int width = this.getSize().width;
+           g.drawImage(img, 0, 0, width, height, this);
+	    } catch(IOException e){
+	        e.printStackTrace();
+	    }
+   }
+		  	
 	public String getChoixNomEpoque() {
 		return age[choixEpoque];
 	}

@@ -1,10 +1,15 @@
 package cad.view;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -25,7 +30,21 @@ public class EndScreen extends JPanel{
 		this.mod = bs.getModel();
 		draw();
 	}
-
+	
+	public void paintComponent(Graphics g){
+        try{
+        	Image img;
+        	if(mod.getLife() == 0)
+        		img = ImageIO.read(new File("./assets/image/GameOver.jpg"));	
+        	else
+        		img = ImageIO.read(new File("./assets/image/Win.jpg"));
+           int height = this.getSize().height;
+           int width = this.getSize().width;
+           g.drawImage(img, 0, 0, width, height, this);
+	    } catch(IOException e){
+	        e.printStackTrace();
+	    }
+   }
 
 	private void draw() {
 		this.setBackground(Color.yellow);
