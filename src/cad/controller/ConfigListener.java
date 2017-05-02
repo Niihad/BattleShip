@@ -32,9 +32,9 @@ public class ConfigListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		cScreen.setVisible(false);
-		this.mod.selectionEpoque(cScreen.getChoixNomEpoque(), this.mod.chargementEpoque(cScreen.getChoixEpoque()));
 		this.mod.setContext(cScreen.getChoixStrategie());
 		alea(cScreen.getChoixTirage());
+		this.mod.selectionEpoque(cScreen.getChoixNomEpoque(), this.mod.chargementEpoque(cScreen.getChoixEpoque(), "epoques"));
 		bs.setGameScreen();
 	}
 

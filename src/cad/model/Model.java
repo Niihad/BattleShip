@@ -38,9 +38,8 @@ public class Model extends Observable implements Runnable {
 		this.etat = Etat.WAIT;
 
 		// Initialisation de l'ï¿½poque
-		this.selectionEpoque(this.chargementNomEpoque()[0], this.chargementEpoque(0));
+		this.selectionEpoque(this.chargementNomEpoque()[0], this.chargementEpoque(0, "epoques"));
 		
-		//Sauvegarde save = new Sauvegarde("");
 	}
 	
 	
@@ -231,9 +230,11 @@ public class Model extends Observable implements Runnable {
 	
 	/**
 	 * Chargement d'une ï¿½poque constituï¿½e de plusieurs bateaux
+	 * @param numEpoque : numéro de l'époque
+	 * @param nomFichier : nom du fichier a télécharger
 	 * @return on retourne le nom des attributs avec leurs valeurs
 	 */
-	public Ship[] chargementEpoque(int numEpoque) {
+	public Ship[] chargementEpoque(int numEpoque, String nomFichier) {
 	    Ship[] shipsForModel = new Ship[5];
 	    int n = 0;
 		
@@ -244,7 +245,7 @@ public class Model extends Observable implements Runnable {
              // Etape 2 : crï¿½ation d'un parseur
             DocumentBuilder builder = factory.newDocumentBuilder();
 			// Etape 3 : crï¿½ation d'un Document
-		    Document document = builder.parse(new File("XML/epoques.xml"));
+		    Document document = builder.parse(new File("XML/" + nomFichier + ".xml"));
 		    // Etape 4 : rï¿½cupï¿½ration de l'Element racine
 		    Element epoques = document.getDocumentElement();
 		    // Etape 5 : rï¿½cupï¿½ration de tous les noeuds
