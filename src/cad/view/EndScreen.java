@@ -14,7 +14,7 @@ public class EndScreen extends JPanel{
 	public EndScreen(BattleShip battleShip, Model model) {
 		this.bs = battleShip;
 		this.mod = model;
-		this.setBackground(Color.BLUE);
+		this.setBackground(Color.RED);
 
 	}
 

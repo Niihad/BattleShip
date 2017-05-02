@@ -38,9 +38,10 @@ public class GameController implements ActionListener {
 			this.game.updateBoardPlayer();
 		}	
 		
-		if(model.isEnd_game())
+		if(model.isEnd_game()){
 			game.setVisible(false);
 			bs.setEndScreen();
+		}
 	}
 
 }
