@@ -20,9 +20,9 @@ public class EndScreen extends JPanel{
 
 
 
-	public EndScreen(BattleShip battleShip, Model model) {
+	public EndScreen(BattleShip battleShip) {
 		this.bs = battleShip;
-		this.mod = model;
+		this.mod = bs.getModel();
 		draw();
 	}
 

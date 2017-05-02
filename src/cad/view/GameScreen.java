@@ -21,9 +21,9 @@ public class GameScreen extends JPanel implements Observer{
 	private JPanel panelBoardPlayer, panelBoardAI;
 	private BattleShip bs;
 
-	public GameScreen(BattleShip battleShip, Model model) {
+	public GameScreen(BattleShip battleShip) {
 		this.bs = battleShip;
-		this.model = model;
+		this.model = bs.getModel();
 		this.boardPlayer = new JButton[11][11];
 		this.drawBoard(this.panelBoardPlayer, this.boardPlayer, 50, 50, true);
 		this.boardAI = new JButton[11][11];
@@ -82,7 +82,7 @@ public class GameScreen extends JPanel implements Observer{
 					boolean collision = false;
 					if(model.getBoardAI()[i][j].getShip() != null)
 						collision = true;
-					boardAI[i][j].addActionListener(new GameController(bs,this,collision,i,j,model));
+					boardAI[i][j].addActionListener(new GameController(bs,this,collision,i,j));
 				}				
 				jp.add(board[i][j]);
 			}
