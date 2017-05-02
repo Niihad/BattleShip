@@ -23,11 +23,7 @@ public class Model extends Observable implements Runnable {
 	public Model() {
 		this.boardPlayer = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardPlayer);
-		this.boardAI = new Cell[WIDTH + 1][HEIGHT + 1];
-		this.buildBoards(this.boardAI);
-		//this.initialPlaceShip(this.boardAI);
 		this.etat = Etat.PLAYER;
-		//this.aleaPlace(this.boardAI);
 
 		//this.print(boardPlayer);
 		this.print(boardAI);
@@ -173,12 +169,15 @@ public class Model extends Observable implements Runnable {
 		
 		age = this.addAge(nomEpoque, ships);
 		
+		this.life = 0;
 		for (Ship ship : this.age.getShips())
 			life += ship.getLife();
 		life_ia =  life;
 		
 		this.initialPlaceShip(this.boardPlayer);
 		this.etat = Etat.PLAYER;
+		this.boardAI = new Cell[WIDTH + 1][HEIGHT + 1];
+		this.buildBoards(this.boardAI);
 		this.aleaPlace(this.boardAI);
 		
 		this.print(boardAI);

@@ -192,6 +192,7 @@ public class ConfigScreen extends JPanel implements ItemListener {
 									    String nom = "";
 									    String image = "";
 									    int longueur = 0;
+									    int vie = 0;
 							    		for (int l = 0; l < attributsNode.getLength(); l++) {
 									    	if(attributsNode.item(l).getNodeType() == Node.ELEMENT_NODE) {
 										    	Element attribut = (Element) attributsNode.item(l);
@@ -201,11 +202,13 @@ public class ConfigScreen extends JPanel implements ItemListener {
 										    		image = attribut.getTextContent();
 										    	if(attribut.getNodeName().equals("longueur"))
 										    		longueur = Integer.parseInt(attribut.getTextContent());
+										    	if(attribut.getNodeName().equals("vie"))
+										    		vie = Integer.parseInt(attribut.getTextContent());
 										    	reconnaissanceBateau = true;
 									    	}
 									    }
 							    		if(reconnaissanceBateau) {
-							    			shipsForModel[n] = new Ship(nom, image, longueur, longueur);
+							    			shipsForModel[n] = new Ship(nom, image, longueur, vie);
 							    			n++;
 							    		}
 							    	}
