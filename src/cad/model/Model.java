@@ -35,10 +35,12 @@ public class Model extends Observable implements Runnable {
 	public Model() {
 		this.boardPlayer = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardPlayer);
-		this.etat = Etat.PLAYER;
+		this.etat = Etat.WAIT;
 		this.epoqueName = this.chargementNomEpoque();
-		
-		//Sauvegarde save = new Sauvegarde("");
+		this.etat = Etat.WAIT;
+
+		// Initialisation de l'�poque
+		this.selectionEpoque(this.chargementNomEpoque()[0], this.chargementEpoque(0, "epoques"));
 	}
 	
 	
@@ -217,10 +219,12 @@ public class Model extends Observable implements Runnable {
 	
 	
 	/**
-	 * Chargement d'une epoque constituee de plusieurs bateaux
+	 * Chargement d'une �poque constitu�e de plusieurs bateaux
+	 * @param numEpoque : num�ro de l'�poque
+	 * @param nomFichier : nom du fichier a t�l�charger
 	 * @return on retourne le nom des attributs avec leurs valeurs
 	 */
-	public Ship[] chargementEpoque(int numEpoque) {
+	public Ship[] chargementEpoque(int numEpoque, String nomFichier) {
 	    Ship[] shipsForModel = new Ship[5];
 	    int n = 0;
 		
@@ -231,7 +235,7 @@ public class Model extends Observable implements Runnable {
              // Etape 2 : cr�ation d'un parseur
             DocumentBuilder builder = factory.newDocumentBuilder();
 			// Etape 3 : cr�ation d'un Document
-		    Document document = builder.parse(new File("XML/epoques.xml"));
+		    Document document = builder.parse(new File("XML/" + nomFichier + ".xml"));
 		    // Etape 4 : r�cup�ration de l'Element racine
 		    Element epoques = document.getDocumentElement();
 		    // Etape 5 : r�cup�ration de tous les noeuds
@@ -313,7 +317,7 @@ public class Model extends Observable implements Runnable {
 		for (Ship ship : this.age.getShips())
 			life += ship.getLife();
 		life_ia =  life;
-		
+
 		this.boardAI = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardAI);
 		this.initialPlaceShip(this.boardAI);

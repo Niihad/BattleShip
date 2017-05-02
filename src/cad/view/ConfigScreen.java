@@ -24,10 +24,10 @@ public class ConfigScreen extends JPanel implements ItemListener {
 	private static final long serialVersionUID = 1L;
 	private String[] strategy;
 
-	private JComboBox<Object> tirOrdinateur,epoque;
+	private JComboBox tirOrdinateur,epoque,tiragealea;
 	private String strategy1,strategy2,strategy3;
-	private int choixEpoque;
-	private Label tirIa,eq;
+	private int choixEpoque,choixStrategie,choixtirage;
+	private Label tirIa,eq,choix;
 	private JButton play;
 	private BattleShip bs;
 	private Model mod;
@@ -62,16 +62,18 @@ public class ConfigScreen extends JPanel implements ItemListener {
 		this.epoque = new JComboBox<Object>(mod.getEpoqueName());
 		epoque.addItemListener(this);
 		
+		this.tiragealea = new JComboBox(new String[]{"Pile","Face"});
 		this.tirIa = new Label("Strategie tir IA");
 		this.eq = new Label("Epoque");
 		this.play = new JButton("Play");
 		play.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				mod.selectionEpoque(mod.getEpoqueName()[choixEpoque], mod.chargementEpoque(choixEpoque));
+				mod.selectionEpoque(mod.getEpoqueName()[choixEpoque], mod.chargementEpoque(choixEpoque, "epoques"));
 				bs.setPlacementScreen();
 			}
 		});
+		this.choix = new Label("Faire votre choix");
 		
 		this.setBackground(Color.GREEN);
 		Box panneauBouton = Box.createVerticalBox();
@@ -79,33 +81,35 @@ public class ConfigScreen extends JPanel implements ItemListener {
 		panneauBouton.add(tirOrdinateur);
 		panneauBouton.add(eq);
 		panneauBouton.add(epoque);
+		panneauBouton.add(choix);
+		panneauBouton.add(tiragealea);
 	    panneauBouton.add(Box.createVerticalStrut(60));
 	    panneauBouton.add(play);
 	    this.add(panneauBouton);
 	}
 
 	public void itemStateChanged(ItemEvent arg0) {
-		if(arg0.getSource() == tirOrdinateur){
-			int tmp = tirOrdinateur.getSelectedIndex();
-			switch (tmp){
-			  case 0:
-				  this.mod.setContext(context);
-				  break;  
-			  case 1:
-				  this.mod.setContext(context2);
-				  break;  
-			  case 2:
-				  this.mod.setContext(context3);
-				  break; 
-			  default:
-			}
-		}
 
+		if(arg0.getSource() == tirOrdinateur)
+			choixStrategie = tirOrdinateur.getSelectedIndex();
+		
 		// R�cup�ration du param�tre de l'�poque
-		if(arg0.getSource() == epoque){
+		if(arg0.getSource() == epoque)
 			choixEpoque = epoque.getSelectedIndex();
-		}
+		
+		if(arg0.getSource() == tiragealea)
+			choixtirage = tiragealea.getSelectedIndex();
 	
 	}
 
+	public Context getChoixStrategie() {
+		if( choixStrategie == 0)
+			   return context;
+		if( choixStrategie == 1)
+			   return context2;
+		if( choixStrategie == 2)
+			   return context3;
+		   return context;
+	}
+	
 }
