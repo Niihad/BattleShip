@@ -32,16 +32,18 @@ public class ModelTest {
 	@Test
 	public void test_pas_tirer() {
 		Model model = new Model();
-		model.setShoot(1,0);
-		assertTrue(false == model.neverShoot(1,1));
+		model.setEtat(Etat.IA);
+		model.setShoot(1,1);
+		assertTrue(true == model.neverShoot(1,1));
 	}
 	
 	@Test
 	//on test si sa detecte bien qu'il  n y a pas de tir
 	public void test_deja_tirer() {
 		Model model = new Model();
-		model.setShoot(1,1);
-		assertTrue(true == model.neverShoot(1,1));
+		model.setEtat(Etat.IA);
+		model.setShoot(1,0);
+		assertTrue(false == model.neverShoot(1,1));
 	}
 	
 	//test si la vie diminue bien lors d'une collision

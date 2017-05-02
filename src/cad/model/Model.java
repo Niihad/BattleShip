@@ -604,17 +604,18 @@ public class Model extends Observable implements Runnable,Serializable  {
 	public synchronized void setShoot(int x, int y) {
 		Cell cell;
 		if(etat == Etat.PLAYER){
-			etat = Etat.IA;
 			cell = this.boardAI[x][y];
 			if(cell.getShip() != null){
 				this.setLife_ia();	
 			}
+			etat = Etat.IA;
 		}else{
-			etat = Etat.PLAYER;
 			cell = boardPlayer[x][y];
+			cell.setShoot(true);
 			if(cell.getShip() != null){
 				this.setLife();	
 			}
+			etat = Etat.PLAYER;
 		}	
 		this.mettreAjour();
 	}
