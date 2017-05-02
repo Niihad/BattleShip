@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import cad.model.Model;
+import cad.model.Sauvegarde;
 
 public class MenuListener implements ActionListener {
 	private Model mod;
@@ -18,6 +19,7 @@ public class MenuListener implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		switch (choix) {
 		case 0:
+			new Sauvegarde("Thomas", mod);
 			break;	
 		case 1:
 			break;

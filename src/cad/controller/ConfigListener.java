@@ -18,7 +18,7 @@ public class ConfigListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		cScreen.setVisible(false);
-		this.bs.getModel().selectionEpoque(cScreen.getChoixNomEpoque(), this.bs.getModel().chargementEpoque(cScreen.getChoixEpoque()));
+		this.bs.getModel().selectionEpoque(cScreen.getChoixNomEpoque(), this.bs.getModel().chargementEpoque(cScreen.getChoixEpoque(), "epoques"));
 		bs.setGameScreen();
 	}
 
