@@ -33,21 +33,24 @@ public class BattleShip extends JFrame {
 		this.menu = new MenuScreen(this);
 		frame.add(menu, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(1200, 800);
+		frame.setSize(350, 300);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		frame.setResizable(false);
 	}
 	
 	//passer a l ecran de menu
 	public void setMenuScreen(){
 		this.menu = new MenuScreen(this);
 		frame.add(menu, BorderLayout.CENTER);
+		frame.setSize(350, 300);
 	}
 	
 	//passer a l ecran de placement des bateaux
 	public void setPlacementScreen() {
 		this.placement = new PlacementScreen(this);
 		frame.add(placement, BorderLayout.CENTER);
+		frame.setSize(1250, 800);
 	}
 	
 	//passer a l ecran de jeux
@@ -57,6 +60,7 @@ public class BattleShip extends JFrame {
 		this.game = new GameScreen(this);
 		frame.add(stats, BorderLayout.NORTH);
 		frame.add(game, BorderLayout.CENTER);
+		frame.setSize(1300, 800);
 	}
 	
 	//passer a l ecran de configuration

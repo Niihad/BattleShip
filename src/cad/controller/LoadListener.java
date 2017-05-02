@@ -25,11 +25,16 @@ public class LoadListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		loadScreen.setVisible(false);
-		bs.setModel(chargerProfil((String) loadScreen.getListProfil().getSelectedValue()));
-		bs.setGameScreen();
-		bs.getGame().updateBoardAI();
-		bs.getGame().updateBoardPlayer();
-		bs.getModel().IA_play();
+		Model mod = chargerProfil((String) loadScreen.getListProfil().getSelectedValue());
+		bs.setModel(mod);
+		/*if(mod.verificationBeginGame() == false)
+			bs.setMenuScreen();
+		else {*/
+			bs.setGameScreen();
+			bs.getGame().updateBoardAI();
+			bs.getGame().updateBoardPlayer();
+			bs.getModel().IA_play();
+		//}
 	}
 
 

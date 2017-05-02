@@ -1,6 +1,8 @@
 package cad.view;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Label;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Vector;
 
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -92,6 +95,17 @@ public class LoadScreen extends JPanel {
 		return listProfil;
 	}
 	
+
+	public void paintComponent(Graphics g){
+         try{
+	        Image img = ImageIO.read(new File("./assets/image/Menu.jpg"));
+            int height = this.getSize().height;
+            int width = this.getSize().width;
+            g.drawImage(img, 0, 0, width, height, this);
+	    } catch(IOException e){
+	        e.printStackTrace();
+	    }
+    }
 	
 
 
