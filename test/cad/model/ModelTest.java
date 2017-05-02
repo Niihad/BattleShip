@@ -44,6 +44,17 @@ public class ModelTest {
 		assertTrue(true == model.neverShoot(1,1));
 	}
 	
+	//test si la vie diminue bien lors d'une collision
+	@Test
+	public void test(){
+		Model model = new Model();
+		Ship sh = new Ship("test",null,null,1, 1);
+		model.setShipCell(model.getBoardPlayer(), 1,1, sh,1);
+		int tmp = model.getLife();
+		model.setEtat(Etat.IA);
+		model.setShoot(1, 1);
+		assertTrue(model.getLife()==tmp-1);
+	}
 	
 	
 }
