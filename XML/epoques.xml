@@ -5,30 +5,35 @@
 			<ship>
 				<nom>Porte-avion</nom>
 				<image>assets/s1.png</image>
+				<imageV>assets/s1v.png</imageV>
 				<longueur>5</longueur>
 				<vie>5</vie>
 			</ship>
 			<ship>
 				<nom>Croiseur</nom>
 				<image>assets/s1.png</image>
+				<imageV>assets/s1v.png</imageV>
 				<longueur>4</longueur>
 				<vie>4</vie>
 			</ship>
 			<ship>
 				<nom>Contre-torpilleur</nom>
 				<image>assets/s1.png</image>
+				<imageV>assets/s1v.png</imageV>
 				<longueur>3</longueur>
 				<vie>3</vie>
 			</ship>
 			<ship>
 				<nom>Sous-marins</nom>
 				<image>assets/s1.png</image>
+				<imageV>assets/s1v.png</imageV>
 				<longueur>3</longueur>
 				<vie>3</vie>
 			</ship>
 			<ship>
 				<nom>Torpilleur</nom>
 				<image>assets/s1.png</image>
+				<imageV>assets/s1v.png</imageV>
 				<longueur>2</longueur>
 				<vie>2</vie>
 			</ship>
@@ -39,30 +44,35 @@
 			<ship>
 				<nom>Schooner</nom>
 				<image>assets/s1.png</image>
+				<imageV>assets/s1v.png</imageV>
 				<longueur>5</longueur>
 				<vie>5</vie>
 			</ship>
 			<ship>
 				<nom>Frégate</nom>
 				<image>assets/s1.png</image>
+				<imageV>assets/s1v.png</imageV>
 				<longueur>4</longueur>
 				<vie>4</vie>
 			</ship>
 			<ship>
 				<nom>Barque</nom>
 				<image>assets/s1.png</image>
+				<imageV>assets/s1v.png</imageV>
 				<longueur>3</longueur>
 				<vie>3</vie>
 			</ship>
 			<ship>
 				<nom>Barque</nom>
 				<image>assets/s1.png</image>
+				<imageV>assets/s1v.png</imageV>
 				<longueur>3</longueur>
 				<vie>3</vie>
 			</ship>
 			<ship>
 				<nom>Sloop</nom>
 				<image>assets/s1.png</image>
+				<imageV>assets/s1v.png</imageV>
 				<longueur>2</longueur>
 				<vie>2</vie>
 			</ship>
@@ -73,30 +83,35 @@
 			<ship>
 				<nom>Trirème</nom>
 				<image>assets/s1.png</image>
+				<imageV>assets/s1v.png</imageV>
 				<longueur>5</longueur>
 				<vie>5</vie>
 			</ship>
 			<ship>
 				<nom>Quinquérème</nom>
 				<image>assets/s1.png</image>
+				<imageV>assets/s1v.png</imageV>
 				<longueur>4</longueur>
 				<vie>4</vie>
 			</ship>
 			<ship>
 				<nom>Galère</nom>
 				<image>assets/s1.png</image>
+				<imageV>assets/s1v.png</imageV>
 				<longueur>3</longueur>
 				<vie>3</vie>
 			</ship>
 			<ship>
 				<nom>Galère</nom>
 				<image>assets/s1.png</image>
+				<imageV>assets/s1v.png</imageV>
 				<longueur>3</longueur>
 				<vie>3</vie>
 			</ship>
 			<ship>
 				<nom>Birème</nom>
 				<image>assets/s1.png</image>
+				<imageV>assets/s1v.png</imageV>
 				<longueur>2</longueur>
 				<vie>2</vie>
 			</ship>

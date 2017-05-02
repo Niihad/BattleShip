@@ -66,17 +66,35 @@ public class ShipBrdPanelListener extends MouseAdapter {
 	        			if(!this.rotation){ // horizontal
 	        				JPanel panelOrigin = (JPanel) board[ord][abs+i-part];
 	        				JLabel label = (JLabel) panelOrigin.getComponent(0);
+	        				panelOrigin.remove(label);
+	        				panelOrigin.revalidate();
+	        				panelOrigin.repaint();
 	        				JPanel panelDestination = (JPanel) board[ord+i-length/2][abs-middle];
+	        				int ordDest = placement.getIndexJPanel(panelDestination).x;
+	        		    	int absDest = placement.getIndexJPanel(panelDestination).y;
+	        		    	int absCDest = (absDest>Model.getWidth()) ? absDest-Model.getWidth()-3 : absDest;
+	        		    	Cell cellDest = model.getBoardConvert(abs)[ordDest][absCDest];
+	        				label = placement.drawShipCut(cellDest.getShip().getPathImage(), length, i, !rotation);
 	        				panelDestination.add(label);
 	        			}else{ // vertical
 	        				JPanel panelOrigin = (JPanel) board[ord+i-part][abs];
 	        				JLabel label = (JLabel) panelOrigin.getComponent(0);
+	        				panelOrigin.remove(label);
+	        				panelOrigin.revalidate();
+	        				panelOrigin.repaint();
 	        				JPanel panelDestination = (JPanel) board[ord-middle][abs+i-length/2];
+	        				int ordDest = placement.getIndexJPanel(panelDestination).x;
+	        		    	int absDest = placement.getIndexJPanel(panelDestination).y;
+	        		    	int absCDest = (absDest>Model.getWidth()) ? absDest-Model.getWidth()-3 : absDest;
+	        		    	Cell cellDest = model.getBoardConvert(abs)[ordDest][absCDest];
+	        				label = placement.drawShipCut(cellDest.getShip().getPathImage(), length, i, !rotation);
 	        				panelDestination.add(label);
 	        			}
 	        		}
 	        		this.placement.revalidate();
 	                this.placement.repaint();
+	                this.model.print(this.model.getBoardPlayer());
+	                this.model.print(this.model.getBoardAI());
         		}
 	        }else{
 	        	// stock chaque cells que constitue le bateau selectionné
