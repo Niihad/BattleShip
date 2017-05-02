@@ -19,6 +19,7 @@ public class CellView extends JButton implements Observer{
 	private Model model;
 	private int abs, ord, width;
 	private boolean player;
+	private ImageIcon icon;
 	
 	public CellView(Model model, int x, int y, int width, boolean player){
 		super();
@@ -27,7 +28,9 @@ public class CellView extends JButton implements Observer{
 		this.abs = y;
 		this.width = width;
 		this.player = player;
-		
+		this.icon = new ImageIcon(new ImageIcon("assets/s1.png").getImage().getScaledInstance(width, width, Image.SCALE_DEFAULT));
+
+		;
 		/*this.setFocusPainted(false);
 		this.setContentAreaFilled(false);
 		this.setOpaque(false);*/
@@ -65,7 +68,6 @@ public class CellView extends JButton implements Observer{
 	}
 
 	public void update(Observable arg0, Object arg1) {
-		ImageIcon icon = new ImageIcon(new ImageIcon("assets/s1.png").getImage().getScaledInstance(width, width, Image.SCALE_DEFAULT));
 		Cell cell;
 		if(this.player)
 			cell = model.getBoardPlayer()[ord][abs];

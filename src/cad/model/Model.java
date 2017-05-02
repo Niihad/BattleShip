@@ -605,6 +605,8 @@ public class Model extends Observable implements Runnable,Serializable  {
 		Cell cell;
 		if(etat == Etat.PLAYER){
 			cell = this.boardAI[x][y];
+			cell.setShoot(true);
+
 			if(cell.getShip() != null){
 				this.setLife_ia();	
 			}
