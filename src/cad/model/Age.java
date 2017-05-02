@@ -17,7 +17,7 @@ public class Age {
 	/********************* GETTER / SETTER *********************/
 	/***********************************************************/
 	
-	public String getAge() {
+	public String getAgeName() {
 		return age;
 	}
 
