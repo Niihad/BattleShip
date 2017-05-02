@@ -36,6 +36,7 @@ public class ModelTest {
 		assertTrue(false == model.neverShoot(1,1));
 	}
 	
+	@Test
 	//on test si sa detecte bien qu'il  n y a pas de tir
 	public void test_deja_tirer() {
 		Model model = new Model();
