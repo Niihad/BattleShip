@@ -4,20 +4,18 @@ import java.util.Random;
 
 public class Diagonale implements Strategy {
 
-	@Override
 	public String name() {
 		return "Diagonale";
 	}
 
-	@Override
 	/**
 	 * Mode de jeu Diagonale :
-	 * On récupère les cellules
-	 * Si un bateau adverse encore en vie est touché 
-	 * 		alors si une seule case touchée 
-	 * 				alors aléatoire autour
-	 * 				sinon viser dans l'alignement 	=> 	c'est une amélioration
-	 * 		 sinon viser en diagonale selon les cases déjà touchées
+	 * On rï¿½cupï¿½re les cellules
+	 * Si un bateau adverse encore en vie est touchï¿½ 
+	 * 		alors si une seule case touchï¿½e 
+	 * 				alors alï¿½atoire autour
+	 * 				sinon viser dans l'alignement 	=> 	c'est une amï¿½lioration
+	 * 		 sinon viser en diagonale selon les cases dï¿½jï¿½ touchï¿½es
 	 */
 	public void play(Model mod) {
 
@@ -28,7 +26,7 @@ public class Diagonale implements Strategy {
 		int w = mod.getWidth();
 		int h = mod.getHeight();
 
-		//Si une cellule d'un bateau est touchée alors on regarde autour d'une si on peut tirer sur une cellule qui n'est pas encore touchée
+		//Si une cellule d'un bateau est touchï¿½e alors on regarde autour d'une si on peut tirer sur une cellule qui n'est pas encore touchï¿½e
 		for(int i = 1; i <= w; i++)
 			for(int j = 1; j <= h; j++) {
 				if(board[i][j].isShoot() && board[i][j].getShip() != null) {
@@ -38,17 +36,17 @@ public class Diagonale implements Strategy {
 						y = j - 1;
 					}
 					else if(i != 1 && !board[i - 1][j].isShoot()) {
-						// On tire à gauche
+						// On tire ï¿½ gauche
 						x = i - 1;
 						y = j;
 					}
 					else if(j != h && !board[i][j + 1].isShoot()) {
-						// On tire à en bas
+						// On tire ï¿½ en bas
 						x = i;
 						y = j + 1;
 					}
 					else if(i != w && !board[i + 1][j].isShoot()) {
-						// On tire à droite
+						// On tire ï¿½ droite
 						x = i + 1;
 						y = j;
 					}
@@ -60,7 +58,7 @@ public class Diagonale implements Strategy {
 			}
 		System.out.println("L'IA tire en : " + x + " - " + y);
 		
-		// On tire en diagonale de manière aléatoire
+		// On tire en diagonale de maniï¿½re alï¿½atoire
 		do{
 			if(r.nextInt(2) == 0) {
 				x = 1 + 2 * r.nextInt(w / 2);

@@ -4,12 +4,10 @@ import java.util.Random;
 
 public class Aleatoire implements Strategy {
 
-	@Override
 	public String name() {
 		return "Aleatoire";
 	}
 
-	@Override
 	public void play(Model mod) {
 		Random r = new Random();
 		int w = mod.getWidth();

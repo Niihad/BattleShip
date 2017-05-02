@@ -99,7 +99,7 @@ public class GameScreen extends JPanel implements Observer{
 	}
 	
 	/**
-	 * Met à jour le tableau du joueur suite au tir de l'IA
+	 * Met ï¿½ jour le tableau du joueur suite au tir de l'IA
 	 * si l'IA ne touche pas de bateau
 	 * 		alors met la case en noir 
 	 * 		sinon met la case en rouge
@@ -117,8 +117,6 @@ public class GameScreen extends JPanel implements Observer{
 			}
 	}
 
-
-	@Override
 	public void update(Observable arg0, Object arg1) {
 	}
 }
