@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Label;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,9 +17,11 @@ import cad.model.Model;
 public class ConfigScreen extends JPanel implements ItemListener {
 
 	private static final long serialVersionUID = 1L;
+	private String[] age,strategy;
 
 	private JComboBox tirOrdinateur,epoque,tiragealea;
 	private String strategy1,strategy2,strategy3;
+	private int choixEpoque,choixStrategie,choixTirage;
 	private Label tirIa,eq,choix;
 	private JButton play;
 	private BattleShip bs;
@@ -31,6 +32,9 @@ public class ConfigScreen extends JPanel implements ItemListener {
 		this.bs = battleShip;
 		this.mod = model;
 		this.choixEpoque = 0;
+		this.choixTirage = 0;	
+		this.choixStrategie = 0;
+		this.strategy = new String[3];
 		drawConfig();
 		controller();
 	}
@@ -41,6 +45,8 @@ public class ConfigScreen extends JPanel implements ItemListener {
 
 
 	private void drawConfig() {
+		for(int i = 0; i <= mod.getStrategie().size()-1;i++)
+			strategy[i] = mod.getStrategie().get(i).getNameStrategy();
 		this.tirOrdinateur = new JComboBox(strategy);
 		tirOrdinateur.addItemListener(this);
 		
@@ -78,16 +84,20 @@ public class ConfigScreen extends JPanel implements ItemListener {
 			choixEpoque = epoque.getSelectedIndex();
 		
 		if(arg0.getSource() == tiragealea)
+			choixTirage = tiragealea.getSelectedIndex();
 	
 	}
 
 	public int getChoixTirage() {
+		return choixTirage;
 	}
 
 	public String getChoixNomEpoque() {
 		return age[choixEpoque];
 	}
 	
+	public int getChoixStrategie() {
+		   return choixStrategie;
 	}
 	
 	public int getChoixEpoque() {
