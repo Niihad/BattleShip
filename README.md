@@ -25,7 +25,7 @@
   -  12                Création de tableau des scores
   -  13                Création de sauvegardes
   -  14                Implémenter la reprise d’une partie
-  -  15                Implémenter le changement d'époque
+  -  15                Implémenter le changement de la stratégie
   -  16                Implémentation des stratégies de l'IA
   -  17                Ajouter un écran de fin (Win - Game Over)
   -  18                Ajouter du son
