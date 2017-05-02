@@ -34,9 +34,9 @@ public class ConfigScreen extends JPanel implements ItemListener {
 	private BattleShip bs;
 	private Model mod;
 
-	public ConfigScreen(BattleShip battleShip, Model model) {
+	public ConfigScreen(BattleShip battleShip) {
 		this.bs = battleShip;
-		this.mod = model;
+		this.mod = bs.getModel();
 		this.choixEpoque = 0;
 		this.choixTirage = 0;	
 		this.choixStrategie = 0;

@@ -34,7 +34,7 @@ public class ConfigListener implements ActionListener {
 		cScreen.setVisible(false);
 		this.mod.setContext(mod.getStrategie().get(cScreen.getChoixStrategie()));
 		alea(cScreen.getChoixTirage());
-		this.mod.selectionEpoque(cScreen.getChoixNomEpoque(), this.mod.chargementEpoque(cScreen.getChoixEpoque()));
+		mod.selectionEpoque(mod.getEpoqueName()[cScreen.getChoixEpoque()], mod.chargementEpoque(cScreen.getChoixEpoque(), "epoques"));
 		this.mod.setPseudo(cScreen.getPseudoField().getText());
 		bs.setPlacementScreen();	
 		}
