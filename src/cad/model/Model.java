@@ -1,8 +1,20 @@
 package cad.model;
 
 import java.awt.Point;
+import java.io.File;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Random;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class Model extends Observable implements Runnable {
 	
@@ -24,6 +36,11 @@ public class Model extends Observable implements Runnable {
 		this.boardPlayer = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardPlayer);
 		this.etat = Etat.PLAYER;
+
+		// Initialisation de l'�poque
+		this.selectionEpoque(this.chargementNomEpoque()[0], this.chargementEpoque(0));
+		
+		//Sauvegarde save = new Sauvegarde("");
 	}
 	
 	
@@ -153,6 +170,142 @@ public class Model extends Observable implements Runnable {
 	}
 	
 	/**
+	 * Chargement du nom de chacune des �poques disponibles depuis le fichier XML/epoques.xml
+	 * 
+	 * @return on retourne les noms des �poques dans un tableau
+	 */
+	public String[] chargementNomEpoque() {
+	    int k = 0;
+	    String[] nomEpoques;
+	    String[] nomEpoquesTemporaires = new String[]{"Aucune Epoque"};;
+		
+         // Etape 1 : recuperation d'une instance de la classe "DocumentBuilderFactory"
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            	
+        try {
+             // Etape 2 : creation d'un parseur
+            DocumentBuilder builder = factory.newDocumentBuilder();
+			// Etape 3 : creation d'un Document
+		    Document document = builder.parse(new File("XML/epoques.xml"));
+		    // Etape 4 : recuperation de l'Element racine
+		    Element epoques = document.getDocumentElement();
+		    // Etape 5 : recuperation de tous les noeuds
+		    NodeList noeuds = epoques.getChildNodes();
+		    nomEpoquesTemporaires = new String[noeuds.getLength()];
+		    
+		    for (int i = 0; i < noeuds.getLength(); i++) {
+		    	if(noeuds.item(i).getNodeType() == Node.ELEMENT_NODE && noeuds.item(i).getNodeName().equals("epoque")) {
+			    	Element epoque = (Element) noeuds.item(i);
+			    	nomEpoquesTemporaires[Integer.parseInt(epoque.getAttribute("id"))] = epoque.getAttribute("nom");
+			    	k++;
+		    	}
+		    }
+        }
+        catch (final ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        catch (final SAXException e) {
+            e.printStackTrace();
+        }
+        catch (final IOException e) {
+            e.printStackTrace();
+        }
+        
+        // On rassemble les noms d'epoque
+        if(k != 0) {
+    		nomEpoques = new String[k];
+            for(int i = 0; i < k; i++)
+            	nomEpoques[i] = nomEpoquesTemporaires[i];
+        }
+        else 
+    		nomEpoques = nomEpoquesTemporaires;
+        	
+			
+		return nomEpoques;
+	}
+	
+	
+	/**
+	 * Chargement d'une �poque constitu�e de plusieurs bateaux
+	 * @return on retourne le nom des attributs avec leurs valeurs
+	 */
+	public Ship[] chargementEpoque(int numEpoque) {
+	    Ship[] shipsForModel = new Ship[5];
+	    int n = 0;
+		
+         // Etape 1 : r�cup�ration d'une instance de la classe "DocumentBuilderFactory"
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            	
+        try {
+             // Etape 2 : cr�ation d'un parseur
+            DocumentBuilder builder = factory.newDocumentBuilder();
+			// Etape 3 : cr�ation d'un Document
+		    Document document = builder.parse(new File("XML/epoques.xml"));
+		    // Etape 4 : r�cup�ration de l'Element racine
+		    Element epoques = document.getDocumentElement();
+		    // Etape 5 : r�cup�ration de tous les noeuds
+		    NodeList noeuds = epoques.getChildNodes();
+		    
+		    for (int i = 0; i < noeuds.getLength(); i++) {
+		    	if(noeuds.item(i).getNodeType() == Node.ELEMENT_NODE && noeuds.item(i).getNodeName().equals("epoque")) {
+		    		// On r�cup�re les donn�es concernant une �poque
+			    	Element epoque = (Element) noeuds.item(i);
+			    	if(epoque.getAttribute("id").equals(Integer.toString(numEpoque))) {
+			    		//On r�cup�re les donn�es sur tous les bateaux
+			    		NodeList shipsNode = epoque.getChildNodes();
+					    for (int j = 0; j < shipsNode.getLength(); j++) {
+					    	if(shipsNode.item(j).getNodeType() == Node.ELEMENT_NODE && shipsNode.item(j).getNodeName().equals("ships")) {
+					    		// On r�cup�re les donn�es concernant un seul bateau
+					    		NodeList shipNode = ((Element) shipsNode.item(j)).getChildNodes();
+							    for (int k = 0; k < shipNode.getLength(); k++) {
+							    	if(shipNode.item(k).getNodeType() == Node.ELEMENT_NODE) {
+							    		NodeList attributsNode = ((Element) shipNode.item(k)).getChildNodes();
+									    boolean reconnaissanceBateau = false;
+									    String nom = "";
+									    String image = "";
+									    int longueur = 0;
+									    int vie = 0;
+							    		for (int l = 0; l < attributsNode.getLength(); l++) {
+									    	if(attributsNode.item(l).getNodeType() == Node.ELEMENT_NODE) {
+										    	Element attribut = (Element) attributsNode.item(l);
+										    	if(attribut.getNodeName().equals("nom"))
+										    		nom = attribut.getTextContent();
+										    	if(attribut.getNodeName().equals("image"))
+										    		image = attribut.getTextContent();
+										    	if(attribut.getNodeName().equals("longueur"))
+										    		longueur = Integer.parseInt(attribut.getTextContent());
+										    	if(attribut.getNodeName().equals("vie"))
+										    		vie = Integer.parseInt(attribut.getTextContent());
+										    	reconnaissanceBateau = true;
+									    	}
+									    }
+							    		if(reconnaissanceBateau) {
+							    			shipsForModel[n] = new Ship(nom, image, longueur, vie);
+							    			n++;
+							    		}
+							    	}
+							    }
+					    	}
+					    }
+			    	}
+		    	}
+		    }
+        }
+        catch (final ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        catch (final SAXException e) {
+            e.printStackTrace();
+        }
+        catch (final IOException e) {
+            e.printStackTrace();
+        }
+			
+		return shipsForModel;
+	}
+
+	
+	/**
 	 * Initialise les bateaux
 	 * @param nomEpoque : nom de l'�poque choisie
 	 * @param shipsEpoque : liste des bateaux pour une �poque choisie
@@ -176,7 +329,8 @@ public class Model extends Observable implements Runnable {
 		this.buildBoards(this.boardAI);
 		this.aleaPlace(this.boardAI);
 		
-		this.print(boardAI);
+		//this.print(boardAI);
+		//this.print(boardAI);
 	}
 	
 	private void initialPlaceShip(Cell[][] board){

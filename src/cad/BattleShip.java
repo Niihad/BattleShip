@@ -52,4 +52,10 @@ public class BattleShip extends JFrame {
 	public static void main(String[] args) {
 		new BattleShip();
 	}
+
+	public Model getModel() {
+		return model;
+	}
+	
+	
 }
