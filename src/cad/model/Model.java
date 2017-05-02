@@ -35,7 +35,7 @@ public class Model extends Observable implements Runnable {
 	public Model() {
 		this.boardPlayer = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardPlayer);
-		this.etat = Etat.PLAYER;
+		this.etat = Etat.WAIT;
 
 		// Initialisation de l'�poque
 		this.selectionEpoque(this.chargementNomEpoque()[0], this.chargementEpoque(0));
@@ -328,7 +328,6 @@ public class Model extends Observable implements Runnable {
 		life_ia =  life;
 		
 		this.initialPlaceShip(this.boardPlayer);
-		this.etat = Etat.PLAYER;
 		this.boardAI = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardAI);
 		this.aleaPlace(this.boardAI);
