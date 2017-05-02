@@ -333,7 +333,6 @@ public class Model extends Observable implements Runnable {
 		this.boardAI = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardAI);
 		this.initialPlaceShip(this.boardAI);
-		this.etat = Etat.PLAYER;
 	}
 	
 	private Age addAge(String name, Ship[] ships){
