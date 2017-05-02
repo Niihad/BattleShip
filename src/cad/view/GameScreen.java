@@ -81,12 +81,16 @@ public class GameScreen extends JPanel implements Observer{
 		for(int i=0; i<Model.getWidth()+1; i++){
 			for(int j=0; j<Model.getHeight()+1; j++){
 				board[i][j] = new CellView(this.model,i,j,size, player);
+				if(i == 0 && j == 0)
+					board[i][j].setEnabled(false);
 				if(j>10 && j<13){
 					board[i][j].setBorder(null);
 				}else if(i==0 && j>0 && j < size){
 					board[i][j].add(new JLabel(""+j));
+					board[i][j].setEnabled(false);
 				}else if(i>0 && j==0){
 					board[i][j].add(new JLabel(""+c));
+					board[i][j].setEnabled(false);
 					c++;
 				}else if(i==0 && j>10){
 					int m = j-size-2;
@@ -95,6 +99,8 @@ public class GameScreen extends JPanel implements Observer{
 					board[i][j].add(new JLabel(""+d));
 					d++;
 				}
+				if(player)
+					board[i][j].setEnabled(false);
 				jp.add(board[i][j]);
 			}
 		}

@@ -31,7 +31,7 @@ public class CellView extends JButton implements Observer{
 		/*this.setFocusPainted(false);
 		this.setContentAreaFilled(false);
 		this.setOpaque(false);*/
-		
+		this.setBackground(new Color(0,0,0,0));
 		this.setLayout(new GridBagLayout());
 		this.setPreferredSize(new Dimension(width,width)); 
 		this.setBorder(BorderFactory.createMatteBorder( 0,0,1,1, Color.black));
@@ -76,6 +76,7 @@ public class CellView extends JButton implements Observer{
 			this.setBackground(Color.red); // bateau toucher
 		}else if(cell.isShoot()){
 			this.setBackground(Color.black);
+			
 		}
 			
 	}
