@@ -42,7 +42,7 @@ public class BattleShip extends JFrame {
 	}
 	
 	public void setGameScreen() {
-		frame.setJMenuBar(new MenuView(model));
+		frame.setJMenuBar(new MenuView(this));
 		this.stats = new StatsView(model);
 		this.placement = new PlacementScreen(model);
 		this.game = new GameScreen(this);

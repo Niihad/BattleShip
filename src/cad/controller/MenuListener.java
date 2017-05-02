@@ -19,6 +19,7 @@ public class MenuListener implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		switch (choix) {
 		case 0:
+			System.out.println(mod);
 			new Sauvegarde("Thomas", mod);
 			break;	
 		case 1:
