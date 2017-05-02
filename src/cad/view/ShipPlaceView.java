@@ -134,7 +134,7 @@ public class ShipPlaceView extends JPanel implements Observer{
 		jb.setPreferredSize(new Dimension(width,40));
 		jb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				model.setChooseAge(ship);
+				//model.setChooseAge(ship);
 			}
 		});
 		jp.add(jb); 
