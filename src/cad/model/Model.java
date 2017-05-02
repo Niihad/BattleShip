@@ -37,9 +37,9 @@ public class Model extends Observable implements Runnable {
 		this.buildBoards(this.boardPlayer);
 		this.boardAI = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardAI);
-		this.initialPlaceShip(this.boardPlayer);
+		this.initialPlaceShip(this.boardAI);
 		this.etat = Etat.PLAYER;
-		this.aleaPlace(this.boardAI);
+		//this.aleaPlace(this.boardAI);
 
 		//this.print(boardPlayer);
 		this.print(boardAI);
@@ -264,25 +264,25 @@ public class Model extends Observable implements Runnable {
 		this.cloneShip = (Ship) cell.cloneShip();
 	}
 	
-	public void movePlacementShipBoard(Cell cell, Cell newCell, int part, boolean player){
-		boolean rotation = cell.getShip().isRotation();
-		int x = newCell.getX();
-		int y = newCell.getY();
+	public void movePlacementShipBoard(Cell cell, int val, int i, int part){
+		boolean rotation = this.cloneShip.isRotation();
+		int x = cell.getX();
+		int y = cell.getY();
 		if(!rotation)// horizontal
-			y = y + cell.getPart()- part; 
+			y = y + i - part; 
 		else // verticale
-			x = x + cell.getPart()- part;
-		if(player){
-			this.boardPlayer[x][y] = (Cell) cell.clone();
-			this.boardPlayer[x][y].setLocation(x, y);
-			this.boardPlayer[x][y].setShip(this.cloneShip);
-			cell.setShip(null);
-		}else{
-			this.boardAI[x][y] = (Cell) cell.clone();
-			this.boardAI[x][y].setLocation(x, y);
-			this.boardAI[x][y].setShip(this.cloneShip);
-			cell.setShip(null);
-		}
+			x = x + i - part;
+		this.getBoardConvert(val)[x][y].setShip(this.cloneShip);
+		this.getBoardConvert(val)[x][y].setPart(i);
+		this.mettreAjour();
+	}
+	
+	public void replacePlacementShipBoard(Cell cell, int val, int i){
+		int x = cell.getX();
+		int y = cell.getY();
+		this.getBoardConvert(val)[x][y].setShip(this.cloneShip);
+		this.getBoardConvert(val)[x][y].setPart(i);
+		this.mettreAjour();
 	}
 	
 	public void rotationShipPlacement(Cell cell, int val, int part){
@@ -294,7 +294,7 @@ public class Model extends Observable implements Runnable {
 				Cell origin = this.getBoardConvert(val)[cell.getX()][cell.getY()+i-part];
 				Cell newCell = this.getBoardConvert(val)[cell.getX()+i-length/2][cell.getY()-middle];
 				newCell.setShip(this.cloneShip);
-				newCell.setPart(origin.getPart());
+				newCell.setPart(i);
 				newCell.getShip().setRotation(!rotation);
 				if(origin.getX() != newCell.getX() || origin.getY() != newCell.getY())
 					origin.setShip(null);
@@ -302,7 +302,7 @@ public class Model extends Observable implements Runnable {
 				Cell origin = this.getBoardConvert(val)[cell.getX()+i-part][cell.getY()];
 				Cell newCell = this.getBoardConvert(val)[cell.getX()-middle][cell.getY()+i-length/2];
 				newCell.setShip(this.cloneShip);
-				newCell.setPart(origin.getPart());
+				newCell.setPart(i);
 				newCell.getShip().setRotation(!rotation);
 				if(origin.getX() != newCell.getX() || origin.getY() != newCell.getY())
 					origin.setShip(null);
@@ -310,7 +310,49 @@ public class Model extends Observable implements Runnable {
 		}
 	}
 	
-	public boolean placementShipValid(Cell cell){
+	public boolean verificationPlacementShip(Cell cell, int val, int length, boolean rotation, int part){
+		int x = cell.getX();
+		int y = cell.getY();
+		for(int i=0; i<length; i++){
+			if(!rotation){ // horizontal
+				if(y-part<1 || y+length-part>Model.WIDTH+1){ // permet d'eviter le deplacer du plateau
+					return false;
+				}else if(this.getBoardConvert(val)[x][y+i-part].getShip() != null){ // permet d'eviter les collision entre ship
+					return false;
+				}
+			}else{ // vertical
+				if(x-part<1 || x+length-part>Model.HEIGHT+1){
+					return false;
+				}else if(this.getBoardConvert(val)[x+i-part][y].getShip() != null){ 
+					return false;	
+				}
+			}
+		}
+		return true;
+	}
+	
+	public boolean verificationRotationShip(Cell cell, int val, int length, boolean rotation, int part){
+		int x = cell.getX();
+		int y = cell.getY();
+		for(int i=0; i<length; i++){
+			if(!rotation){ //rotation horizontal
+				int tmpX  = x - part;
+				int tmpY = y + i - length/2;
+				if(tmpY<1 || tmpY>Model.HEIGHT){
+					return false;
+				}else if(this.getBoardConvert(val)[tmpX][tmpY].getShip() != null && tmpY != y){ 
+					return false;	
+				}
+			}else{ // rotation vertical
+				int tmpX  = x + i - length/2;
+				int tmpY = y - part;
+				if(tmpX<1 || tmpX>Model.HEIGHT){
+					return false;
+				}else if(this.getBoardConvert(val)[tmpX][tmpY].getShip() != null && tmpX != x){ 
+					return false;	
+				}
+			}
+		}
 		return true;
 	}
 
