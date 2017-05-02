@@ -7,8 +7,6 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-
-
 import cad.model.Cell;
 import cad.model.Model;
 
@@ -28,7 +26,7 @@ public class CellView extends JButton implements Observer{
 		this.player = player;
 		
 		this.setFocusPainted(false);
-		this.setContentAreaFilled(false);
+		//this.setContentAreaFilled(false);
 		this.setOpaque(false);
 		this.setLayout(new GridBagLayout());
 		this.setPreferredSize(new Dimension(width,width)); 
@@ -52,8 +50,6 @@ public class CellView extends JButton implements Observer{
 		this.ord = ord;
 	}
 	
-
-	@Override
 	public void update(Observable arg0, Object arg1) {
 		if(this.player){
 			Cell cell = model.getBoardPlayer()[ord][abs];

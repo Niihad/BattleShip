@@ -4,13 +4,14 @@ import java.io.Serializable;
 
 public class Ship implements Cloneable, Serializable {
 	
-	protected String name, pathImage;
-	protected boolean rotation = false; // false horizontal - true vertical
-	protected int lengthShip, life;
+	private String name, pathImage, pathImageV;
+	private boolean rotation = false; // false horizontal - true vertical
+	private int lengthShip, life;
 	
-	public Ship(String name, String pathImage, int lengthShip, int life){
+	public Ship(String name, String pathImage, String pathImageV, int lengthShip, int life){
 		this.name = name;
 		this.pathImage = pathImage;
+		this.pathImageV = pathImageV;
 		this.lengthShip = lengthShip;
 		this.life = life;
 	}
@@ -36,12 +37,23 @@ public class Ship implements Cloneable, Serializable {
 		this.pathImage = pathImage;
 	}
 
+	public String getPathImageV() {
+		return pathImageV;
+	}
+
+	public void setPathImageV(String pathImageV) {
+		this.pathImageV = pathImageV;
+	}
+
 	public boolean isRotation() {
 		return rotation;
 	}
 
 	public void setRotation(boolean rotation) {
 		this.rotation = rotation;
+		String tmp = this.pathImage;
+		this.pathImage = this.pathImageV;
+		this.pathImageV = tmp;
 	}
 
 	public int getLengthShip() {

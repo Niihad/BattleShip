@@ -33,7 +33,6 @@ public class Model extends Observable implements Runnable,Serializable  {
 	private ArrayList<Context> strategie;
 	protected String pseudo;
 
-
 	public enum Etat {
 		WAIT, PLAYER, IA
 	}
@@ -302,6 +301,7 @@ public class Model extends Observable implements Runnable,Serializable  {
 									    boolean reconnaissanceBateau = false;
 									    String nom = "";
 									    String image = "";
+									    String imageV = "";
 									    int longueur = 0;
 									    int vie = 0;
 							    		for (int l = 0; l < attributsNode.getLength(); l++) {
@@ -311,6 +311,8 @@ public class Model extends Observable implements Runnable,Serializable  {
 										    		nom = attribut.getTextContent();
 										    	if(attribut.getNodeName().equals("image"))
 										    		image = attribut.getTextContent();
+										    	if(attribut.getNodeName().equals("imageV"))
+										    		imageV = attribut.getTextContent();
 										    	if(attribut.getNodeName().equals("longueur"))
 										    		longueur = Integer.parseInt(attribut.getTextContent());
 										    	if(attribut.getNodeName().equals("vie"))
@@ -319,7 +321,7 @@ public class Model extends Observable implements Runnable,Serializable  {
 									    	}
 									    }
 							    		if(reconnaissanceBateau) {
-							    			shipsForModel[n] = new Ship(nom, image, longueur, vie);
+							    			shipsForModel[n] = new Ship(nom, image, imageV, longueur, vie);
 							    			n++;
 							    		}
 							    	}

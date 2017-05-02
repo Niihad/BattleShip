@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import cad.BattleShip;
+import cad.controller.GameController;
 import cad.model.Cell;
 import cad.model.Model;
 
@@ -22,17 +23,17 @@ public class GameScreen extends JPanel implements Observer{
 	private static final long serialVersionUID = 1L;
 	private static final int CELL_WIDTH = 50;
 	protected Model model;
-	private JButton[][] boardPlayer, boardAI;
+	private CellView[][] boardPlayer, boardAI;
 	private JPanel panelBoardPlayer, panelBoardAI;
 	private BattleShip bs;
 
 	public GameScreen(BattleShip battleShip) {
 		this.bs = battleShip;
 		this.model = bs.getModel();
-		this.boardPlayer = new JButton[Model.getWidth()+1][Model.getHeight()+1];
+		this.boardPlayer = new CellView[Model.getWidth()+1][Model.getHeight()+1];
 		this.drawBoard(this.panelBoardPlayer, this.boardPlayer, 50,true);
 		this.drawShipPlayer(model.getBoardPlayer());
-		this.boardAI = new JButton[Model.getWidth()+1][Model.getHeight()+1];
+		this.boardAI = new CellView[Model.getWidth()+1][Model.getHeight()+1];
 		this.drawBoard(this.panelBoardAI, this.boardAI, 50, false);
 		this.model.addObserver(this);
 	}
@@ -51,6 +52,7 @@ public class GameScreen extends JPanel implements Observer{
 		for(int i=0; i<Model.getWidth()+1; i++){
 			for(int j=0; j<Model.getHeight()+1; j++){
 				board[i][j] = new CellView(this.model,i,j,size, player);
+				board[i][j].addActionListener(new GameController(bs,this,i,j));
 				if(j>10 && j<13){
 					board[i][j].setBorder(null);
 				}else if(i==0 && j>0 && j < size){

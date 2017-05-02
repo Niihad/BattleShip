@@ -9,17 +9,15 @@ import cad.model.Model.Etat;
 import cad.view.GameScreen;
 
 public class GameController implements ActionListener {
-	private boolean collision;
 	private int x,y;
 	private GameScreen game;
 	private Model model;
 	private BattleShip bs;
 	
-	public GameController(BattleShip bs, GameScreen gameScreen, boolean collision, int i, int j) {
+	public GameController(BattleShip bs, GameScreen gameScreen, int i, int j) {
 		this.game = gameScreen; 
 		this.bs = bs;
 		this.model = bs.getModel();
-		this.collision = collision;
 		this.x = i;
 		this.y = j;
 	}
@@ -28,7 +26,7 @@ public class GameController implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(model.getEtat() == Etat.PLAYER && model.isEnd_game() == false){
-			if(collision){
+			if(model.getBoardAI()[x][y].getShip() != null){
 				this.model.setLife_ia();
 				this.game.setCouleur(x,y,true);
 			}else{
