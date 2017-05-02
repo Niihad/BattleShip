@@ -105,7 +105,7 @@ public class GameScreen extends JPanel implements Observer{
 	 * 		sinon met la case en rouge
 	 */
 	public void updateBoardPlayer(){
-		int w = 11, h = 11;
+		int w = model.getWidth(), h = model.getHeight();
 		for(int x = 0; x < w; x++) 
 			for(int y = 0; y < h; y++) {
 				if(model.getBoardPlayer()[x][y].isShoot()) {
