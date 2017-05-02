@@ -99,7 +99,7 @@ public class GameScreen extends JPanel implements Observer{
 	}
 	
 	/**
-	 * Met ï¿½ jour le tableau du joueur suite au tir de l'IA
+	 * Met à jour le tableau du joueur suite au tir de l'IA
 	 * si l'IA ne touche pas de bateau
 	 * 		alors met la case en noir 
 	 * 		sinon met la case en rouge
@@ -116,7 +116,34 @@ public class GameScreen extends JPanel implements Observer{
 				}
 			}
 	}
+	
+	/**
+	 * Met à jour le tableau de l'IA au chargement d'une partie
+	 */
+	public void updateBoardAI() {
+		int w = 11, h = 11;
+		for(int x = 0; x < w; x++) 
+			for(int y = 0; y < h; y++) 
+				if(model.getBoardAI()[x][y].isShoot()) 
+					setCouleur(x,y,true);
+	}
+	
+	
+	public void resetBoardIA(){
+		int w = 11, h = 11;
+		for(int x = 0; x < w; x++) 
+			for(int y = 0; y < h; y++) {
+				if(model.getBoardPlayer()[x][y].isShoot()) {
+					if(model.getBoardPlayer()[x][y].getShip() == null)
+						boardPlayer[x][y].setBackground(Color.black.darker());
+					else
+						boardPlayer[x][y].setBackground(Color.red.darker());
+				}
+			}
+	}
 
+
+	@Override
 	public void update(Observable arg0, Object arg1) {
 	}
 }

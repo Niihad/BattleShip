@@ -1,9 +1,11 @@
 package cad.model;
 
-public class Cell implements Cloneable{
-	private int x, y, part;
-	private boolean state, isTouch, shoot;
-	private Ship ship;
+import java.io.Serializable;
+
+public class Cell implements Cloneable, Serializable{
+	protected int x, y, part;
+	protected boolean state, isTouch, shoot;
+	protected Ship ship;
 	
 	public Cell(int x, int y){
 		this.x = x;

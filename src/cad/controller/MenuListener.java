@@ -15,11 +15,11 @@ public class MenuListener implements ActionListener {
 		this.choix = i;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		switch (choix) {
 		case 0:
-			System.out.println(mod);
-			new Sauvegarde("Thomas", mod);
+			mod.saveProfile();
 			break;	
 		case 1:
 			break;

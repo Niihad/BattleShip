@@ -1,10 +1,12 @@
 package cad.model;
 
-public class Ship implements Cloneable{
+import java.io.Serializable;
+
+public class Ship implements Cloneable, Serializable {
 	
-	private String name, pathImage;
-	private boolean rotation = false; // false horizontal - true vertical
-	private int lengthShip, life;
+	protected String name, pathImage;
+	protected boolean rotation = false; // false horizontal - true vertical
+	protected int lengthShip, life;
 	
 	public Ship(String name, String pathImage, int lengthShip, int life){
 		this.name = name;

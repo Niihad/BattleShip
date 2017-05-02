@@ -2,7 +2,11 @@ package cad.model;
 
 import java.awt.Point;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Observable;
 import java.util.Random;
 
@@ -16,18 +20,19 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class Model extends Observable implements Runnable {
+public class Model extends Observable implements Runnable, Serializable {
 	
-	private static final int WIDTH = 10;
-	private static final int HEIGHT = 10;
-	private Age age;
-	private Cell[][] boardPlayer, boardAI;
-	private String[] epoqueName;
-	private Ship cloneShip;
-	private int life,life_ia;
-	private Context context;
-	private boolean end_game = false;
-	private Etat etat;
+	protected static final int WIDTH = 10;
+	protected static final int HEIGHT = 10;
+	protected String pseudo;
+	protected Age age;
+	protected Cell[][] boardPlayer, boardAI;
+	protected Point selectShipPLace = null;
+	protected Ship chooseShip, cloneShip;
+	protected int life,life_ia;
+	protected Context context;
+	protected boolean end_game = false;
+	protected Etat etat;
 	public enum Etat {
 		WAIT, PLAYER, IA
 	}
@@ -36,22 +41,58 @@ public class Model extends Observable implements Runnable {
 		this.boardPlayer = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardPlayer);
 		this.etat = Etat.WAIT;
-		this.epoqueName = this.chargementNomEpoque();
-		this.etat = Etat.WAIT;
 
 		// Initialisation de l'ï¿½poque
-		this.selectionEpoque(this.chargementNomEpoque()[0], this.chargementEpoque(0, "epoques"));
+		this.selectionEpoque(this.chargementNomEpoque()[0], this.chargementEpoque(0));
+		
 	}
+
 	
+	/***********************************************************/
+	/*********************** SAUVEGARDE ************************/
+	/***********************************************************/
+	/**
+	 * Sauvegarde du profil grace à l'implémentation de l'interface Serializable des différents objects concernés
+	 * Stock l'objet dans un fichier dont le nom est crée à partir du pseudo
+	 */
+	public void saveProfile() {
+        String file = "./profils/" + pseudo + ".save";
+
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(this);
+            oos.flush();
+            oos.close();
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 	
 	/***********************************************************/
 	/********************* GETTER / SETTER *********************/
 	/***********************************************************/
 	
+	
+	
 	public static int getWidth() {
 		return WIDTH;
 	}
 	
+	public String getPseudo() {
+		return pseudo;
+	}
+
+
+	public void setPseudo(String pseudo) {
+		this.pseudo = pseudo;
+	}
+
+
 	public static int getHeight() {
 		return HEIGHT;
 	}
@@ -62,6 +103,22 @@ public class Model extends Observable implements Runnable {
 
 	public void setAge(Age age) {
 		this.age = age;
+	}
+
+	public Point getSelectShipPLace() {
+		return selectShipPLace;
+	}
+
+	public void setSelectShipPLace(Point selectShipPLace) {
+		this.selectShipPLace = selectShipPLace;
+	}
+
+	public Ship getChooseShip() {
+		return chooseShip;
+	}
+
+	public void setChooseAge(Ship ship) {
+		this.chooseShip = ship;
 	}
 
 	public Cell[][] getBoardPlayer() {
@@ -78,14 +135,6 @@ public class Model extends Observable implements Runnable {
 
 	public void setBoardAI(Cell[][] boardAi) {
 		this.boardAI = boardAi;
-	}
-
-	public String[] getEpoqueName() {
-		return epoqueName;
-	}
-
-	public void setEpoqueName(String[] epoque) {
-		this.epoqueName = epoque;
 	}
 
 	public int getLife() {
@@ -150,6 +199,13 @@ public class Model extends Observable implements Runnable {
 	/********************** Initiale Game **********************/
 	/***********************************************************/
 	
+	private Age addAge(String name, Ship[] ships){
+		Age age = new Age(name);
+		for(int i=0; i<ships.length; i++)	
+			age.addShip(ships[i]);
+		return age;
+	}
+	
 	private void buildBoards(Cell[][] board){
 		for(int i=0; i<=WIDTH; i++){
 			for(int j=0; j<=HEIGHT; j++){
@@ -158,14 +214,10 @@ public class Model extends Observable implements Runnable {
 		}
 	}
 	
-	
-	/***********************************************************/
-	/*********************** Config Game ***********************/
-	/***********************************************************/
-	
 	/**
-	 * Chargement du nom de chacune des epoques disponibles depuis le fichier XML/epoques.xml
-	 * @return on retourne les noms des epoques dans un tableau
+	 * Chargement du nom de chacune des ï¿½poques disponibles depuis le fichier XML/epoques.xml
+	 * 
+	 * @return on retourne les noms des ï¿½poques dans un tableau
 	 */
 	public String[] chargementNomEpoque() {
 	    int k = 0;
@@ -220,11 +272,11 @@ public class Model extends Observable implements Runnable {
 	
 	/**
 	 * Chargement d'une ï¿½poque constituï¿½e de plusieurs bateaux
-	 * @param numEpoque : numï¿½ro de l'ï¿½poque
-	 * @param nomFichier : nom du fichier a tï¿½lï¿½charger
+	 * @param numEpoque : numéro de l'époque
+	 * @param nomFichier : nom du fichier a télécharger
 	 * @return on retourne le nom des attributs avec leurs valeurs
 	 */
-	public Ship[] chargementEpoque(int numEpoque, String nomFichier) {
+	public Ship[] chargementEpoque(int numEpoque) {
 	    Ship[] shipsForModel = new Ship[5];
 	    int n = 0;
 		
@@ -235,7 +287,7 @@ public class Model extends Observable implements Runnable {
              // Etape 2 : crï¿½ation d'un parseur
             DocumentBuilder builder = factory.newDocumentBuilder();
 			// Etape 3 : crï¿½ation d'un Document
-		    Document document = builder.parse(new File("XML/" + nomFichier + ".xml"));
+		    Document document = builder.parse(new File("XML/epoques.xml"));
 		    // Etape 4 : rï¿½cupï¿½ration de l'Element racine
 		    Element epoques = document.getDocumentElement();
 		    // Etape 5 : rï¿½cupï¿½ration de tous les noeuds
@@ -308,8 +360,8 @@ public class Model extends Observable implements Runnable {
 	public void selectionEpoque(String nomEpoque, Ship[] shipsEpoque) {
 		Ship[] ships = shipsEpoque;
 
-		for(int i = 0; i < shipsEpoque.length; i++) 
-			System.out.println(ships[i].getName());
+		//for(int i = 0; i < shipsEpoque.length; i++) 
+			//System.out.println(ships[i].getName());
 		
 		age = this.addAge(nomEpoque, ships);
 		
@@ -317,22 +369,18 @@ public class Model extends Observable implements Runnable {
 		for (Ship ship : this.age.getShips())
 			life += ship.getLife();
 		life_ia =  life;
-
+		
+		this.initialPlaceShip(this.boardPlayer);
 		this.boardAI = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardAI);
-		this.initialPlaceShip(this.boardAI);
-		this.etat = Etat.PLAYER;
-	}
-	
-	private Age addAge(String name, Ship[] ships){
-		Age age = new Age(name);
-		for(int i=0; i<ships.length; i++)	
-			age.addShip(ships[i]);
-		return age;
+		this.aleaPlace(this.boardAI);
+		
+		//this.print(boardAI);
+		//this.print(boardAI);
 	}
 	
 	private void initialPlaceShip(Cell[][] board){
-		int position[][] = { { 2, 2 }, { 5, 2 }, { 8, 7 }, { 8, 2 }, { 5, 8 } };
+		int position[][] = { { 1, 1 }, { 4, 4 }, { 6, 6 }, { 8, 1 }, { 10, 9 } };
 		int i = 0;
 		for (Ship ship : this.age.getShips()) {
 			for (int j = 0; j < ship.getLengthShip(); j++) {
@@ -342,7 +390,7 @@ public class Model extends Observable implements Runnable {
 		}
 	}
 
-	public void aleaPlace(Cell[][] boardAi) {
+	private void aleaPlace(Cell[][] boardAi) {
 		Random r = new Random();
 		int x, y;
 		for (Ship ship : this.age.getShips()) {
@@ -515,24 +563,13 @@ public class Model extends Observable implements Runnable {
 		}
 		return true;
 	}
-	
-	/*
-	 * Teste de verification permettant de savoir si la partie peu commencer apres placement de tout les bateaux
-	 */
-	public boolean verificationBeginGame(){
-		for(int i=0; i<this.boardAI.length; i++){
-			for(int j=0; j<this.boardAI.length; j++){
-				if(this.boardAI[i][j].getShip() != null)
-					return false;
-			}
-		}
-		return true;
-	}
 
 	/***********************************************************/
 	/************************ GameScreen ***********************/
 	/***********************************************************/
 
+	
+	@Override
 	public void run() {
 		this.mettreAjour();
 	}

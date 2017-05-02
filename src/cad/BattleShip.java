@@ -8,6 +8,7 @@ import cad.model.Model;
 import cad.view.ConfigScreen;
 import cad.view.EndScreen;
 import cad.view.GameScreen;
+import cad.view.LoadScreen;
 import cad.view.MenuScreen;
 import cad.view.MenuView;
 import cad.view.PlacementScreen;
@@ -21,6 +22,7 @@ public class BattleShip extends JFrame {
 	private PlacementScreen placement;
 	private StatsView stats;
 	private ConfigScreen config;
+	private LoadScreen load;
 	private EndScreen end;
 	private JFrame frame;
 	private Model model;
@@ -41,22 +43,27 @@ public class BattleShip extends JFrame {
 		frame.add(menu, BorderLayout.CENTER);
 	}
 	
-	public void setPlacementScreen() {
-		this.placement = new PlacementScreen(this);
-		frame.add(placement, BorderLayout.CENTER);
-	}
-	
 	public void setGameScreen() {
 		frame.setJMenuBar(new MenuView(this));
 		this.stats = new StatsView(model);
+		this.placement = new PlacementScreen(model);
 		this.game = new GameScreen(this);
 		frame.add(stats, BorderLayout.NORTH);
+		//frame.add(placement, BorderLayout.CENTER);
 		frame.add(game, BorderLayout.CENTER);
 	}
 	
 	public void setConfigScreen() {
-		this.config = new ConfigScreen(this);
+		this.config = new ConfigScreen(this,model);
 		frame.add(config, BorderLayout.CENTER);
+	}
+	
+	/**
+	 * Chargement de la page de chargement de partie
+	 */
+	public void setLoadScreen() {
+		this.load = new LoadScreen(this);
+		frame.add(load, BorderLayout.CENTER);
 	}
 	
 	public void setEndScreen() {
@@ -73,7 +80,20 @@ public class BattleShip extends JFrame {
 		this.model = new Model();
 		setMenuScreen();
 	}
+	
 	public Model getModel() {
 		return model;
 	}
+
+	public void setModel(Model model) {
+		this.model = model;
+	}
+
+	public GameScreen getGame() {
+		return game;
+	}
+	
+	
+	
+	
 }

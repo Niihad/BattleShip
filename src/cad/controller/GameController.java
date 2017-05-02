@@ -24,6 +24,7 @@ public class GameController implements ActionListener {
 		this.y = j;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(model.getEtat() == Etat.PLAYER && model.isEnd_game() == false){
 			if(collision){
@@ -35,7 +36,8 @@ public class GameController implements ActionListener {
 			this.model.setEtat(Etat.IA);
 			this.model.IA_play();
 			this.game.updateBoardPlayer();
-		}	
+		}
+		game.updateBoardPlayer();
 		
 		if(model.isEnd_game()){
 			game.setVisible(false);
