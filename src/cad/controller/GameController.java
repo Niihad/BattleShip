@@ -6,18 +6,16 @@ import java.awt.event.ActionListener;
 import cad.BattleShip;
 import cad.model.Model;
 import cad.model.Model.Etat;
-import cad.view.GameScreen;
+import cad.view.CellView;
 
 public class GameController implements ActionListener {
 	private int x,y;
-	private GameScreen game;
+	private CellView cellView;
 	private Model model;
-	private BattleShip bs;
 	
-	public GameController(BattleShip bs, GameScreen gameScreen, int i, int j) {
-		this.game = gameScreen; 
-		this.bs = bs;
-		this.model = bs.getModel();
+	public GameController(Model model, CellView view, int i, int j) {
+		this.cellView = view; 
+		this.model = model;
 		this.x = i;
 		this.y = j;
 	}
@@ -25,21 +23,16 @@ public class GameController implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(model.getEtat() == Etat.PLAYER && model.isEnd_game() == false){
-			if(model.getBoardAI()[x][y].getShip() != null){
-				this.model.setLife_ia();
-				this.game.setCouleur(x,y,true);
+			if(cellView.isPlayer()){
+				model.setShoot(x, y);
 			}else{
-				this.game.setCouleur(x,y,false);
+				model.setShoot(x, y);
 			}
-			this.model.setEtat(Etat.IA);
-			this.model.IA_play();
-			this.game.updateBoardPlayer();
 		}
-		game.updateBoardPlayer();
 		
 		if(model.isEnd_game()){
-			game.setVisible(false);
-			bs.setEndScreen();
+			//game.setVisible(false);
+			//bs.setEndScreen();
 		}
 	}
 
