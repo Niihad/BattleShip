@@ -30,13 +30,13 @@ public class EndScreen extends JPanel{
 	private void draw() {
 		this.setBackground(Color.yellow);
 		if(mod.getLife() == 0)
-			this.win = new Label("YOU LOSE");
+			this.win = new Label("Vous avez perdu");
 		else
-			this.win = new Label("YOU WIN");
+			this.win = new Label("Vous avez gagné");
 		this.add(win);
 		
-		this.play = new JButton("Play");
-		this.exit = new JButton("Exit");
+		this.play = new JButton("Retour ecran d'accueil");
+		this.exit = new JButton("Quitter");
 		
 		Box panneauBouton = Box.createVerticalBox();
 		panneauBouton.add(play);

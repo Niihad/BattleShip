@@ -39,9 +39,9 @@ public class MenuScreen extends JPanel {
 	}
 
 	private void drawMenu() {
-		this.play = new JButton("Play");
-		this.load = new JButton("Load");
-		this.exit = new JButton("Exit");
+		this.play = new JButton("Jouer");
+		this.load = new JButton("Charger");
+		this.exit = new JButton("Quitter");
 		this.setBackground(Color.BLUE);
 		Box panneauBouton = Box.createVerticalBox();
 		panneauBouton.add(play);
