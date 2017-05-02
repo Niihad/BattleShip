@@ -342,7 +342,7 @@ public class Model extends Observable implements Runnable {
 		}
 	}
 
-	private void aleaPlace(Cell[][] boardAi) {
+	public void aleaPlace(Cell[][] boardAi) {
 		Random r = new Random();
 		int x, y;
 		for (Ship ship : this.age.getShips()) {

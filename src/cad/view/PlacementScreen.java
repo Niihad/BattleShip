@@ -49,6 +49,7 @@ public class PlacementScreen extends JPanel implements Observer{
 			public void actionPerformed(ActionEvent e) {
 				model.print(model.getBoardAI());
 				if(model.verificationBeginGame()){
+					model.aleaPlace(model.getBoardAI());
 					setVisible(false);
 					battleShip.setGameScreen();
 				}else{
