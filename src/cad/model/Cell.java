@@ -77,20 +77,4 @@ public class Cell implements Cloneable, Serializable{
 	public Object cloneShip(){
 		return (Ship) ship.clone();
 	}
-	
-	public Object clone() {
-	    Cell cell = null;
-	    try {
-	    	// On récupère l'instance à renvoyer par l'appel de la méthode super.clone()
-	    	cell = (Cell) super.clone();
-	    } catch(CloneNotSupportedException cnse) {
-	      	// Ne devrait jamais arriver car nous implémentons l'interface Cloneable
-	      	cnse.printStackTrace(System.err);
-	    }
-	    // On clone l'attribut de type Patronyme qui n'est pas immuable.
-	    //cell.ship = (Ship) ship.clone();
-	    // on renvoie le clone
-	    return cell;
-	}
-
 }

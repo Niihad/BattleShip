@@ -1,12 +1,19 @@
 package cad.view;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -60,38 +67,45 @@ public class PlacementScreen extends JPanel implements Observer{
 		jp.setLayout(new GridLayout(size, length,0,0));
 		for(int i=0; i<size; i++){
 			for(int j=0; j<length; j++){
-				if(i==0 && j==0){
-					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
-				}else if(i==0 && j==13){
-					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
-				}else if(j>10 && j<13){
-					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
+				board[i][j] = initJPanel();
+				if(j>10 && j<13){
 					board[i][j].setBorder(null);
 				}else if(i==0 && j>0 && j < size){
-					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
 					board[i][j].add(new JLabel(""+j));
 				}else if(i>0 && j==0){
-					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
 					board[i][j].add(new JLabel(""+c));
 					c++;
 				}else if(i==0 && j>10){
 					int m = j-size-2;
-					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
 					board[i][j].add(new JLabel(""+m));
 				}else if(i>0 && j==13){
-					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
 					board[i][j].add(new JLabel(""+d));
 					d++;
-				}else if(j < size){
-					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
-				}else {
-					board[i][j] = new CellView(this.model,i,j,CELL_WIDTH);
 				}
 				jp.add(board[i][j]);
 			}
 		}
 	}
 	
+	private JPanel initJPanel(){
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridBagLayout());
+		panel.setPreferredSize(new Dimension(CELL_WIDTH,CELL_WIDTH)); 
+		panel.setBorder(BorderFactory.createMatteBorder( 0,0,1,1, Color.black));
+		return panel;
+	}
+	
+	public Point getIndexJPanel(JPanel panel){
+		int size = this.model.getBoardPlayer().length;
+		int length = size*2+2;
+		for(int i=0; i<size; i++){
+			for(int j=0; j<length; j++){
+				if(board[i][j].equals(panel))
+					return new Point(i,j);
+			}
+		}
+		return null;
+	}
 	
 	/***********************************************************/
 	/************************** Ships **************************/

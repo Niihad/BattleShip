@@ -1,12 +1,12 @@
 package cad.model;
 
-import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
 
@@ -21,18 +21,20 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class Model extends Observable implements Runnable, Serializable {
-	
-	protected static final int WIDTH = 10;
-	protected static final int HEIGHT = 10;
+
+	private static final int WIDTH = 10;
+	private static final int HEIGHT = 10;
 	protected String pseudo;
-	protected Age age;
-	protected Cell[][] boardPlayer, boardAI;
-	protected Point selectShipPLace = null;
-	protected Ship chooseShip, cloneShip;
-	protected int life,life_ia;
-	protected Context context;
-	protected boolean end_game = false;
-	protected Etat etat;
+	private Age age;
+	private Cell[][] boardPlayer, boardAI;
+	private String[] epoqueName;
+	private Ship cloneShip;
+	private int life,life_ia;
+	private Context context;
+	private boolean end_game = false;
+	private Etat etat;
+	private ArrayList<Context> strategie;
+
 	public enum Etat {
 		WAIT, PLAYER, IA
 	}
@@ -41,10 +43,21 @@ public class Model extends Observable implements Runnable, Serializable {
 		this.boardPlayer = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardPlayer);
 		this.etat = Etat.WAIT;
-
-		// Initialisation de l'�poque
+		this.epoqueName = this.chargementNomEpoque();
+		this.strategie = new ArrayList<Context>();
+		// Initialisation de l'epoque
 		this.selectionEpoque(this.chargementNomEpoque()[0], this.chargementEpoque(0));
-		
+		creationStrategie();
+
+	}
+	
+	private void creationStrategie() {
+		Context context = new Context(new Aleatoire());
+		Context context2 = new Context(new Diagonale());
+		Context context3 = new Context(new Intelligent());
+		strategie.add(context);
+		strategie.add(context2);
+		strategie.add(context3);
 	}
 
 	
@@ -103,22 +116,6 @@ public class Model extends Observable implements Runnable, Serializable {
 
 	public void setAge(Age age) {
 		this.age = age;
-	}
-
-	public Point getSelectShipPLace() {
-		return selectShipPLace;
-	}
-
-	public void setSelectShipPLace(Point selectShipPLace) {
-		this.selectShipPLace = selectShipPLace;
-	}
-
-	public Ship getChooseShip() {
-		return chooseShip;
-	}
-
-	public void setChooseAge(Ship ship) {
-		this.chooseShip = ship;
 	}
 
 	public Cell[][] getBoardPlayer() {
@@ -198,13 +195,6 @@ public class Model extends Observable implements Runnable, Serializable {
 	/***********************************************************/
 	/********************** Initiale Game **********************/
 	/***********************************************************/
-	
-	private Age addAge(String name, Ship[] ships){
-		Age age = new Age(name);
-		for(int i=0; i<ships.length; i++)	
-			age.addShip(ships[i]);
-		return age;
-	}
 	
 	private void buildBoards(Cell[][] board){
 		for(int i=0; i<=WIDTH; i++){
@@ -377,6 +367,14 @@ public class Model extends Observable implements Runnable, Serializable {
 		
 		//this.print(boardAI);
 		//this.print(boardAI);
+		//this.initialPlaceShip(this.boardAI);
+	}
+	
+	private Age addAge(String name, Ship[] ships){
+		Age age = new Age(name);
+		for(int i=0; i<ships.length; i++)	
+			age.addShip(ships[i]);
+		return age;
 	}
 	
 	private void initialPlaceShip(Cell[][] board){
@@ -597,4 +595,9 @@ public class Model extends Observable implements Runnable, Serializable {
 			context.executeStrategy(this);
 		}	
 	}
+
+	public ArrayList<Context> getStrategie() {
+		return strategie;
+	}
 }
+

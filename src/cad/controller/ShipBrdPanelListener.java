@@ -11,7 +11,6 @@ import javax.swing.SwingUtilities;
 
 import cad.model.Cell;
 import cad.model.Model;
-import cad.view.CellView;
 import cad.view.PlacementScreen;
 
 public class ShipBrdPanelListener extends MouseAdapter {
@@ -19,9 +18,9 @@ public class ShipBrdPanelListener extends MouseAdapter {
 	private Model model;
 	private PlacementScreen placement;
     private JPanel[][] board;
-    private CellView[] originalJPanel;
+    private JPanel[] originalJPanel;
     private JLabel[] label;
-    private int length, part;
+    private int length, part, abs, absC, ord;
     private boolean rotation;
     
     public ShipBrdPanelListener(Model model, PlacementScreen placement){
@@ -38,9 +37,14 @@ public class ShipBrdPanelListener extends MouseAdapter {
     	 */
     	JPanel src = (JPanel) e.getSource();
     	// recuperaton du composant present dans le jPanel
-        CellView comp = (CellView) src.getComponentAt(e.getPoint());
+    	JPanel comp = (JPanel) src.getComponentAt(e.getPoint());
+    	// ainsi que son index sur le gridLayout
+    	int ord = placement.getIndexJPanel(comp).x;
+    	int abs = placement.getIndexJPanel(comp).y;
+    	int absC = (abs>Model.getWidth()) ? abs-Model.getWidth()-3 : abs;
+  
         if (comp != null && ((JComponent) comp).getComponentCount() == 1) {
-        	Cell cell = model.getBoardConvert(comp.getAbs())[comp.getOrd()][comp.getAbsConvert()];
+        	Cell cell = model.getBoardConvert(abs)[ord][absC];
         	/* les differentes cell que constitue un bateau on tous le meme ship en commun. 
     		 * il est donc necessaire de cloner la reference ship des anciens position cells du bateau
     		 * puisque ces dernieres devront etre mise a null.
@@ -57,18 +61,18 @@ public class ShipBrdPanelListener extends MouseAdapter {
         	// rotation du bateau selectionné
         	if (e.getButton() != MouseEvent.BUTTON1){
         		int middle = part - length/2;
-        		if (this.model.verificationRotationShip(cell,comp.getAbs(),length,!rotation,middle)){
-	        		this.model.rotationShipPlacement(cell, comp.getAbs()-middle, part);
+        		if (this.model.verificationRotationShip(cell,abs,length,!rotation,middle)){
+	        		this.model.rotationShipPlacement(cell, abs-middle, part);
 	        		for(int i=0; i<length; i++){
 	        			if(!this.rotation){ // horizontal
-	        				CellView panelOrigin = (CellView) board[comp.getOrd()][comp.getAbs()+i-part];
+	        				JPanel panelOrigin = (JPanel) board[ord][abs+i-part];
 	        				JLabel label = (JLabel) panelOrigin.getComponent(0);
-	        				CellView panelDestination = (CellView) board[comp.getOrd()+i-length/2][comp.getAbs()-middle];
+	        				JPanel panelDestination = (JPanel) board[ord+i-length/2][abs-middle];
 	        				panelDestination.add(label);
 	        			}else{ // vertical
-	        				CellView panelOrigin = (CellView) board[comp.getOrd()+i-part][comp.getAbs()];
+	        				JPanel panelOrigin = (JPanel) board[ord+i-part][abs];
 	        				JLabel label = (JLabel) panelOrigin.getComponent(0);
-	        				CellView panelDestination = (CellView) board[comp.getOrd()-middle][comp.getAbs()+i-length/2];
+	        				JPanel panelDestination = (JPanel) board[ord-middle][abs+i-length/2];
 	        				panelDestination.add(label);
 	        			}
 	        		}
@@ -77,19 +81,19 @@ public class ShipBrdPanelListener extends MouseAdapter {
         		}
 	        }else{
 	        	// stock chaque cells que constitue le bateau selectionné
-	        	this.originalJPanel = new CellView[length]; 
+	        	this.originalJPanel = new JPanel[length]; 
 	        	// stock chaque label que constitue le bateau selectionné
 	        	this.label = new JLabel[length];
 	        	for(int i=0; i<length; i++){
 	        		if(!this.rotation){ // horizontal
-	        			Cell rmvCell = model.getBoardConvert(comp.getAbs())[comp.getOrd()][comp.getAbsConvert()+i-part];
+	        			Cell rmvCell = model.getBoardConvert(abs)[ord][absC+i-part];
 	        			rmvCell.setShip(null);
-	        			this.originalJPanel[i] = (CellView) board[comp.getOrd()][comp.getAbs()+i-part];
+	        			this.originalJPanel[i] = (JPanel) board[ord][abs+i-part];
 	        			this.repaintClick(this.originalJPanel[i],i,e,true);
 	        		}else{ // vertical
-	        			Cell rmvCell = model.getBoardConvert(comp.getAbs())[comp.getOrd()+i-part][comp.getAbsConvert()];
+	        			Cell rmvCell = model.getBoardConvert(abs)[ord+i-part][absC];
 	        			rmvCell.setShip(null);
-	        			this.originalJPanel[i] = (CellView) board[comp.getOrd()+i-part][comp.getAbs()];
+	        			this.originalJPanel[i] = (JPanel) board[ord+i-part][abs];
 						this.repaintClick(this.originalJPanel[i],i,e,true);
 	        		}
 	        	}
@@ -121,19 +125,22 @@ public class ShipBrdPanelListener extends MouseAdapter {
             return;
         }
         JPanel src = (JPanel) e.getSource();
-        CellView comp = (CellView) src.getComponentAt(e.getPoint());
+        JPanel comp = (JPanel) src.getComponentAt(e.getPoint());
+        ord = placement.getIndexJPanel(comp).x;
+    	abs = placement.getIndexJPanel(comp).y;
+    	absC = (abs>Model.getWidth()) ? abs-Model.getWidth()-3 : abs;
         if (comp != null) {
-        	if((comp.getAbs() < 11 || comp.getAbs() > 13) && comp.getOrd() != 0 && comp.getAbs() != 0){
-	        	Cell cell = model.getBoardConvert(comp.getAbs())[comp.getOrd()][comp.getAbsConvert()]; 
-	        	if (this.model.verificationPlacementShip(cell, comp.getAbs(), this.length, this.rotation,part)){ 
+        	if((abs < 11 || abs > 13) && ord != 0 && abs != 0){
+	        	Cell cell = model.getBoardConvert(abs)[ord][absC]; 
+	        	if (this.model.verificationPlacementShip(cell, abs, this.length, this.rotation,part)){ 
 	        		for(int i=0; i<length; i++){
 		        		if(!this.rotation){ // horizontal
-			        		this.model.movePlacementShipBoard(cell,comp.getAbs(),i,part);
-			        		CellView panelDestination = (CellView) board[comp.getOrd()][comp.getAbs()+i-part];
+			        		this.model.movePlacementShipBoard(cell,abs,i,part);
+			        		JPanel panelDestination = (JPanel) board[ord][abs+i-part];
 			        		panelDestination.add(label[i]);
 			        	}else{ // vertical
-			        		this.model.movePlacementShipBoard(cell,comp.getAbs(),i,part);
-			        		CellView panelDestination = (CellView) board[comp.getOrd()+i-part][comp.getAbs()];
+			        		this.model.movePlacementShipBoard(cell,abs,i,part);
+			        		JPanel panelDestination = (JPanel) board[ord+i-part][abs];
 			        		panelDestination.add(label[i]);
 			        	}
 		        	}
@@ -148,8 +155,8 @@ public class ShipBrdPanelListener extends MouseAdapter {
 		}
         this.placement.revalidate();
         this.placement.repaint();
-        //this.model.print(this.model.getBoardPlayer());
-        //this.model.print(this.model.getBoardAI());
+        this.model.print(this.model.getBoardPlayer());
+        this.model.print(this.model.getBoardAI());
         label = null;
     }
     
@@ -158,7 +165,7 @@ public class ShipBrdPanelListener extends MouseAdapter {
 	/************************* FONCTION ************************/
 	/***********************************************************/
     
-    private void repaintClick(CellView cell, int i, MouseEvent e, boolean first){
+    private void repaintClick(JPanel cell, int i, MouseEvent e, boolean first){
     	label[i] = (JLabel) cell.getComponent(0);
     	cell.remove(label[i]);
     	cell.revalidate();
@@ -187,8 +194,11 @@ public class ShipBrdPanelListener extends MouseAdapter {
     private void replaeShip(){
     	for(int i=0; i<originalJPanel.length; i++){
 			originalJPanel[i].add(label[i]);
-			Cell OriginCell = model.getBoardConvert(originalJPanel[i].getAbs())[originalJPanel[i].getOrd()][originalJPanel[i].getAbsConvert()];
-			this.model.replacePlacementShipBoard(OriginCell,originalJPanel[i].getAbs(),i);
+			int ordOld = placement.getIndexJPanel(originalJPanel[i]).x;
+	    	int absOld = placement.getIndexJPanel(originalJPanel[i]).y;
+	    	int absCold = (absOld>Model.getWidth()) ? absOld-Model.getWidth()-3 : absOld;
+			Cell OriginCell = model.getBoardConvert(absOld)[ordOld][absCold];
+			this.model.replacePlacementShipBoard(OriginCell,absOld,i);
 		}
     }
     
