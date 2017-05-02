@@ -1,7 +1,11 @@
 package cad.model;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
@@ -16,7 +20,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class Model extends Observable implements Runnable {
+public class Model extends Observable implements Runnable,Serializable  {
 	
 	private static final int WIDTH = 10;
 	private static final int HEIGHT = 10;
@@ -29,6 +33,7 @@ public class Model extends Observable implements Runnable {
 	private boolean end_game = false;
 	private Etat etat;
 	private ArrayList<Context> strategie;
+	protected String pseudo;
 
 	public enum Etat {
 		WAIT, PLAYER, IA
@@ -55,7 +60,32 @@ public class Model extends Observable implements Runnable {
 		strategie.add(context3);
 	}
 	
+	/***********************************************************/
+	/*********************** SAUVEGARDE ************************/
+	/***********************************************************/
+	/**
+	 * Sauvegarde du profil grace à l'implémentation de l'interface Serializable des différents objects concernés
+	 * Stock l'objet dans un fichier dont le nom est crée à partir du pseudo
+	 */
+	public void saveProfile() {
+        String file = "./profils/" + pseudo + ".save";
+
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(this);
+            oos.flush();
+            oos.close();
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 	
+		
 	/***********************************************************/
 	/********************* GETTER / SETTER *********************/
 	/***********************************************************/
@@ -66,6 +96,15 @@ public class Model extends Observable implements Runnable {
 	
 	public static int getHeight() {
 		return HEIGHT;
+	}
+	
+	public String getPseudo() {
+		return pseudo;
+	}
+
+
+	public void setPseudo(String pseudo) {
+		this.pseudo = pseudo;
 	}
 		
 	public Age getAge() {
@@ -579,4 +618,3 @@ public class Model extends Observable implements Runnable {
 		return strategie;
 	}
 }
-

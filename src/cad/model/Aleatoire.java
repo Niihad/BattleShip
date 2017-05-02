@@ -1,13 +1,16 @@
 package cad.model;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Aleatoire implements Strategy {
+public class Aleatoire implements Strategy, Serializable {
 
+	@Override
 	public String name() {
 		return "Aleatoire";
 	}
 
+	@Override
 	public void play(Model mod) {
 		Random r = new Random();
 		int w = mod.getWidth();

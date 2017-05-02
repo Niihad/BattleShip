@@ -1,7 +1,9 @@
 package cad.model;
 
-public class Context {
-	private Strategy strategy;
+import java.io.Serializable;
+
+public class Context implements Serializable {
+	protected Strategy strategy;
 	
 	public Context(Strategy strategy){
 		this.strategy = strategy;

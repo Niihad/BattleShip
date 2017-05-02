@@ -1,6 +1,8 @@
 package cad.model;
 
-public class Ship implements Cloneable{
+import java.io.Serializable;
+
+public class Ship implements Cloneable, Serializable {
 	
 	private String name, pathImage, pathImageV;
 	private boolean rotation = false; // false horizontal - true vertical

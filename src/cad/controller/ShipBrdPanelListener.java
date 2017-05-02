@@ -29,6 +29,7 @@ public class ShipBrdPanelListener extends MouseAdapter {
     	this.board = placement.getBoard();
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
     	/* recupere et stock le jPanel present a l'endroit du curseur 
     	 * remarque un bloc jPanel represente un seul bloc du bateau plusieur bloc
@@ -123,6 +124,7 @@ public class ShipBrdPanelListener extends MouseAdapter {
         e.consume();
     }
     
+    @Override
     public void mouseDragged(MouseEvent e) {
     	if (label == null) {
             return;
@@ -135,6 +137,7 @@ public class ShipBrdPanelListener extends MouseAdapter {
 		}
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
     	if (label == null) {
             return;

@@ -37,6 +37,7 @@ public class StatsView extends JPanel implements Observer{
 		this.add(age);
 	}
 
+	@Override
 	public void update(Observable arg0, Object arg1) {
 		this.life.setText("Life : " + this.mod.getLife() +" / " + tmp);
 		this.life_IA.setText("Life IA: " + this.mod.getLife_ia() +" / " + tmp);

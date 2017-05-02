@@ -32,6 +32,12 @@ public class MenuScreen extends JPanel {
 	        public void actionPerformed(ActionEvent event){
 	        	setVisible(false);
 	        	bs.setConfigScreen();}});
+		
+		load.addActionListener(new ActionListener(){  	
+	        public void actionPerformed(ActionEvent event){
+	        	setVisible(false);
+	        	bs.setLoadScreen();
+	        	}});
 		 
 		exit.addActionListener(new ActionListener(){  	
 	        public void actionPerformed(ActionEvent event){

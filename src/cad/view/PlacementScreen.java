@@ -56,7 +56,7 @@ public class PlacementScreen extends JPanel implements Observer{
 					setVisible(false);
 					battleShip.setGameScreen();
 				}else{
-					javax.swing.JOptionPane.showMessageDialog(null,"Tous les bateaux ne sont pas placÃ©"); 
+					javax.swing.JOptionPane.showMessageDialog(null,"Tous les bateaux ne sont pas placé"); 
 				}
 			}
 		});

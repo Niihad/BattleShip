@@ -22,12 +22,12 @@ public class MenuListener implements ActionListener {
 		this.strategy = new String[3];
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		switch (choix) {
 		case 0:
-			System.out.println(mod);
-			new Sauvegarde("Thomas", mod);
-			break;
+			mod.saveProfile();
+			break;	
 		case 1:
 			for (int i = 0; i <= mod.getStrategie().size() - 1; i++)
 				strategy[i] = mod.getStrategie().get(i).getNameStrategy();

@@ -1,21 +1,24 @@
 package cad.model;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Intelligent implements Strategy {
+public class Intelligent implements Strategy, Serializable {
 
+	@Override
 	public String name() {
 		return "Intelligent";
 	}
 
+	@Override
 	/**
 	 * Mode de jeu Diagonale :
-	 * On rï¿½cupï¿½re les cellules
-	 * Si un bateau adverse encore en vie est touchï¿½ 
-	 * 		alors si une seule case touchï¿½e 
-	 * 				alors alï¿½atoire autour
+	 * On récupère les cellules
+	 * Si un bateau adverse encore en vie est touché 
+	 * 		alors si une seule case touchée 
+	 * 				alors aléatoire autour
 	 * 				sinon viser dans l'alignement
-	 * 		 sinon viser en diagonale selon les cases dï¿½jï¿½ touchï¿½es
+	 * 		 sinon viser en diagonale selon les cases déjà touchées
 	 */
 	public void play(Model mod) {
 
@@ -27,7 +30,7 @@ public class Intelligent implements Strategy {
 		int h = mod.getHeight();
 
 		System.out.println("Test : ");
-		//Si une cellule d'un bateau est touchï¿½e alors on regarde autour d'une si on peut tirer sur une cellule qui n'est pas encore touchï¿½e
+		//Si une cellule d'un bateau est touchée alors on regarde autour d'une si on peut tirer sur une cellule qui n'est pas encore touchée
 		for(int i = 1; i <= w; i++)
 			for(int j = 1; j <= h; j++) {
 				if(board[i][j].isShoot() && board[i][j].getShip() != null) {
@@ -39,17 +42,17 @@ public class Intelligent implements Strategy {
 							y = j - 1;
 						}
 						else if(i != 1 && (rand + k) % 4 == 2 && !board[i - 1][j].isShoot()) {
-							// On tire ï¿½ gauche
+							// On tire à gauche
 							x = i - 1;
 							y = j;
 						}
 						else if(j != h && (rand + k) % 4 == 3 && !board[i][j + 1].isShoot()) {
-							// On tire ï¿½ en bas
+							// On tire à en bas
 							x = i;
 							y = j + 1;
 						}
 						else if(i != w && (rand + k) % 4 == 0 && !board[i + 1][j].isShoot()) {
-							// On tire ï¿½ droite
+							// On tire à droite
 							x = i + 1;
 							y = j;
 						}
@@ -62,7 +65,7 @@ public class Intelligent implements Strategy {
 			}
 		System.out.println("L'IA tire en : " + x + " - " + y);
 		
-		// On tire en diagonale de maniï¿½re alï¿½atoire
+		// On tire en diagonale de manière aléatoire
 		do{
 			if(r.nextInt(2) == 0) {
 				x = 1 + 2 * r.nextInt((w) / 2);

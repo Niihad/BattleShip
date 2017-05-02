@@ -1,11 +1,12 @@
 package cad.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Age {
+public class Age implements Serializable {
 
-	private String age;
-	private ArrayList<Ship> ships;
+	protected String age;
+	protected ArrayList<Ship> ships;
 	
 	public Age(String age){
 		this.age = age;
@@ -39,7 +40,7 @@ public class Age {
 	/***********************************************************/
 	
 	public void addShip(Ship ship){
-		this.ships.add(ship);
+			this.ships.add(ship);
 	}
 	
 	public void deleteShip(Ship ship){

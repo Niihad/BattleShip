@@ -8,6 +8,7 @@ import cad.model.Model;
 import cad.view.ConfigScreen;
 import cad.view.EndScreen;
 import cad.view.GameScreen;
+import cad.view.LoadScreen;
 import cad.view.MenuScreen;
 import cad.view.MenuView;
 import cad.view.PlacementScreen;
@@ -24,6 +25,7 @@ public class BattleShip extends JFrame {
 	private EndScreen end;
 	private JFrame frame;
 	private Model model;
+	private LoadScreen load;
 
 	public BattleShip() {
 		this.model = new Model();
@@ -65,6 +67,11 @@ public class BattleShip extends JFrame {
 		frame.add(end, BorderLayout.CENTER);
 	}
 	
+	public void setLoadScreen(){
+		this.load = new LoadScreen(this);
+		frame.add(load, BorderLayout.CENTER);
+	}
+	
 	public static void main(String[] args) {
 		new BattleShip();
 	}
@@ -75,5 +82,13 @@ public class BattleShip extends JFrame {
 	}
 	public Model getModel() {
 		return model;
+	}
+	
+	public void setModel(Model model) {
+		this.model = model;
+	}
+	
+	public GameScreen getGame() {
+		return game;
 	}
 }
