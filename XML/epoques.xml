@@ -6,31 +6,31 @@
 				<nom>Porte-avion</nom>
 				<image>assets/s1.png</image>
 				<longueur>5</longueur>
-				<vie></vie>
+				<vie>5</vie>
 			</ship>
 			<ship>
 				<nom>Croiseur</nom>
 				<image>assets/s1.png</image>
 				<longueur>4</longueur>
-				<vie></vie>
+				<vie>4</vie>
 			</ship>
 			<ship>
 				<nom>Contre-torpilleur</nom>
 				<image>assets/s1.png</image>
 				<longueur>3</longueur>
-				<vie></vie>
+				<vie>3</vie>
 			</ship>
 			<ship>
 				<nom>Sous-marins</nom>
 				<image>assets/s1.png</image>
 				<longueur>3</longueur>
-				<vie></vie>
+				<vie>3</vie>
 			</ship>
 			<ship>
 				<nom>Torpilleur</nom>
 				<image>assets/s1.png</image>
 				<longueur>2</longueur>
-				<vie></vie>
+				<vie>2</vie>
 			</ship>
 		</ships>
     </epoque>
@@ -40,31 +40,31 @@
 				<nom>Schooner</nom>
 				<image>assets/s1.png</image>
 				<longueur>5</longueur>
-				<vie></vie>
+				<vie>5</vie>
 			</ship>
 			<ship>
 				<nom>Frégate</nom>
 				<image>assets/s1.png</image>
 				<longueur>4</longueur>
-				<vie></vie>
+				<vie>4</vie>
 			</ship>
 			<ship>
 				<nom>Barque</nom>
 				<image>assets/s1.png</image>
 				<longueur>3</longueur>
-				<vie></vie>
+				<vie>3</vie>
 			</ship>
 			<ship>
 				<nom>Barque</nom>
 				<image>assets/s1.png</image>
 				<longueur>3</longueur>
-				<vie></vie>
+				<vie>3</vie>
 			</ship>
 			<ship>
 				<nom>Sloop</nom>
 				<image>assets/s1.png</image>
 				<longueur>2</longueur>
-				<vie></vie>
+				<vie>2</vie>
 			</ship>
 		</ships>
     </epoque>
@@ -74,31 +74,31 @@
 				<nom>Trirème</nom>
 				<image>assets/s1.png</image>
 				<longueur>5</longueur>
-				<vie></vie>
+				<vie>5</vie>
 			</ship>
 			<ship>
 				<nom>Quinquérème</nom>
 				<image>assets/s1.png</image>
 				<longueur>4</longueur>
-				<vie></vie>
+				<vie>4</vie>
 			</ship>
 			<ship>
 				<nom>Galère</nom>
 				<image>assets/s1.png</image>
 				<longueur>3</longueur>
-				<vie></vie>
+				<vie>3</vie>
 			</ship>
 			<ship>
 				<nom>Galère</nom>
 				<image>assets/s1.png</image>
 				<longueur>3</longueur>
-				<vie></vie>
+				<vie>3</vie>
 			</ship>
 			<ship>
 				<nom>Birème</nom>
 				<image>assets/s1.png</image>
 				<longueur>2</longueur>
-				<vie></vie>
+				<vie>2</vie>
 			</ship>
 		</ships>
     </epoque>
