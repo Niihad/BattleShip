@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 
 import cad.model.Model;
 import cad.view.ConfigScreen;
+import cad.view.EndScreen;
 import cad.view.GameScreen;
 import cad.view.MenuScreen;
 import cad.view.MenuView;
@@ -20,6 +21,7 @@ public class BattleShip extends JFrame {
 	private PlacementScreen placement;
 	private StatsView stats;
 	private ConfigScreen config;
+	private EndScreen end;
 	private JFrame frame;
 	private Model model;
 
@@ -38,7 +40,7 @@ public class BattleShip extends JFrame {
 		frame.setJMenuBar(new MenuView(model));
 		this.stats = new StatsView(model);
 		this.placement = new PlacementScreen(model);
-		this.game = new GameScreen(model);
+		this.game = new GameScreen(this,model);
 		frame.add(stats, BorderLayout.NORTH);
 		//frame.add(placement, BorderLayout.CENTER);
 		frame.add(game, BorderLayout.CENTER);
@@ -47,6 +49,11 @@ public class BattleShip extends JFrame {
 	public void setConfigScreen() {
 		this.config = new ConfigScreen(this,model);
 		frame.add(config, BorderLayout.CENTER);
+	}
+	
+	public void setEndScreen() {
+		this.end = new EndScreen(this,model);
+		frame.add(end, BorderLayout.CENTER);
 	}
 	
 	public static void main(String[] args) {
