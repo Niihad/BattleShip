@@ -15,11 +15,11 @@ public class GameController implements ActionListener {
 	private Model model;
 	private BattleShip bs;
 	
-	public GameController(BattleShip bs, GameScreen gameScreen, boolean collision, int i, int j, Model model) {
+	public GameController(BattleShip bs, GameScreen gameScreen, boolean collision, int i, int j) {
 		this.game = gameScreen; 
-		this.model = model;
-		this.collision = collision;
 		this.bs = bs;
+		this.model = bs.getModel();
+		this.collision = collision;
 		this.x = i;
 		this.y = j;
 	}

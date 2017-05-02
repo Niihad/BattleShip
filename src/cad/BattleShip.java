@@ -36,11 +36,16 @@ public class BattleShip extends JFrame {
 		frame.setVisible(true);
 	}
 	
+	public void setMenuScreen(){
+		this.menu = new MenuScreen(this);
+		frame.add(menu, BorderLayout.CENTER);
+	}
+	
 	public void setGameScreen() {
 		frame.setJMenuBar(new MenuView(model));
 		this.stats = new StatsView(model);
 		this.placement = new PlacementScreen(model);
-		this.game = new GameScreen(this,model);
+		this.game = new GameScreen(this);
 		frame.add(stats, BorderLayout.NORTH);
 		//frame.add(placement, BorderLayout.CENTER);
 		frame.add(game, BorderLayout.CENTER);
@@ -52,7 +57,8 @@ public class BattleShip extends JFrame {
 	}
 	
 	public void setEndScreen() {
-		this.end = new EndScreen(this,model);
+		this.end = new EndScreen(this);
+		this.stats.setVisible(false);
 		frame.add(end, BorderLayout.CENTER);
 	}
 	
@@ -60,9 +66,11 @@ public class BattleShip extends JFrame {
 		new BattleShip();
 	}
 
+	public void replay() {
+		this.model = new Model();
+		setMenuScreen();
+	}
 	public Model getModel() {
 		return model;
 	}
-	
-	
 }

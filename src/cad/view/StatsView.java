@@ -13,7 +13,7 @@ public class StatsView extends JPanel implements Observer{
 
 	private static final long serialVersionUID = 1L;
 	private Model mod;
-	private JLabel life,life_IA,strategy;
+	private JLabel life,life_IA,strategy,age;
 	private int tmp;
 	
 	public StatsView(Model model){
@@ -29,10 +29,12 @@ public class StatsView extends JPanel implements Observer{
 		this.life_IA = new JLabel("Life IA : " + tmp +" / " + tmp);
 		this.life_IA.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		this.strategy = new JLabel("Strategie IA : " + mod.getContext().getNameStrategy());
-		
+		this.strategy.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		this.age = new JLabel("Age : " + mod.getAge().getAgeName());
 		this.add(life);
 		this.add(life_IA);	
 		this.add(strategy);
+		this.add(age);
 	}
 
 	@Override
