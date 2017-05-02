@@ -52,7 +52,6 @@ public class GameScreen extends JPanel implements Observer{
 		for(int i=0; i<Model.getWidth()+1; i++){
 			for(int j=0; j<Model.getHeight()+1; j++){
 				board[i][j] = new CellView(this.model,i,j,size, player);
-				board[i][j].addActionListener(new GameController(bs,this,i,j));
 				if(j>10 && j<13){
 					board[i][j].setBorder(null);
 				}else if(i==0 && j>0 && j < size){
@@ -106,7 +105,7 @@ public class GameScreen extends JPanel implements Observer{
 	}
 	
 	/**
-	 * Met à jour le tableau du joueur suite au tir de l'IA
+	 * Met ï¿½ jour le tableau du joueur suite au tir de l'IA
 	 * si l'IA ne touche pas de bateau
 	 * 		alors met la case en noir 
 	 * 		sinon met la case en rouge
@@ -125,7 +124,7 @@ public class GameScreen extends JPanel implements Observer{
 	}
 	
 	/**
-	 * Met à jour le tableau de l'IA au chargement d'une partie
+	 * Met ï¿½ jour le tableau de l'IA au chargement d'une partie
 	 */
 	public void updateBoardAI() {
 		int w = 11, h = 11;

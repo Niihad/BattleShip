@@ -610,8 +610,10 @@ public class Model extends Observable implements Runnable,Serializable  {
 			setLife();	
 		}
 		etat = Etat.PLAYER;
+		this.mettreAjour();
 	}
 	
+
 	//appel de la strategie pour faire jouer ia
 	public void IA_play(){
 		if(etat == Etat.IA && end_game == false){

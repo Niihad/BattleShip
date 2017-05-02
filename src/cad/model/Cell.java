@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Cell implements Cloneable, Serializable{
 	protected int x, y, part;
-	protected boolean state, isTouch, shoot;
+	protected boolean shoot;
 	protected Ship ship;
 	
 	public Cell(int x, int y){
@@ -35,22 +35,6 @@ public class Cell implements Cloneable, Serializable{
 
 	public void setPart(int part) {
 		this.part = part;
-	}
-
-	public boolean isState() {
-		return state;
-	}
-
-	public void setState(boolean state) {
-		this.state = state;
-	}
-
-	public boolean isTouch() {
-		return isTouch;
-	}
-
-	public void setTouch(boolean isTouch) {
-		this.isTouch = isTouch;
 	}
 
 	public Ship getShip() {
