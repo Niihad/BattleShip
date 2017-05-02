@@ -3,6 +3,7 @@ package cad.model;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
 
@@ -27,6 +28,7 @@ public class Model extends Observable implements Runnable {
 	private int life,life_ia;
 	private Context context;
 	private boolean end_game = false;
+	private ArrayList<Context> strategie;
 	private Etat etat;
 	public enum Etat {
 		WAIT, PLAYER, IA
@@ -36,13 +38,27 @@ public class Model extends Observable implements Runnable {
 		this.boardPlayer = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardPlayer);
 		this.etat = Etat.WAIT;
-
+		strategie = new ArrayList<Context>();
 		// Initialisation de l'�poque
 		this.selectionEpoque(this.chargementNomEpoque()[0], this.chargementEpoque(0, "epoques"));
-		
+		creationStrategie();
+				
 	}
 	
 	
+	private void creationStrategie() {
+		Context context = new Context(new Aleatoire());
+		Context context2 = new Context(new Diagonale());
+		Context context3 = new Context(new Intelligent());
+		strategie.add(context);
+		strategie.add(context2);
+		strategie.add(context3);
+	}
+	
+	public ArrayList<Context> getStrategie() {
+		return strategie;
+	}
+
 	/***********************************************************/
 	/********************* GETTER / SETTER *********************/
 	/***********************************************************/
