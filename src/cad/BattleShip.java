@@ -38,16 +38,19 @@ public class BattleShip extends JFrame {
 		frame.setVisible(true);
 	}
 	
+	//passer a l ecran de menu
 	public void setMenuScreen(){
 		this.menu = new MenuScreen(this);
 		frame.add(menu, BorderLayout.CENTER);
 	}
 	
+	//passer a l ecran de placement des bateaux
 	public void setPlacementScreen() {
 		this.placement = new PlacementScreen(this);
 		frame.add(placement, BorderLayout.CENTER);
 	}
 	
+	//passer a l ecran de jeux
 	public void setGameScreen() {
 		frame.setJMenuBar(new MenuView(this));
 		this.stats = new StatsView(model);
@@ -56,30 +59,35 @@ public class BattleShip extends JFrame {
 		frame.add(game, BorderLayout.CENTER);
 	}
 	
+	//passer a l ecran de configuration
 	public void setConfigScreen() {
 		this.config = new ConfigScreen(this);
 		frame.add(config, BorderLayout.CENTER);
 	}
 	
+	//passer a l ecran de fin
 	public void setEndScreen() {
 		this.end = new EndScreen(this);
 		this.stats.setVisible(false);
 		frame.add(end, BorderLayout.CENTER);
 	}
 	
+	//passer a l ecran de chargement
 	public void setLoadScreen(){
 		this.load = new LoadScreen(this);
 		frame.add(load, BorderLayout.CENTER);
 	}
 	
-	public static void main(String[] args) {
-		new BattleShip();
-	}
-
+	//pour rejouer
 	public void replay() {
 		this.model = new Model();
 		setMenuScreen();
 	}
+	
+	/***********************************************************/
+	/********************* GETTER / SETTER *********************/
+	/***********************************************************/
+	
 	public Model getModel() {
 		return model;
 	}
@@ -90,5 +98,9 @@ public class BattleShip extends JFrame {
 	
 	public GameScreen getGame() {
 		return game;
+	}
+	
+	public static void main(String[] args) {
+		new BattleShip();
 	}
 }

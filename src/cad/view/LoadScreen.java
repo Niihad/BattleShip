@@ -2,8 +2,6 @@ package cad.view;
 
 import java.awt.Color;
 import java.awt.Label;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,6 +18,7 @@ import cad.BattleShip;
 import cad.controller.LoadListener;
 import cad.model.Model;
 
+@SuppressWarnings("serial")
 public class LoadScreen extends JPanel {
 
 

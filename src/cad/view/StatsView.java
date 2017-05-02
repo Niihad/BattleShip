@@ -22,6 +22,7 @@ public class StatsView extends JPanel implements Observer{
 		this.mod.addObserver(this);
 	}
 
+	//affichage des infos concernant le jeux
 	private void draw() {
 		this.tmp = this.mod.getLife();
 		this.life = new JLabel("Life : " + tmp +" / " + tmp);

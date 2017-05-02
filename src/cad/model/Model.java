@@ -9,11 +9,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -49,15 +47,6 @@ public class Model extends Observable implements Runnable,Serializable  {
 		this.selectionEpoque(this.chargementNomEpoque()[0], this.chargementEpoque(0, "epoques"));
 		creationStrategie();
 
-	}
-	
-	private void creationStrategie() {
-		Context context = new Context(new Aleatoire());
-		Context context2 = new Context(new Diagonale());
-		Context context3 = new Context(new Intelligent());
-		strategie.add(context);
-		strategie.add(context2);
-		strategie.add(context3);
 	}
 	
 	/***********************************************************/
@@ -196,6 +185,9 @@ public class Model extends Observable implements Runnable,Serializable  {
 		return (val > Model.WIDTH) ? this.boardAI : this.boardPlayer;
 	}
 	
+	public ArrayList<Context> getStrategie() {
+		return strategie;
+	}	
 	
 	/***********************************************************/
 	/********************** Initiale Game **********************/
@@ -395,6 +387,7 @@ public class Model extends Observable implements Runnable,Serializable  {
 		}
 	}
 
+	//placement alea des bateaux de l ia
 	public void aleaPlace(Cell[][] boardAi) {
 		Random r = new Random();
 		int x, y;
@@ -443,6 +436,7 @@ public class Model extends Observable implements Runnable,Serializable  {
 		return false;
 	}
 
+	//affichage des plateaaux pour debug
 	public void print(Cell[][] board) {
 		for (int i = 1; i < WIDTH + 1; i++) {
 			System.out.println("---------------------");
@@ -458,6 +452,15 @@ public class Model extends Observable implements Runnable,Serializable  {
 		System.out.println("----------------------------------------------------------------------------");
 	}
 	
+	
+	private void creationStrategie() {
+		Context context = new Context(new Aleatoire());
+		Context context2 = new Context(new Diagonale());
+		Context context3 = new Context(new Intelligent());
+		strategie.add(context);
+		strategie.add(context2);
+		strategie.add(context3);
+	}
 	
 	/***********************************************************/
 	/********************** ShipPLaceView **********************/
@@ -600,6 +603,7 @@ public class Model extends Observable implements Runnable,Serializable  {
 		return boardPlayer[x][y].isShoot();
 	}
 
+	//tir de l ia
 	public void setShoot(int x, int y) {
 		boardPlayer[x][y].setShoot(true);
 		if(boardPlayer[x][y].getShip() != null){
@@ -609,14 +613,12 @@ public class Model extends Observable implements Runnable,Serializable  {
 		this.mettreAjour();
 	}
 	
-	
+
+	//appel de la strategie pour faire jouer ia
 	public void IA_play(){
 		if(etat == Etat.IA && end_game == false){
 			context.executeStrategy(this);
 		}	
 	}
 
-	public ArrayList<Context> getStrategie() {
-		return strategie;
-	}
 }

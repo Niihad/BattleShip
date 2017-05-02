@@ -7,7 +7,6 @@ import javax.swing.JOptionPane;
 
 import cad.BattleShip;
 import cad.model.Model;
-import cad.model.Sauvegarde;
 
 public class MenuListener implements ActionListener {
 	private Model mod;
@@ -25,10 +24,10 @@ public class MenuListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		switch (choix) {
-		case 0:
+		case 0://sauvegarder
 			mod.saveProfile();
 			break;	
-		case 1:
+		case 1://changer de strategie
 			for (int i = 0; i <= mod.getStrategie().size() - 1; i++)
 				strategy[i] = mod.getStrategie().get(i).getNameStrategy();
 			Integer choix =  JOptionPane.showOptionDialog(null, "Changer la strategie en", "Strategie",
@@ -37,7 +36,7 @@ public class MenuListener implements ActionListener {
 			if(choix != null)
 				mod.setContext(mod.getStrategie().get(choix));
 			break;
-		case 2:
+		case 2://quitter
 			System.exit(0);
 			break;
 		default:

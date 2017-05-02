@@ -3,17 +3,15 @@ package cad.view;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-
 import cad.BattleShip;
 import cad.controller.MenuListener;
-import cad.model.Model;
 
+@SuppressWarnings("serial")
 public class MenuView extends JMenuBar{
 	private JMenu menu;
 	private JMenuItem sauvegarder,quitter,strategie;
-	private BattleShip bs;
-	private Model mod;
 
+	//barre de menu
 	public MenuView(BattleShip bs) {
 		this.menu = new JMenu("Reglage");
 		this.sauvegarder = new JMenuItem("Sauvegarder");

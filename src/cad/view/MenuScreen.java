@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 
 import cad.BattleShip;
 
+//fenetre menu pour les choix entre jouer - charger - quitters
 public class MenuScreen extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
@@ -28,17 +29,20 @@ public class MenuScreen extends JPanel {
 	}
 
 	private void controller() {
+		//on passe a l ecran de jeux
 		play.addActionListener(new ActionListener(){  	
 	        public void actionPerformed(ActionEvent event){
 	        	setVisible(false);
 	        	bs.setConfigScreen();}});
 		
+		//on passe a l ecran de chargement
 		load.addActionListener(new ActionListener(){  	
 	        public void actionPerformed(ActionEvent event){
 	        	setVisible(false);
 	        	bs.setLoadScreen();
 	        	}});
 		 
+		//on quitte
 		exit.addActionListener(new ActionListener(){  	
 	        public void actionPerformed(ActionEvent event){
 	        	System.exit(0);}});		

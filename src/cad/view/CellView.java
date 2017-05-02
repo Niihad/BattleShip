@@ -9,7 +9,6 @@ import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-
 import cad.controller.GameController;
 import cad.model.Cell;
 import cad.model.Model;
