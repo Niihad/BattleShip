@@ -107,17 +107,17 @@ public class ConfigScreen extends JPanel implements ItemListener {
 	    String[] nomEpoques;
 	    String[] nomEpoquesTemporaires = new String[]{"Aucune Epoque"};;
 		
-         // Etape 1 : r�cup�ration d'une instance de la classe "DocumentBuilderFactory"
+         // Etape 1 : recuperation d'une instance de la classe "DocumentBuilderFactory"
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             	
         try {
-             // Etape 2 : cr�ation d'un parseur
+             // Etape 2 : creation d'un parseur
             DocumentBuilder builder = factory.newDocumentBuilder();
-			// Etape 3 : cr�ation d'un Document
+			// Etape 3 : creation d'un Document
 		    Document document = builder.parse(new File("XML/epoques.xml"));
-		    // Etape 4 : r�cup�ration de l'Element racine
+		    // Etape 4 : recuperation de l'Element racine
 		    Element epoques = document.getDocumentElement();
-		    // Etape 5 : r�cup�ration de tous les noeuds
+		    // Etape 5 : recuperation de tous les noeuds
 		    NodeList noeuds = epoques.getChildNodes();
 		    nomEpoquesTemporaires = new String[noeuds.getLength()];
 		    
@@ -139,7 +139,7 @@ public class ConfigScreen extends JPanel implements ItemListener {
             e.printStackTrace();
         }
         
-        // On rassemble les noms d'�poque
+        // On rassemble les noms d'epoque
         if(k != 0) {
     		nomEpoques = new String[k];
             for(int i = 0; i < k; i++)

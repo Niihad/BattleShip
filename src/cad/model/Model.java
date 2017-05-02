@@ -24,10 +24,6 @@ public class Model extends Observable implements Runnable {
 		this.boardPlayer = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardPlayer);
 		this.etat = Etat.PLAYER;
-
-		//this.print(boardPlayer);
-		this.print(boardAI);
-		this.etat = Etat.PLAYER;
 	}
 	
 	
