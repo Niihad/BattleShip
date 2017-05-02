@@ -9,6 +9,7 @@ import java.util.Observer;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import cad.BattleShip;
 import cad.controller.GameController;
 import cad.model.Model;
 
@@ -18,8 +19,10 @@ public class GameScreen extends JPanel implements Observer{
 	protected Model model;
 	private JButton[][] boardPlayer, boardAI;
 	private JPanel panelBoardPlayer, panelBoardAI;
+	private BattleShip bs;
 
-	public GameScreen(Model model) {
+	public GameScreen(BattleShip battleShip, Model model) {
+		this.bs = battleShip;
 		this.model = model;
 		this.boardPlayer = new JButton[11][11];
 		this.drawBoard(this.panelBoardPlayer, this.boardPlayer, 50, 50, true);
@@ -79,7 +82,7 @@ public class GameScreen extends JPanel implements Observer{
 					boolean collision = false;
 					if(model.getBoardAI()[i][j].getShip() != null)
 						collision = true;
-					boardAI[i][j].addActionListener(new GameController(this,collision,i,j,model));
+					boardAI[i][j].addActionListener(new GameController(bs,this,collision,i,j,model));
 				}				
 				jp.add(board[i][j]);
 			}

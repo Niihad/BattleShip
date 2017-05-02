@@ -103,6 +103,8 @@ public class Model extends Observable implements Runnable {
 	public void setLife() {
 		if(life >= 1)
 			this.life--;
+		if(life == 0)
+			this.end_game = true;
 		this.mettreAjour();	
 	}
 
@@ -113,6 +115,8 @@ public class Model extends Observable implements Runnable {
 	public void setLife_ia() {
 		if(life_ia >= 1)
 			this.life_ia--;
+		if(life_ia == 0)
+			this.end_game = true;
 		this.mettreAjour();
 	}
 
@@ -547,7 +551,7 @@ public class Model extends Observable implements Runnable {
 	}
 	
 	public void IA_play(){
-		if(etat == Etat.IA){
+		if(etat == Etat.IA && end_game == false){
 			context.executeStrategy(this);
 		}	
 	}
