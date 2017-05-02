@@ -477,7 +477,7 @@ public class Model extends Observable implements Runnable,Serializable  {
 		this.cloneShip = (Ship) cell.cloneShip();
 	}
 	
-	public void movePlacementShipBoard(Cell cell, int val, int i, int part){
+	public synchronized void movePlacementShipBoard(Cell cell, int val, int i, int part){
 		boolean rotation = this.cloneShip.isRotation();
 		int x = cell.getX();
 		int y = cell.getY();
@@ -490,7 +490,7 @@ public class Model extends Observable implements Runnable,Serializable  {
 		this.mettreAjour();
 	}
 	
-	public void replacePlacementShipBoard(Cell cell, int val, int i){
+	public synchronized void replacePlacementShipBoard(Cell cell, int val, int i){
 		int x = cell.getX();
 		int y = cell.getY();
 		this.getBoardConvert(val)[x][y].setShip(this.cloneShip);
@@ -601,19 +601,21 @@ public class Model extends Observable implements Runnable,Serializable  {
 	}
 
 	//tir de l ia
-	public void setShoot(int x, int y) {
+	public synchronized void setShoot(int x, int y) {
 		Cell cell;
 		if(etat == Etat.PLAYER){
 			etat = Etat.IA;
 			cell = this.boardAI[x][y];
+			if(cell.getShip() != null){
+				this.setLife_ia();	
+			}
 		}else{
 			etat = Etat.PLAYER;
 			cell = boardPlayer[x][y];
+			if(cell.getShip() != null){
+				this.setLife();	
+			}
 		}	
-		cell.setShoot(true);
-		if(cell.getShip() != null){
-			setLife();	
-		}
 		this.mettreAjour();
 	}
 	
