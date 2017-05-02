@@ -20,6 +20,8 @@ public class ConfigListener implements ActionListener {
 		this.mod = bs.getModel();
 	}
 
+	//tirage alea pour savoir qui commence
+	//on fait un random et compare avec le choix du joueur
 	public void alea(int choix){
 		Random rand = new Random();
 		int nombreAleatoire = rand.nextInt(2);
@@ -29,6 +31,7 @@ public class ConfigListener implements ActionListener {
 			mod.setEtat(Etat.IA);
 	}
 	
+	//traitement des infos avant de passer a l'ecran de jeu
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		cScreen.setVisible(false);

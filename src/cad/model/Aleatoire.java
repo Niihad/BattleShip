@@ -10,6 +10,7 @@ public class Aleatoire implements Strategy, Serializable {
 		return "Aleatoire";
 	}
 
+	//strategie qui tire au hasard
 	@Override
 	public void play(Model mod) {
 		Random r = new Random();
@@ -17,7 +18,7 @@ public class Aleatoire implements Strategy, Serializable {
 		int h = mod.getHeight();
 		int x = 0, y = 0;
 
-		do{
+		do{//on verifie qu il n a jamais jouer dans cette case
 			x = 1 + r.nextInt(w);
 			y = 1 + r.nextInt(h);
 		}while(mod.neverShoot(x,y));

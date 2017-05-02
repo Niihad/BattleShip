@@ -51,13 +51,13 @@ public class ConfigScreen extends JPanel implements ItemListener {
 
 
 	private void drawConfig() {
-		
+		//recuperation des diff strategie
 		for(int i = 0; i <= mod.getStrategie().size()-1;i++)
 			strategy[i] = mod.getStrategie().get(i).getNameStrategy();
 		this.tirOrdinateur = new JComboBox(strategy);
-
 		tirOrdinateur.addItemListener(this);
 		
+		//recuperation des diff epoques
 		this.age = this.mod.chargementNomEpoque();
 		this.epoque = new JComboBox(age);
 		epoque.addItemListener(this);
@@ -89,6 +89,7 @@ public class ConfigScreen extends JPanel implements ItemListener {
 
 	@Override
 	public void itemStateChanged(ItemEvent arg0) {
+		//recuperation du choix de strategie
 		if(arg0.getSource() == tirOrdinateur)
 			choixStrategie = tirOrdinateur.getSelectedIndex();
 		
@@ -96,6 +97,7 @@ public class ConfigScreen extends JPanel implements ItemListener {
 		if(arg0.getSource() == epoque)
 			choixEpoque = epoque.getSelectedIndex();
 		
+		//recuperation du choix pour le tirage alea pour savoir qui commence
 		if(arg0.getSource() == tiragealea)
 			choixTirage = tiragealea.getSelectedIndex();
 	

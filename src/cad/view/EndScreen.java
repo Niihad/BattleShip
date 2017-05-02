@@ -29,6 +29,7 @@ public class EndScreen extends JPanel{
 
 	private void draw() {
 		this.setBackground(Color.yellow);
+		//on regarde par rapport au nbre du vie
 		if(mod.getLife() == 0)
 			this.win = new Label("Vous avez perdu");
 		else
@@ -43,11 +44,14 @@ public class EndScreen extends JPanel{
 	    panneauBouton.add(Box.createVerticalStrut(20));
 		panneauBouton.add(exit);
 		this.add(panneauBouton);
+		
+		//rejouer
 		play.addActionListener(new ActionListener(){  	
 	        public void actionPerformed(ActionEvent event){
 	        	setVisible(false);
 	        	bs.replay();}});	
 		
+		//quitter
 		exit.addActionListener(new ActionListener(){  	
 	        public void actionPerformed(ActionEvent event){
 	        	System.exit(0);}});		

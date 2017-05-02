@@ -1,17 +1,13 @@
 package cad.view;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
+
 
 import cad.model.Cell;
 import cad.model.Model;

@@ -24,6 +24,7 @@ public class GameController implements ActionListener {
 		this.y = j;
 	}
 
+	//traitement des action du joueur
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(model.getEtat() == Etat.PLAYER && model.isEnd_game() == false){
@@ -33,12 +34,14 @@ public class GameController implements ActionListener {
 			}else{
 				this.game.setCouleur(x,y,false);
 			}
+			//tour du joueur
 			this.model.setEtat(Etat.IA);
 			this.model.IA_play();
 			this.game.updateBoardPlayer();
 		}
 		game.updateBoardPlayer();
 		
+		//test fin de partie pour passer a l ecran de fin
 		if(model.isEnd_game()){
 			game.setVisible(false);
 			bs.setEndScreen();
