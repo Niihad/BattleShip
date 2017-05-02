@@ -53,10 +53,16 @@ public class BattleShip extends JFrame {
 	
 	public void setEndScreen() {
 		this.end = new EndScreen(this,model);
+		this.stats.setVisible(false);
 		frame.add(end, BorderLayout.CENTER);
 	}
 	
 	public static void main(String[] args) {
 		new BattleShip();
+	}
+
+	public void replay() {
+		this.model = new Model();
+		setConfigScreen();
 	}
 }
