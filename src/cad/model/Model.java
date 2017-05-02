@@ -1,6 +1,5 @@
 package cad.model;
 
-import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,13 +22,14 @@ public class Model extends Observable implements Runnable {
 	private static final int HEIGHT = 10;
 	private Age age;
 	private Cell[][] boardPlayer, boardAI;
-	private Point selectShipPLace = null;
-	private Ship chooseShip, cloneShip;
+	private String[] epoqueName;
+	private Ship cloneShip;
 	private int life,life_ia;
 	private Context context;
 	private boolean end_game = false;
-	private ArrayList<Context> strategie;
 	private Etat etat;
+	private ArrayList<Context> strategie;
+
 	public enum Etat {
 		WAIT, PLAYER, IA
 	}
@@ -38,13 +38,13 @@ public class Model extends Observable implements Runnable {
 		this.boardPlayer = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardPlayer);
 		this.etat = Etat.WAIT;
-		strategie = new ArrayList<Context>();
+		this.epoqueName = this.chargementNomEpoque();
+		this.strategie = new ArrayList<Context>();
 		// Initialisation de l'ï¿½poque
 		this.selectionEpoque(this.chargementNomEpoque()[0], this.chargementEpoque(0, "epoques"));
 		creationStrategie();
-				
+
 	}
-	
 	
 	private void creationStrategie() {
 		Context context = new Context(new Aleatoire());
@@ -55,10 +55,7 @@ public class Model extends Observable implements Runnable {
 		strategie.add(context3);
 	}
 	
-	public ArrayList<Context> getStrategie() {
-		return strategie;
-	}
-
+	
 	/***********************************************************/
 	/********************* GETTER / SETTER *********************/
 	/***********************************************************/
@@ -79,22 +76,6 @@ public class Model extends Observable implements Runnable {
 		this.age = age;
 	}
 
-	public Point getSelectShipPLace() {
-		return selectShipPLace;
-	}
-
-	public void setSelectShipPLace(Point selectShipPLace) {
-		this.selectShipPLace = selectShipPLace;
-	}
-
-	public Ship getChooseShip() {
-		return chooseShip;
-	}
-
-	public void setChooseAge(Ship ship) {
-		this.chooseShip = ship;
-	}
-
 	public Cell[][] getBoardPlayer() {
 		return boardPlayer;
 	}
@@ -109,6 +90,14 @@ public class Model extends Observable implements Runnable {
 
 	public void setBoardAI(Cell[][] boardAi) {
 		this.boardAI = boardAi;
+	}
+
+	public String[] getEpoqueName() {
+		return epoqueName;
+	}
+
+	public void setEpoqueName(String[] epoque) {
+		this.epoqueName = epoque;
 	}
 
 	public int getLife() {
@@ -173,13 +162,6 @@ public class Model extends Observable implements Runnable {
 	/********************** Initiale Game **********************/
 	/***********************************************************/
 	
-	private Age addAge(String name, Ship[] ships){
-		Age age = new Age(name);
-		for(int i=0; i<ships.length; i++)	
-			age.addShip(ships[i]);
-		return age;
-	}
-	
 	private void buildBoards(Cell[][] board){
 		for(int i=0; i<=WIDTH; i++){
 			for(int j=0; j<=HEIGHT; j++){
@@ -188,10 +170,14 @@ public class Model extends Observable implements Runnable {
 		}
 	}
 	
+	
+	/***********************************************************/
+	/*********************** Config Game ***********************/
+	/***********************************************************/
+	
 	/**
-	 * Chargement du nom de chacune des ï¿½poques disponibles depuis le fichier XML/epoques.xml
-	 * 
-	 * @return on retourne les noms des ï¿½poques dans un tableau
+	 * Chargement du nom de chacune des epoques disponibles depuis le fichier XML/epoques.xml
+	 * @return on retourne les noms des epoques dans un tableau
 	 */
 	public String[] chargementNomEpoque() {
 	    int k = 0;
@@ -246,8 +232,8 @@ public class Model extends Observable implements Runnable {
 	
 	/**
 	 * Chargement d'une ï¿½poque constituï¿½e de plusieurs bateaux
-	 * @param numEpoque : numéro de l'époque
-	 * @param nomFichier : nom du fichier a télécharger
+	 * @param numEpoque : numï¿½ro de l'ï¿½poque
+	 * @param nomFichier : nom du fichier a tï¿½lï¿½charger
 	 * @return on retourne le nom des attributs avec leurs valeurs
 	 */
 	public Ship[] chargementEpoque(int numEpoque, String nomFichier) {
@@ -343,18 +329,22 @@ public class Model extends Observable implements Runnable {
 		for (Ship ship : this.age.getShips())
 			life += ship.getLife();
 		life_ia =  life;
-		
-		this.initialPlaceShip(this.boardPlayer);
+
 		this.boardAI = new Cell[WIDTH + 1][HEIGHT + 1];
 		this.buildBoards(this.boardAI);
-		this.aleaPlace(this.boardAI);
-		
-		//this.print(boardAI);
-		//this.print(boardAI);
+		this.initialPlaceShip(this.boardAI);
+		this.etat = Etat.PLAYER;
+	}
+	
+	private Age addAge(String name, Ship[] ships){
+		Age age = new Age(name);
+		for(int i=0; i<ships.length; i++)	
+			age.addShip(ships[i]);
+		return age;
 	}
 	
 	private void initialPlaceShip(Cell[][] board){
-		int position[][] = { { 1, 1 }, { 4, 4 }, { 6, 6 }, { 8, 1 }, { 10, 9 } };
+		int position[][] = { { 2, 2 }, { 5, 2 }, { 8, 7 }, { 8, 2 }, { 5, 8 } };
 		int i = 0;
 		for (Ship ship : this.age.getShips()) {
 			for (int j = 0; j < ship.getLengthShip(); j++) {
@@ -364,7 +354,7 @@ public class Model extends Observable implements Runnable {
 		}
 	}
 
-	private void aleaPlace(Cell[][] boardAi) {
+	public void aleaPlace(Cell[][] boardAi) {
 		Random r = new Random();
 		int x, y;
 		for (Ship ship : this.age.getShips()) {
@@ -537,13 +527,24 @@ public class Model extends Observable implements Runnable {
 		}
 		return true;
 	}
+	
+	/*
+	 * Teste de verification permettant de savoir si la partie peu commencer apres placement de tout les bateaux
+	 */
+	public boolean verificationBeginGame(){
+		for(int i=0; i<this.boardAI.length; i++){
+			for(int j=0; j<this.boardAI.length; j++){
+				if(this.boardAI[i][j].getShip() != null)
+					return false;
+			}
+		}
+		return true;
+	}
 
 	/***********************************************************/
 	/************************ GameScreen ***********************/
 	/***********************************************************/
 
-	
-	@Override
 	public void run() {
 		this.mettreAjour();
 	}
@@ -571,4 +572,9 @@ public class Model extends Observable implements Runnable {
 			context.executeStrategy(this);
 		}	
 	}
+
+	public ArrayList<Context> getStrategie() {
+		return strategie;
+	}
 }
+

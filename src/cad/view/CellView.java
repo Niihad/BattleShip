@@ -49,7 +49,6 @@ public class CellView extends JPanel implements Observer{
 		return (this.abs>Model.getWidth()) ? this.abs-Model.getWidth()-3 : this.abs;
 	}
 
-	@Override
 	public void update(Observable arg0, Object arg1) {
 	}
 

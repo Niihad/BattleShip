@@ -29,13 +29,12 @@ public class ConfigListener implements ActionListener {
 			mod.setEtat(Etat.IA);
 	}
 	
-	@Override
+	
 	public void actionPerformed(ActionEvent e) {
 		cScreen.setVisible(false);
 		this.mod.setContext(mod.getStrategie().get(cScreen.getChoixStrategie()));
 		alea(cScreen.getChoixTirage());
-		this.mod.selectionEpoque(cScreen.getChoixNomEpoque(), this.mod.chargementEpoque(cScreen.getChoixEpoque(), "epoques"));
-		bs.setGameScreen();
-	}
+		mod.selectionEpoque(mod.getEpoqueName()[cScreen.getChoixEpoque()], mod.chargementEpoque(cScreen.getChoixEpoque(), "epoques"));
+		bs.setPlacementScreen();	}
 
 }

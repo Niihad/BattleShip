@@ -15,7 +15,6 @@ public class MenuListener implements ActionListener {
 		this.choix = i;
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		switch (choix) {
 		case 0:

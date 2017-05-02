@@ -3,14 +3,19 @@ package cad.view;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import cad.BattleShip;
 import cad.controller.ShipBrdPanelListener;
 import cad.model.Cell;
 import cad.model.Model;
@@ -19,13 +24,15 @@ public class PlacementScreen extends JPanel implements Observer{
 	
 	private static final long serialVersionUID = 1L;
 	private static final int CELL_WIDTH = 50;
+	private BattleShip battleShip;
 	private Model model;
 	private JPanel[][] board;
 	private JPanel panelBoard;
 
-	public PlacementScreen(Model modele){
+	public PlacementScreen(BattleShip bs){
 		super();
-		this.model = modele;
+		this.battleShip = bs;
+		this.model = battleShip.getModel();
 		
 		this.board = new JPanel[Model.getHeight()+1][Model.getWidth()*2+4];
 		this.panelBoard = new JPanel();
@@ -36,7 +43,21 @@ public class PlacementScreen extends JPanel implements Observer{
 		this.panelBoard.addMouseListener(shipListener);
 		this.panelBoard.addMouseMotionListener(shipListener);
 		this.drawShipsBoard(model.getBoardAI());
-
+		
+		JButton play = new JButton("PLAY");
+		play.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				model.print(model.getBoardAI());
+				if(model.verificationBeginGame()){
+					model.aleaPlace(model.getBoardAI());
+					setVisible(false);
+					battleShip.setGameScreen();
+				}else{
+					javax.swing.JOptionPane.showMessageDialog(null,"Tous les bateaux ne sont pas placé"); 
+				}
+			}
+		});
+		this.add(play);
 		this.model.addObserver(this);
 	}
 	
@@ -121,7 +142,6 @@ public class PlacementScreen extends JPanel implements Observer{
 		this.board[i][j].add(label);
 	}
 		
-	@Override
 	public void update(Observable arg0, Object arg1) {
 	}
 	

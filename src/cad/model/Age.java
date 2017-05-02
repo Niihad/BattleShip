@@ -39,7 +39,7 @@ public class Age {
 	/***********************************************************/
 	
 	public void addShip(Ship ship){
-			this.ships.add(ship);
+		this.ships.add(ship);
 	}
 	
 	public void deleteShip(Ship ship){
