@@ -105,23 +105,32 @@ public class GameScreen extends JPanel implements Observer{
 			for(int j=0; j<board[i].length;j++){
 				Cell cell = board[i][j];
 				if(cell.getShip() != null){
-					this.drawShipCut(cell.getShip().getPathImage(), cell.getShip().getLengthShip(), cell.getPart(),i,j);
+					JLabel label = this.drawShipCut(cell.getShip().getPathImage(), cell.getShip().getLengthShip(), cell.getPart(), cell.getShip().isRotation());
+					this.boardPlayer[i][j].add(label);
 				}
 			}
 		}
 	}
 	
-	public void drawShipCut(String path, int length, int cut, int i, int j){
-		ImageIcon icon = new ImageIcon(new ImageIcon(path).getImage().getScaledInstance(CELL_WIDTH*length, CELL_WIDTH, Image.SCALE_DEFAULT));
+	public JLabel drawShipCut(String path, int length, int cut, boolean rotation){
+		ImageIcon icon;
+		if(!rotation) // horizontal
+			 icon = new ImageIcon(new ImageIcon(path).getImage().getScaledInstance(CELL_WIDTH*length, CELL_WIDTH, Image.SCALE_DEFAULT));
+		else
+			icon = new ImageIcon(new ImageIcon(path).getImage().getScaledInstance(CELL_WIDTH, CELL_WIDTH*length, Image.SCALE_DEFAULT));
 		Image img = icon.getImage();
 		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = bimage.createGraphics();
 	    g.drawImage(img, 0, 0, null);
 	    g.dispose();
-		BufferedImage part = bimage.getSubimage(cut*CELL_WIDTH, 0, CELL_WIDTH, CELL_WIDTH);
+	    BufferedImage part;
+	    if(!rotation) // horizontal
+	    	part = bimage.getSubimage(cut*CELL_WIDTH, 0, CELL_WIDTH, CELL_WIDTH);
+	    else
+	    	part = bimage.getSubimage(0, cut*CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
 		JLabel label = new JLabel();
 		label.setIcon(new ImageIcon(part));
-		this.boardPlayer[i][j].add(label);
+		return label;
 	}
 	
 	//en rouge si on touche pas et en vert si on touche

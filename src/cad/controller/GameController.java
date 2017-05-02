@@ -24,14 +24,12 @@ public class GameController implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(model.getEtat() == Etat.PLAYER && model.isEnd_game() == false){
-			if(cellView.isPlayer()){
-				model.setShoot(x, y);
-			}else{
-				model.setShoot(x, y);
-			}
+			model.setShoot(x, y);
 			//tour du joueur
-			this.model.setEtat(Etat.IA);
 			this.model.IA_play();
+
+	        this.model.print(this.model.getBoardPlayer());
+	        this.model.print(this.model.getBoardAI());
 		}
 		
 		//test fin de partie pour passer a l ecran de fin
