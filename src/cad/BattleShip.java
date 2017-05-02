@@ -36,6 +36,11 @@ public class BattleShip extends JFrame {
 		frame.setVisible(true);
 	}
 	
+	public void setMenuScreen(){
+		this.menu = new MenuScreen(this);
+		frame.add(menu, BorderLayout.CENTER);
+	}
+	
 	public void setGameScreen() {
 		frame.setJMenuBar(new MenuView(model));
 		this.stats = new StatsView(model);
@@ -63,6 +68,9 @@ public class BattleShip extends JFrame {
 
 	public void replay() {
 		this.model = new Model();
-		setConfigScreen();
+		setMenuScreen();
+	}
+	public Model getModel() {
+		return model;
 	}
 }

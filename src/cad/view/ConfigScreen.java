@@ -4,22 +4,11 @@ import java.awt.Color;
 import java.awt.Label;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import cad.BattleShip;
 import cad.controller.ConfigListener;
@@ -37,6 +26,7 @@ public class ConfigScreen extends JPanel implements ItemListener {
 
 	private JComboBox tirOrdinateur,epoque;
 	private String strategy1,strategy2,strategy3;
+	private int choixEpoque;
 	private Label tirIa,eq;
 	private JButton play;
 	private BattleShip bs;
@@ -46,6 +36,7 @@ public class ConfigScreen extends JPanel implements ItemListener {
 	public ConfigScreen(BattleShip battleShip, Model model) {
 		this.bs = battleShip;
 		this.mod = model;
+		this.choixEpoque = 0;
 		
 		this.context = new Context(new Aleatoire());
 		this.strategy1 = context.getNameStrategy();
@@ -75,9 +66,7 @@ public class ConfigScreen extends JPanel implements ItemListener {
 		this.tirOrdinateur = new JComboBox(strategy);
 		tirOrdinateur.addItemListener(this);
 		
-		this.age = chargementNomEpoque();
-		// Initialisation de l'ï¿½poque
-		this.mod.selectionEpoque(age[0], chargementEpoque(0));
+		this.age = this.mod.chargementNomEpoque();
 		this.epoque = new JComboBox(age);
 		epoque.addItemListener(this);
 		
@@ -95,143 +84,6 @@ public class ConfigScreen extends JPanel implements ItemListener {
 	    panneauBouton.add(play);
 		this.add(panneauBouton);		
 	}
-	
-	
-	/**
-	 * Chargement du nom de chacune des ï¿½poques disponibles depuis le fichier XML/epoques.xml
-	 * 
-	 * @return on retourne les noms des ï¿½poques dans un tableau
-	 */
-	public String[] chargementNomEpoque() {
-	    int k = 0;
-	    String[] nomEpoques;
-	    String[] nomEpoquesTemporaires = new String[]{"Aucune Epoque"};;
-		
-         // Etape 1 : recuperation d'une instance de la classe "DocumentBuilderFactory"
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            	
-        try {
-             // Etape 2 : creation d'un parseur
-            DocumentBuilder builder = factory.newDocumentBuilder();
-			// Etape 3 : creation d'un Document
-		    Document document = builder.parse(new File("XML/epoques.xml"));
-		    // Etape 4 : recuperation de l'Element racine
-		    Element epoques = document.getDocumentElement();
-		    // Etape 5 : recuperation de tous les noeuds
-		    NodeList noeuds = epoques.getChildNodes();
-		    nomEpoquesTemporaires = new String[noeuds.getLength()];
-		    
-		    for (int i = 0; i < noeuds.getLength(); i++) {
-		    	if(noeuds.item(i).getNodeType() == Node.ELEMENT_NODE && noeuds.item(i).getNodeName().equals("epoque")) {
-			    	Element epoque = (Element) noeuds.item(i);
-			    	nomEpoquesTemporaires[Integer.parseInt(epoque.getAttribute("id"))] = epoque.getAttribute("nom");
-			    	k++;
-		    	}
-		    }
-        }
-        catch (final ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-        catch (final SAXException e) {
-            e.printStackTrace();
-        }
-        catch (final IOException e) {
-            e.printStackTrace();
-        }
-        
-        // On rassemble les noms d'epoque
-        if(k != 0) {
-    		nomEpoques = new String[k];
-            for(int i = 0; i < k; i++)
-            	nomEpoques[i] = nomEpoquesTemporaires[i];
-        }
-        else 
-    		nomEpoques = nomEpoquesTemporaires;
-        	
-			
-		return nomEpoques;
-	}
-	
-	
-	/**
-	 * Chargement d'une ï¿½poque constituï¿½e de plusieurs bateaux
-	 * @return on retourne le nom des attributs avec leurs valeurs
-	 */
-	public Ship[] chargementEpoque(int numEpoque) {
-	    Ship[] shipsForModel = new Ship[5];
-	    int n = 0;
-		
-         // Etape 1 : rï¿½cupï¿½ration d'une instance de la classe "DocumentBuilderFactory"
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            	
-        try {
-             // Etape 2 : crï¿½ation d'un parseur
-            DocumentBuilder builder = factory.newDocumentBuilder();
-			// Etape 3 : crï¿½ation d'un Document
-		    Document document = builder.parse(new File("XML/epoques.xml"));
-		    // Etape 4 : rï¿½cupï¿½ration de l'Element racine
-		    Element epoques = document.getDocumentElement();
-		    // Etape 5 : rï¿½cupï¿½ration de tous les noeuds
-		    NodeList noeuds = epoques.getChildNodes();
-		    
-		    for (int i = 0; i < noeuds.getLength(); i++) {
-		    	if(noeuds.item(i).getNodeType() == Node.ELEMENT_NODE && noeuds.item(i).getNodeName().equals("epoque")) {
-		    		// On rï¿½cupï¿½re les donnï¿½es concernant une ï¿½poque
-			    	Element epoque = (Element) noeuds.item(i);
-			    	if(epoque.getAttribute("id").equals(Integer.toString(numEpoque))) {
-			    		//On rï¿½cupï¿½re les donnï¿½es sur tous les bateaux
-			    		NodeList shipsNode = epoque.getChildNodes();
-					    for (int j = 0; j < shipsNode.getLength(); j++) {
-					    	if(shipsNode.item(j).getNodeType() == Node.ELEMENT_NODE && shipsNode.item(j).getNodeName().equals("ships")) {
-					    		// On rï¿½cupï¿½re les donnï¿½es concernant un seul bateau
-					    		NodeList shipNode = ((Element) shipsNode.item(j)).getChildNodes();
-							    for (int k = 0; k < shipNode.getLength(); k++) {
-							    	if(shipNode.item(k).getNodeType() == Node.ELEMENT_NODE) {
-							    		NodeList attributsNode = ((Element) shipNode.item(k)).getChildNodes();
-									    boolean reconnaissanceBateau = false;
-									    String nom = "";
-									    String image = "";
-									    int longueur = 0;
-									    int vie = 0;
-							    		for (int l = 0; l < attributsNode.getLength(); l++) {
-									    	if(attributsNode.item(l).getNodeType() == Node.ELEMENT_NODE) {
-										    	Element attribut = (Element) attributsNode.item(l);
-										    	if(attribut.getNodeName().equals("nom"))
-										    		nom = attribut.getTextContent();
-										    	if(attribut.getNodeName().equals("image"))
-										    		image = attribut.getTextContent();
-										    	if(attribut.getNodeName().equals("longueur"))
-										    		longueur = Integer.parseInt(attribut.getTextContent());
-										    	if(attribut.getNodeName().equals("vie"))
-										    		vie = Integer.parseInt(attribut.getTextContent());
-										    	reconnaissanceBateau = true;
-									    	}
-									    }
-							    		if(reconnaissanceBateau) {
-							    			shipsForModel[n] = new Ship(nom, image, longueur, vie);
-							    			n++;
-							    		}
-							    	}
-							    }
-					    	}
-					    }
-			    	}
-		    	}
-		    }
-        }
-        catch (final ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-        catch (final SAXException e) {
-            e.printStackTrace();
-        }
-        catch (final IOException e) {
-            e.printStackTrace();
-        }
-			
-		return shipsForModel;
-	}
-
 
 	@Override
 	public void itemStateChanged(ItemEvent arg0) {
@@ -251,22 +103,21 @@ public class ConfigScreen extends JPanel implements ItemListener {
 			}
 		}
 
+		// Récupération du paramètre de l'époque
 		if(arg0.getSource() == epoque){
-			int tmp = epoque.getSelectedIndex();
-			switch (tmp){
-			  case 0:
-				  this.mod.selectionEpoque(age[0], chargementEpoque(0));
-				  break;  
-			  case 1:
-				  this.mod.selectionEpoque(age[1], chargementEpoque(1));
-				  break;  
-			  case 2:
-				  this.mod.selectionEpoque(age[2], chargementEpoque(2));
-				  break; 
-			  default:
-			}
+			choixEpoque = epoque.getSelectedIndex();
 		}
 	
 	}
+
+	public String getChoixNomEpoque() {
+		return age[choixEpoque];
+	}
+	
+	public int getChoixEpoque() {
+		return choixEpoque;
+	}
+	
+	
 
 }
