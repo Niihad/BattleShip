@@ -67,15 +67,14 @@ public class CellView extends JButton implements Observer{
 	public void update(Observable arg0, Object arg1) {
 		ImageIcon icon = new ImageIcon(new ImageIcon("assets/s1.png").getImage().getScaledInstance(width, width, Image.SCALE_DEFAULT));
 		Cell cell;
-		if(!this.player)
+		if(this.player)
 			cell = model.getBoardPlayer()[ord][abs];
 		else
 			cell = model.getBoardAI()[ord][abs];
 
 		if(cell.getShip() != null && cell.isShoot()){
 			this.setBackground(Color.red); // bateau toucher
-		}
-		if(cell.isShoot()){
+		}else if(cell.isShoot()){
 			this.setBackground(Color.black);
 		}
 			
