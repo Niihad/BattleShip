@@ -73,7 +73,7 @@ public class CellView extends JButton implements Observer{
 			cell = model.getBoardPlayer()[ord][abs];
 		else
 			cell = model.getBoardAI()[ord][abs];
-
+		
 		if(cell.getShip() != null && cell.isShoot()){
 			this.setBackground(Color.red); // bateau toucher
 		}else if(cell.isShoot()){

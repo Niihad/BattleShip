@@ -195,5 +195,9 @@ public class GameScreen extends JPanel implements Observer{
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
+		for(int x = 0; x < model.getWidth(); x++) 
+			for(int y = 0; y < model.getHeight(); y++) 
+				if(model.getBoardAI()[x][y].isShoot()) 
+					boardAI[x][y].setEnabled(false);
 	}
 }
