@@ -15,13 +15,18 @@ import cad.BattleShip;
 import cad.model.Model;
 import cad.model.Model.Etat;
 import cad.view.CellView;
+import cad.view.GameScreen;
 
 public class GameController implements ActionListener {
 	private int x,y;
 	private CellView cellView;
 	private Model model;
+	private BattleShip bs;
+	private GameScreen gs;
 	
-	public GameController(Model model, CellView view, int i, int j) {
+	public GameController(BattleShip bs, GameScreen gs, Model model, CellView view, int i, int j) {
+		this.bs = bs;
+		this.gs = gs;
 		this.cellView = view; 
 		this.model = model;
 		this.x = i;
@@ -72,8 +77,8 @@ public class GameController implements ActionListener {
 		
 		//test fin de partie pour passer a l ecran de fin
 		if(model.isEnd_game()){
-			//game.setVisible(false);
-			//bs.setEndScreen();
+			gs.setVisible(false);
+			bs.setEndScreen();
 		}
 	}
 

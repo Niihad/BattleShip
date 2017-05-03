@@ -29,7 +29,6 @@ public class Intelligent implements Strategy, Serializable {
 		int w = mod.getWidth();
 		int h = mod.getHeight();
 
-		System.out.println("Test : ");
 		//Si une cellule d'un bateau est touchée alors on regarde autour d'une si on peut tirer sur une cellule qui n'est pas encore touchée
 		for(int i = 1; i <= w; i++)
 			for(int j = 1; j <= h; j++) {
@@ -63,7 +62,6 @@ public class Intelligent implements Strategy, Serializable {
 					}
 				}
 			}
-		System.out.println("L'IA tire en : " + x + " - " + y);
 		
 		// On tire en diagonale de manière aléatoire
 		do{

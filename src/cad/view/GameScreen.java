@@ -79,7 +79,7 @@ public class GameScreen extends JPanel implements Observer{
 		jp.setLayout(new GridLayout(Model.getWidth()+1,Model.getHeight()+1,0,0));
 		for(int i=0; i<Model.getWidth()+1; i++){
 			for(int j=0; j<Model.getHeight()+1; j++){
-				board[i][j] = new CellView(this.model,i,j,size, player);
+				board[i][j] = new CellView(bs,this,i,j,size, player);
 				if(i == 0 && j == 0)
 					board[i][j].setEnabled(false);
 				if(j>10 && j<13){

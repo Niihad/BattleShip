@@ -72,7 +72,7 @@ public class BattleShip extends JFrame {
 	//passer a l ecran de fin
 	public void setEndScreen() {
 		this.end = new EndScreen(this);
-		//this.stats.setVisible(false);
+		this.stats.setVisible(false);
 		frame.add(end, BorderLayout.CENTER);
 	}
 	

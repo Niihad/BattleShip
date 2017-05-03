@@ -9,6 +9,8 @@ import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+
+import cad.BattleShip;
 import cad.controller.GameController;
 import cad.model.Cell;
 import cad.model.Model;
@@ -20,10 +22,14 @@ public class CellView extends JButton implements Observer{
 	private int abs, ord, width;
 	private boolean player;
 	private ImageIcon icon;
+	private BattleShip bs;
+	private GameScreen gs;
 	
-	public CellView(Model model, int x, int y, int width, boolean player){
+	public CellView(BattleShip bs, GameScreen gameScreen, int x, int y, int width, boolean player){
 		super();
-		this.model=model;
+		this.model= bs.getModel();
+		this.bs = bs;
+		this.gs = gameScreen;
 		this.ord = x;
 		this.abs = y;
 		this.width = width;
@@ -39,7 +45,7 @@ public class CellView extends JButton implements Observer{
 		this.setPreferredSize(new Dimension(width,width)); 
 		this.setBorder(BorderFactory.createMatteBorder( 0,0,1,1, Color.black));
 
-		this.addActionListener(new GameController(model,this,x,y));
+		this.addActionListener(new GameController(bs,gs,model,this,x,y));
 		this.model.addObserver(this);
 	}
 
