@@ -26,6 +26,7 @@ public class GameController implements ActionListener {
 		this.model = model;
 		this.x = i;
 		this.y = j;
+		model.IA_play();
 	}
 
 	//traitement des action du joueur
