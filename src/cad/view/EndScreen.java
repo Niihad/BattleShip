@@ -12,6 +12,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import cad.BattleShip;
@@ -20,7 +21,7 @@ import cad.model.Model;
 public class EndScreen extends JPanel{
 	private Model mod;
 	private BattleShip bs;
-	private Label win;
+	private JLabel win;
 	private JButton play,exit;
 
 
@@ -49,16 +50,21 @@ public class EndScreen extends JPanel{
 	private void draw() {
 		this.setBackground(Color.yellow);
 		//on regarde par rapport au nbre du vie
-		if(mod.getLife() == 0)
-			this.win = new Label("Vous avez perdu");
-		else
-			this.win = new Label("Vous avez gagné");
-		this.add(win);
+		if(mod.getLife() == 0) {
+			this.win = new JLabel("Vous avez perdu");
+			this.win.setForeground(Color.RED);
+		}
+		else {
+			this.win = new JLabel("Vous avez gagné");
+			this.win.setForeground(Color.GREEN);
+		}
 		
 		this.play = new JButton("Retour ecran d'accueil");
 		this.exit = new JButton("Quitter");
 		
 		Box panneauBouton = Box.createVerticalBox();
+		panneauBouton.add(win);
+	    panneauBouton.add(Box.createVerticalStrut(20));
 		panneauBouton.add(play);
 	    panneauBouton.add(Box.createVerticalStrut(20));
 		panneauBouton.add(exit);

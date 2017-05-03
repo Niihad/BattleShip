@@ -74,12 +74,14 @@ public class BattleShip extends JFrame {
 		this.end = new EndScreen(this);
 		this.stats.setVisible(false);
 		frame.add(end, BorderLayout.CENTER);
+		frame.setSize(350, 300);
 	}
 	
 	//passer a l ecran de chargement
 	public void setLoadScreen(){
 		this.load = new LoadScreen(this);
 		frame.add(load, BorderLayout.CENTER);
+		frame.setSize(350, 300);
 	}
 	
 	//pour rejouer
