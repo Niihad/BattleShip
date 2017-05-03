@@ -33,8 +33,7 @@ public class GameController implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		if(model.getEtat() == Etat.PLAYER && model.isEnd_game() == false){
 			model.setShoot(x, y);
-			if(model.getBoardPlayer()[x][y].getShip() != null && model.getBoardPlayer()[x][y].isShoot()){
-			
+			if(model.getBoardPlayer()[x][y].getShip() != null){
 				try {
                     AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("./assets/son/explosion.wav"));
                     Clip clip = AudioSystem.getClip();

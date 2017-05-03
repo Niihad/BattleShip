@@ -52,7 +52,9 @@ public class LoadScreen extends JPanel {
 		
 		Box panneauBouton = Box.createVerticalBox();
 		panneauBouton.add(profil);
+	    panneauBouton.add(Box.createVerticalStrut(10));
 		panneauBouton.add(listProfil);
+	    panneauBouton.add(Box.createVerticalStrut(15));
 		panneauBouton.add(load);
 		this.add(panneauBouton);		
 	}

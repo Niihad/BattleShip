@@ -13,7 +13,7 @@ import cad.controller.GameController;
 import cad.model.Cell;
 import cad.model.Model;
 
-public class CellView extends JButton implements Observer{
+public class CellView extends JButton implements Observer {
 	
 	private static final long serialVersionUID = 1L;
 	private Model model;

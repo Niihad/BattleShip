@@ -61,7 +61,6 @@ public class GameScreen extends JPanel implements Observer{
            int height = this.getSize().height;
            int width = this.getSize().width;
            g.drawImage(img, 0, 0, width, height, this);
-           System.out.println(model.getAge().getAgeName());
 
 	    } catch(IOException e){
 	        e.printStackTrace();
