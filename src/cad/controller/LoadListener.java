@@ -27,14 +27,14 @@ public class LoadListener implements ActionListener {
 		loadScreen.setVisible(false);
 		Model mod = chargerProfil((String) loadScreen.getListProfil().getSelectedValue());
 		bs.setModel(mod);
-		/*if(mod.verificationBeginGame() == false)
+		if(mod == null)
 			bs.setMenuScreen();
-		else {*/
+		else {
 			bs.setGameScreen();
 			bs.getGame().updateBoardAI();
 			bs.getGame().updateBoardPlayer();
 			bs.getModel().IA_play();
-		//}
+		}
 	}
 
 
@@ -46,7 +46,7 @@ public class LoadListener implements ActionListener {
 
         File folder = new File("./profils");
         File[] files = folder.listFiles();
-        Model model = new Model();
+        Model model = null;
         
 
         for (int i = 0; i < files.length; i++) {
@@ -60,11 +60,11 @@ public class LoadListener implements ActionListener {
                     fis.close();
 
                 } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                    return null;
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    return null;
                 } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                    return null;
                 }
             }
         }

@@ -14,6 +14,7 @@ import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
@@ -26,7 +27,7 @@ public class LoadScreen extends JPanel {
 
 
 	private JList listProfil;
-	private Label profil;
+	private JLabel profil;
 	private JButton load;
 	private BattleShip bs;
 
@@ -44,14 +45,16 @@ public class LoadScreen extends JPanel {
 
 	private void drawLoad() {
 
-		this.profil = new Label("Profil");		
+		this.profil = new JLabel("Profil");		
+		this.profil.setForeground(Color.WHITE);
 		this.load = new JButton("Charger");
 		this.listProfil = new JList(chargerProfils());
 		
-		this.setBackground(Color.GREEN);
 		Box panneauBouton = Box.createVerticalBox();
 		panneauBouton.add(profil);
+	    panneauBouton.add(Box.createVerticalStrut(10));
 		panneauBouton.add(listProfil);
+	    panneauBouton.add(Box.createVerticalStrut(15));
 		panneauBouton.add(load);
 		this.add(panneauBouton);		
 	}
