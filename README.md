@@ -6,7 +6,9 @@
   - LAMBLÉ Valéry
   
 # Compilation et éxecution
-  - Terminal :
+  - Comiler : ant
+  - Execution : java -jar cad.jar
   
-
+# Jeux
+  - clique droit sur le bateau pour le faire pivoter
  

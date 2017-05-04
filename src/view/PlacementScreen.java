@@ -1,0 +1,167 @@
+package view;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import controller.ShipBrdPanelListener;
+import main.BattleShip;
+import model.Cell;
+import model.Model;
+
+public class PlacementScreen extends JPanel implements Observer{
+	
+	private static final long serialVersionUID = 1L;
+	private static final int CELL_WIDTH = 50;
+	private BattleShip battleShip;
+	private Model model;
+	private JPanel[][] board;
+	private JPanel panelBoard;
+
+	public PlacementScreen(BattleShip bs){
+		super();
+		this.battleShip = bs;
+		this.model = battleShip.getModel();
+		
+		this.board = new JPanel[Model.getHeight()+1][Model.getWidth()*2+4];
+		this.panelBoard = new JPanel();
+		this.drawBoard(this.panelBoard, this.board, this.model.getBoardPlayer().length);
+		this.add(this.panelBoard);
+
+		ShipBrdPanelListener shipListener = new ShipBrdPanelListener(this.model, this);
+		this.panelBoard.addMouseListener(shipListener);
+		this.panelBoard.addMouseMotionListener(shipListener);
+		this.drawShipsBoard(model.getBoardAI());
+		
+		JButton play = new JButton("PLAY");
+		play.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(model.verificationBeginGame()){
+					model.aleaPlace(model.getBoardAI());
+					setVisible(false);
+					battleShip.setGameScreen();
+				}else{
+					javax.swing.JOptionPane.showMessageDialog(null,"Tous les bateaux ne sont pas place"); 
+				}
+			}
+		});
+		this.add(play);
+		this.model.addObserver(this);
+	}
+	
+	public JPanel[][] getBoard() {
+		return board;
+	}
+
+	public void setBoard(JPanel[][] board) {
+		this.board = board;
+	}
+
+
+	/***********************************************************/
+	/************************** Board **************************/
+	/***********************************************************/
+	
+	// build board game 
+	private void drawBoard(JPanel jp, JPanel[][] board, int size){
+		char c = 'A', d = 'A';
+		int length = size*2+2;
+		jp.setLayout(new GridLayout(size, length,0,0));
+		for(int i=0; i<size; i++){
+			for(int j=0; j<length; j++){
+				board[i][j] = initJPanel();
+				if(j>10 && j<13){
+					board[i][j].setBorder(null);
+				}else if(i==0 && j>0 && j < size){
+					board[i][j].add(new JLabel(""+j));
+				}else if(i>0 && j==0){
+					board[i][j].add(new JLabel(""+c));
+					c++;
+				}else if(i==0 && j>10){
+					int m = j-size-2;
+					board[i][j].add(new JLabel(""+m));
+				}else if(i>0 && j==13){
+					board[i][j].add(new JLabel(""+d));
+					d++;
+				}
+				jp.add(board[i][j]);
+			}
+		}
+	}
+	
+	private JPanel initJPanel(){
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridBagLayout());
+		panel.setPreferredSize(new Dimension(CELL_WIDTH,CELL_WIDTH)); 
+		panel.setBorder(BorderFactory.createMatteBorder( 0,0,1,1, Color.black));
+		return panel;
+	}
+	
+	public Point getIndexJPanel(JPanel panel){
+		int size = this.model.getBoardPlayer().length;
+		int length = size*2+2;
+		for(int i=0; i<size; i++){
+			for(int j=0; j<length; j++){
+				if(board[i][j].equals(panel))
+					return new Point(i,j);
+			}
+		}
+		return null;
+	}
+	
+	/***********************************************************/
+	/************************** Ships **************************/
+	/***********************************************************/
+	
+	private void drawShipsBoard(Cell[][] board){
+		for(int i=0; i<board.length;i++){
+			for(int j=0; j<board[i].length;j++){
+				Cell cell = board[i][j];
+				if(cell.getShip() != null){
+					JLabel label = this.drawShipCut(cell.getShip().getPathImage(), cell.getShip().getLengthShip(), cell.getPart(), cell.getShip().isRotation());
+					this.board[i][j+13].add(label);
+				}
+			}
+		}
+	}
+	
+	public JLabel drawShipCut(String path, int length, int cut, boolean rotation){
+		ImageIcon icon;
+		if(!rotation) // horizontal
+			 icon = new ImageIcon(new ImageIcon(path).getImage().getScaledInstance(CELL_WIDTH*length, CELL_WIDTH, Image.SCALE_DEFAULT));
+		else
+			icon = new ImageIcon(new ImageIcon(path).getImage().getScaledInstance(CELL_WIDTH, CELL_WIDTH*length, Image.SCALE_DEFAULT));
+		Image img = icon.getImage();
+		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = bimage.createGraphics();
+	    g.drawImage(img, 0, 0, null);
+	    g.dispose();
+	    BufferedImage part;
+	    if(!rotation) // horizontal
+	    	part = bimage.getSubimage(cut*CELL_WIDTH, 0, CELL_WIDTH, CELL_WIDTH);
+	    else
+	    	part = bimage.getSubimage(0, cut*CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+		JLabel label = new JLabel();
+		label.setIcon(new ImageIcon(part));
+		return label;
+	}
+		
+	public void update(Observable arg0, Object arg1) {
+	}
+	
+}
