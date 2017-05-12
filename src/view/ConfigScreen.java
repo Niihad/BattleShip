@@ -46,7 +46,7 @@ public class ConfigScreen extends JPanel implements ItemListener {
 		this.choixEpoque = 0;
 		this.choixTirage = 0;	
 		this.choixStrategie = 0;
-		this.strategy = new String[3];
+		this.strategy = new String[ mod.getStrategie().size() ];
 		drawConfig();
 		controller();
 	}

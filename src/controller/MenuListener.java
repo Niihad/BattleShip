@@ -18,7 +18,7 @@ public class MenuListener implements ActionListener {
 		this.bs = bs;
 		this.mod = bs.getModel();
 		this.choix = i;
-		this.strategy = new String[3];
+		this.strategy = new String[ mod.getStrategie().size() ];
 	}
 
 	@Override

@@ -454,9 +454,11 @@ public class Model extends Observable implements Runnable,Serializable  {
 		Context context = new Context(new Aleatoire());
 		Context context2 = new Context(new Diagonale());
 		Context context3 = new Context(new Intelligent());
+		Context context4 = new Context(new Stupide());
 		strategie.add(context);
 		strategie.add(context2);
 		strategie.add(context3);
+		strategie.add(context4);
 	}
 	
 	/***********************************************************/
