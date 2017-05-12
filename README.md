@@ -6,7 +6,7 @@
   - LAMBLÉ Valéry
   
 # Compilation et éxecution
-  - Comiler : ant
+  - Compiler : ant
   - Execution : ant run
   - Ce projet nécessite java 1.8
   
