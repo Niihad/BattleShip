@@ -7,8 +7,10 @@
   
 # Compilation et éxecution
   - Comiler : ant
-  - Execution : java -jar cad.jar
+  - Execution : ant run
+  - Ce projet nécessite java 1.8
   
 # Jeux
   - clique droit sur le bateau pour le faire pivoter
+  
  
