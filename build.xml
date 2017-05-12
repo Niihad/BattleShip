@@ -1,50 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create.jar" name="">
 
-    <!-- définition des propriétés -->
-    <dirname property="BattleShip" file="${ant.file}"/>
-    <property name="compiler.args" value=""/>
-    <property name="compiler.args.bataillenavale" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
-    <property name="bataillenavale.output.dir" value="${BattleShip}/bin/cad"/>
-
-    <!-- classpath du projet (sources) -->
-    <path id="bataillenavale.module.sourcepath">
-        <dirset dir="${BattleShip}/src/cad">
-            <include name="src"/>
-        </dirset>
-    </path>
-
-
-    <!-- compilation des sources du projet -->
-    <target name="compile.sources" description="Compile module BatailleNavale; production classes">
-        <mkdir dir="${bataillenavale.output.dir}"/>
-        <javac destdir="${bataillenavale.output.dir}"  fork="true">
-            <compilerarg line="${compiler.args.bataillenavale}"/>
-            <src path="src/"/>
-        </javac>
-        <copy todir="${bataillenavale.output.dir}">
-            <fileset dir="${BattleShip}/src/">
-                <type type="file"/>
-            </fileset>
-        </copy>
+<project name="BattleShip" default="compile" basedir=".">
+          	  
+    <target name="compile">
+        <mkdir dir="build"/>
+		<javac debug="true" includeantruntime="false" srcdir="src" destdir="build"/>
     </target>
 
-    <!-- création d'un fichier jar exécutable -->
-    <target name="create.jar" depends="compile.sources">
-        <jar destfile="${BattleShip}/cad.jar" filesetmanifest="mergewithoutmain">
-            <manifest>
-                <attribute name="Main-Class" value="main.BattleShip"/>
-                <attribute name="Class-Path" value="."/>
-            </manifest>
-            <fileset dir="${bataillenavale.output.dir}"/>
-        </jar>
+    
+    <target name="run">
+	    <mkdir dir="jar"/>
+	    <jar destfile="jar/BatttleShip.jar" filesetmanifest="mergewithoutmain">
+		<manifest>
+		    <attribute name="Main-Class" value="main.BattleShip"/>
+            <attribute name="Class-Path" value="."/>
+		</manifest>
+		<fileset dir="build"/>
+		<fileset dir="src"/>
+	    </jar>
+        <java jar="jar/BatttleShip.jar" fork="true"/>
     </target>
-
-
-
-
-
-
+	
+	
+	<target name="clean">
+        <delete dir="build"/>
+        <delete dir="jar"/>
+    </target>
 
 
 </project>
